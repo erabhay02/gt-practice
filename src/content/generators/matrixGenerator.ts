@@ -1,8 +1,18 @@
 import { mulberry32, pickOne, randomSeed, shuffle, type RngFn } from './rng'
-import { COLORS, FILLS, SHAPE_TYPES, SIZES, generateRandomShape, shapesLookAlike } from './shapePalette'
-import type { ContentSpec, Difficulty, Question, ShapeRotation, ShapeSpec } from '../types'
+import {
+  COLORS,
+  FILLS,
+  INNER_MARKS,
+  NESTED_TYPES,
+  SHAPE_TYPES,
+  SIZES,
+  canHoldInner,
+  generateRandomShape,
+  shapesLookAlike,
+} from './shapePalette'
+import type { ContentSpec, Difficulty, InnerMark, Question, ShapeRotation, ShapeSpec, ShapeType } from '../types'
 
-type Attr = 'color' | 'fill' | 'size' | 'rotation' | 'count'
+type Attr = 'color' | 'fill' | 'size' | 'rotation' | 'count' | 'inner' | 'nested'
 
 type Transform =
   | { attr: 'color'; to: string }
@@ -10,6 +20,8 @@ type Transform =
   | { attr: 'size'; to: ShapeSpec['size'] }
   | { attr: 'count'; to: 2 | 3 }
   | { attr: 'rotation'; delta: number }
+  | { attr: 'inner'; to: InnerMark }
+  | { attr: 'nested'; to: ShapeType | null }
 
 const ROTATION_DELTAS = [45, 90, 135, 180]
 
@@ -36,16 +48,28 @@ function apply(shape: ShapeSpec, transforms: Transform[]): ShapeSpec {
       case 'rotation':
         next = { ...next, rotation: rotate(next.rotation, t.delta) }
         break
+      case 'inner':
+        next = { ...next, inner: t.to }
+        break
+      case 'nested':
+        next = { ...next, nested: t.to }
+        break
     }
   }
   return next
 }
 
-function pickAttrs(rng: RngFn, n: number): Attr[] {
-  // size + count together makes cramped, hard-to-read pictures.
+function pickAttrs(rng: RngFn, difficulty: Difficulty): Attr[] {
+  const pool: Attr[] = ['color', 'fill', 'size', 'rotation', 'count']
+  if (difficulty >= 2) pool.push('inner', 'nested')
   for (;;) {
-    const attrs = shuffle(rng, ['color', 'fill', 'size', 'rotation', 'count'] as Attr[]).slice(0, n)
-    if (!(attrs.includes('size') && attrs.includes('count'))) return attrs
+    const attrs = shuffle(rng, pool).slice(0, difficulty)
+    const has = (a: Attr) => attrs.includes(a)
+    // Combinations that make cramped or self-hiding pictures.
+    if (has('size') && has('count')) continue
+    if (has('inner') && has('nested')) continue
+    if ((has('count') || has('size')) && (has('inner') || has('nested'))) continue
+    return attrs
   }
 }
 
@@ -61,6 +85,10 @@ function buildTransform(rng: RngFn, attr: Attr, a: ShapeSpec): Transform {
       return { attr, to: pickOne(rng, [2, 3] as const) }
     case 'rotation':
       return { attr, delta: pickOne(rng, ROTATION_DELTAS) }
+    case 'inner':
+      return { attr, to: pickOne(rng, INNER_MARKS.filter((m) => m !== (a.inner ?? 'none'))) }
+    case 'nested':
+      return { attr, to: pickOne(rng, [null, ...NESTED_TYPES].filter((n) => n !== (a.nested ?? null))) }
   }
 }
 
@@ -78,19 +106,30 @@ function wrongVersion(rng: RngFn, t: Transform, from: ShapeSpec): Transform {
     case 'rotation':
       // Turning the wrong way is the classic mistake.
       return { attr: 'rotation', delta: -t.delta }
+    case 'inner':
+      return { attr: 'inner', to: pickOne(rng, INNER_MARKS.filter((m) => m !== t.to && m !== (from.inner ?? 'none'))) }
+    case 'nested':
+      return { attr: 'nested', to: pickOne(rng, NESTED_TYPES.filter((n) => n !== t.to && n !== (from.nested ?? null))) }
   }
 }
 
 function buildItem(rng: RngFn, difficulty: Difficulty) {
   const attrs = pickAttrs(rng, difficulty)
-  const a: ShapeSpec = { ...generateRandomShape(rng), count: 1 }
+  const usesInside = attrs.includes('inner') || attrs.includes('nested')
+  const typePool = usesInside ? SHAPE_TYPES.filter(canHoldInner) : SHAPE_TYPES
+
+  const a: ShapeSpec = { ...generateRandomShape(rng), count: 1, type: pickOne(rng, typePool) }
+  if (difficulty >= 2 && !attrs.includes('fill')) a.fill = pickOne(rng, FILLS)
   if (attrs.includes('count') && a.size === 'large') a.size = 'medium'
+  // Marks and nested shapes need room to be readable.
+  if (usesInside && a.size === 'small') a.size = 'medium'
+  if (usesInside && !attrs.includes('size')) a.size = 'large'
 
   const transforms = attrs.map((attr) => buildTransform(rng, attr, a))
 
   // C keeps A's values for every changing attribute, so the rule reads clearly;
   // it differs in shape (and, on harder items, one non-changing attribute too).
-  let c: ShapeSpec = { ...a, type: pickOne(rng, SHAPE_TYPES.filter((t) => t !== a.type)) }
+  let c: ShapeSpec = { ...a, type: pickOne(rng, typePool.filter((t) => t !== a.type)) }
   if (difficulty === 3) {
     const free = (['color', 'fill'] as const).filter((k) => !attrs.includes(k))
     if (free.includes('color')) c = { ...c, color: pickOne(rng, COLORS.filter((x) => x !== a.color)) }
@@ -99,11 +138,11 @@ function buildItem(rng: RngFn, difficulty: Difficulty) {
 
   const b = apply(a, transforms)
   const d = apply(c, transforms)
-  return { a, b, c, d, transforms }
+  return { a, b, c, d, transforms, typePool }
 }
 
 function buildDistractors(rng: RngFn, item: ReturnType<typeof buildItem>): ShapeSpec[] {
-  const { b, c, d, transforms } = item
+  const { b, c, d, transforms, typePool } = item
   const candidates: ShapeSpec[] = []
 
   if (transforms.length > 1) {
@@ -117,7 +156,7 @@ function buildDistractors(rng: RngFn, item: ReturnType<typeof buildItem>): Shape
   candidates.push(apply(c, transforms.map((t, i) => (i === wrongIdx ? wrongVersion(rng, t, c) : t))))
 
   candidates.push(b)
-  candidates.push({ ...d, type: pickOne(rng, SHAPE_TYPES.filter((t) => t !== d.type && t !== b.type)) })
+  candidates.push({ ...d, type: pickOne(rng, typePool.filter((t) => t !== d.type && t !== b.type)) })
   candidates.push(c)
   candidates.push(apply(c, transforms.map((t) => wrongVersion(rng, t, c))))
 

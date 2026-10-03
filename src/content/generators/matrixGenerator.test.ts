@@ -3,7 +3,7 @@ import { generateMatrixQuestion } from './matrixGenerator'
 import { shapesLookAlike } from './shapePalette'
 import type { ContentSpec, ShapeSpec } from '../types'
 
-const seeds = Array.from({ length: 60 }, (_, i) => i * 7919 + 1)
+const seeds = Array.from({ length: 200 }, (_, i) => i * 7919 + 1)
 
 function spec(c: ContentSpec): ShapeSpec {
   if (c.kind !== 'shape') throw new Error('expected shape')
@@ -40,6 +40,28 @@ describe('generateMatrixQuestion (2x2 analogy, like CogAT Level 8)', () => {
       const q = generateMatrixQuestion(1, seed)
       const [a, b] = q.promptVisual![0].map(spec)
       expect(shapesLookAlike(a, b)).toBe(false)
+    }
+  })
+
+  it('harder items use the newer features (marks, nested shapes, half-shading)', () => {
+    const specs = seeds.flatMap((s) => generateMatrixQuestion(3, s).choices.map((c) => spec(c.content)))
+    expect(specs.some((s) => s.inner && s.inner !== 'none')).toBe(true)
+    expect(specs.some((s) => s.nested)).toBe(true)
+    expect(specs.some((s) => s.fill === 'half')).toBe(true)
+  })
+
+  it('never draws marks or nested shapes inside arrows or tiny shapes', () => {
+    for (const seed of seeds) {
+      for (const d of [2, 3] as const) {
+        const q = generateMatrixQuestion(d, seed)
+        const all = [...q.promptVisual!.flat().filter((c) => c.kind === 'shape'), ...q.choices.map((c) => c.content)].map(spec)
+        for (const s of all) {
+          if (s.nested || (s.inner && s.inner !== 'none')) {
+            expect(s.type).not.toBe('arrow')
+            expect(s.size).not.toBe('small')
+          }
+        }
+      }
     }
   })
 

@@ -1,11 +1,13 @@
 import type { ReactNode } from 'react'
-import type { ShapeSpec } from '../types'
+import type { ShapeSpec, ShapeType } from '../types'
 
 const SIZE_PX: Record<ShapeSpec['size'], number> = {
   small: 32,
   medium: 48,
   large: 64,
 }
+
+const MARK_COLOR = '#1e293b'
 
 function polygonPoints(sides: number, r: number, cx: number, cy: number, rotationDeg = -90) {
   const pts: string[] = []
@@ -26,81 +28,104 @@ function starPoints(cx: number, cy: number, rOuter: number, rInner: number) {
   return pts.join(' ')
 }
 
-function fillProps(spec: ShapeSpec, patternId: string): { fill: string; stroke: string; strokeWidth: number } {
-  if (spec.fill === 'outline') {
-    return { fill: 'none', stroke: spec.color, strokeWidth: 4 }
+interface Paint {
+  fill: string
+  stroke: string
+  strokeWidth: number
+}
+
+function shapeElement(type: ShapeType, c: number, r: number, paint: Paint): ReactNode {
+  const common = { ...paint, strokeLinejoin: 'round' as const }
+  switch (type) {
+    case 'circle':
+      return <circle cx={c} cy={c} r={r} {...common} />
+    case 'square':
+      return <rect x={c - r * 0.85} y={c - r * 0.85} width={r * 1.7} height={r * 1.7} {...common} />
+    case 'triangle':
+      return <polygon points={polygonPoints(3, r, c, c)} {...common} />
+    case 'pentagon':
+      return <polygon points={polygonPoints(5, r, c, c)} {...common} />
+    case 'hexagon':
+      return <polygon points={polygonPoints(6, r, c, c)} {...common} />
+    case 'star':
+      return <polygon points={starPoints(c, c, r, r * 0.45)} {...common} />
+    case 'cross': {
+      const arm = r * 0.4
+      return (
+        <path
+          d={`M ${c - arm} ${c - r} H ${c + arm} V ${c - arm} H ${c + r} V ${c + arm} H ${c + arm} V ${c + r} H ${c - arm} V ${c + arm} H ${c - r} V ${c - arm} H ${c - arm} Z`}
+          {...common}
+        />
+      )
+    }
+    case 'arrow':
+      return (
+        <path
+          d={`M ${c - r} ${c - r * 0.25} H ${c + r * 0.1} V ${c - r * 0.65} L ${c + r} ${c} L ${c + r * 0.1} ${c + r * 0.65} V ${c + r * 0.25} H ${c - r} Z`}
+          {...common}
+        />
+      )
   }
-  if (spec.fill === 'striped' || spec.fill === 'dotted') {
-    return { fill: `url(#${patternId})`, stroke: spec.color, strokeWidth: 2 }
+}
+
+function paintFor(spec: ShapeSpec, patternId: string, halfId: string): Paint {
+  switch (spec.fill) {
+    case 'outline':
+      return { fill: 'white', stroke: spec.color, strokeWidth: 4 }
+    case 'striped':
+    case 'dotted':
+      return { fill: `url(#${patternId})`, stroke: spec.color, strokeWidth: 2 }
+    case 'half':
+      return { fill: `url(#${halfId})`, stroke: spec.color, strokeWidth: 2.5 }
+    default:
+      return { fill: spec.color, stroke: spec.color, strokeWidth: 2 }
   }
-  return { fill: spec.color, stroke: spec.color, strokeWidth: 2 }
+}
+
+// Marks get a white halo underneath so they stay visible on patterned fills.
+function InnerMark({ mark, c, r }: { mark: ShapeSpec['inner']; c: number; r: number }) {
+  const len = r * 0.38
+  const lines = (color: string, width: number) => {
+    const props = { stroke: color, strokeWidth: width, strokeLinecap: 'round' as const }
+    if (mark === 'line') return <line x1={c} y1={c - len} x2={c} y2={c + len} {...props} />
+    return (
+      <g {...props}>
+        <line x1={c - len * 0.7} y1={c - len * 0.7} x2={c + len * 0.7} y2={c + len * 0.7} />
+        <line x1={c - len * 0.7} y1={c + len * 0.7} x2={c + len * 0.7} y2={c - len * 0.7} />
+      </g>
+    )
+  }
+  switch (mark) {
+    case 'dot': {
+      const dotR = Math.max(3, r * 0.16)
+      return (
+        <g>
+          <circle cx={c} cy={c} r={dotR + 2} fill="white" />
+          <circle cx={c} cy={c} r={dotR} fill={MARK_COLOR} />
+        </g>
+      )
+    }
+    case 'line':
+    case 'x':
+      return (
+        <g>
+          {lines('white', 6.5)}
+          {lines(MARK_COLOR, 3)}
+        </g>
+      )
+    default:
+      return null
+  }
 }
 
 export function ShapeRenderer({ spec, className, scale = 1 }: { spec: ShapeSpec; className?: string; scale?: number }) {
   const box = SIZE_PX[spec.size]
-  const half = box / 2
-  const r = half * 0.85
-  const patternId = `pat-${spec.color.replace('#', '')}-${spec.fill}`
-  const { fill, stroke, strokeWidth } = fillProps(spec, patternId)
-
-  let shapeEl: ReactNode
-  switch (spec.type) {
-    case 'circle':
-      shapeEl = <circle cx={half} cy={half} r={r} fill={fill} stroke={stroke} strokeWidth={strokeWidth} />
-      break
-    case 'square':
-      shapeEl = (
-        <rect
-          x={half - r}
-          y={half - r}
-          width={r * 2}
-          height={r * 2}
-          fill={fill}
-          stroke={stroke}
-          strokeWidth={strokeWidth}
-        />
-      )
-      break
-    case 'triangle':
-      shapeEl = <polygon points={polygonPoints(3, r, half, half)} fill={fill} stroke={stroke} strokeWidth={strokeWidth} />
-      break
-    case 'pentagon':
-      shapeEl = <polygon points={polygonPoints(5, r, half, half)} fill={fill} stroke={stroke} strokeWidth={strokeWidth} />
-      break
-    case 'hexagon':
-      shapeEl = <polygon points={polygonPoints(6, r, half, half)} fill={fill} stroke={stroke} strokeWidth={strokeWidth} />
-      break
-    case 'star':
-      shapeEl = (
-        <polygon points={starPoints(half, half, r, r * 0.45)} fill={fill} stroke={stroke} strokeWidth={strokeWidth} />
-      )
-      break
-    case 'cross': {
-      const arm = r * 0.4
-      shapeEl = (
-        <path
-          d={`M ${half - arm} ${half - r} H ${half + arm} V ${half - arm} H ${half + r} V ${half + arm} H ${half + arm} V ${half + r} H ${half - arm} V ${half + arm} H ${half - r} V ${half - arm} H ${half - arm} Z`}
-          fill={fill}
-          stroke={stroke}
-          strokeWidth={strokeWidth}
-        />
-      )
-      break
-    }
-    case 'arrow':
-      shapeEl = (
-        <path
-          d={`M ${half - r} ${half - r * 0.25} H ${half + r * 0.1} V ${half - r * 0.65} L ${half + r} ${half} L ${half + r * 0.1} ${half + r * 0.65} V ${half + r * 0.25} H ${half - r} Z`}
-          fill={fill}
-          stroke={stroke}
-          strokeWidth={strokeWidth}
-          strokeLinejoin="round"
-        />
-      )
-      break
-    default:
-      shapeEl = null
-  }
+  const c = box / 2
+  const r = c * 0.85
+  const colorKey = spec.color.replace('#', '')
+  const patternId = `pat-${colorKey}-${spec.fill}`
+  const halfId = `half-${colorKey}`
+  const paint = paintFor(spec, patternId, halfId)
 
   return (
     <svg
@@ -116,8 +141,14 @@ export function ShapeRenderer({ spec, className, scale = 1 }: { spec: ShapeSpec;
           {spec.fill === 'striped' && <path d="M0,6 L6,0" stroke={spec.color} strokeWidth="2" />}
           {spec.fill === 'dotted' && <circle cx="3" cy="3" r="1.5" fill={spec.color} />}
         </pattern>
+        <linearGradient id={halfId} x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0.5" stopColor={spec.color} />
+          <stop offset="0.5" stopColor="white" />
+        </linearGradient>
       </defs>
-      {shapeEl}
+      {shapeElement(spec.type, c, r, paint)}
+      {spec.nested && shapeElement(spec.nested, c, r * 0.38, { fill: 'white', stroke: MARK_COLOR, strokeWidth: 2 })}
+      {!spec.nested && <InnerMark mark={spec.inner} c={c} r={r} />}
     </svg>
   )
 }

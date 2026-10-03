@@ -1,37 +1,37 @@
-import { mulberry32, pickOne, randomSeed, shuffle, type RngFn } from './rng'
-import { COLORS, COUNTS, FILLS, ROTATIONS, SHAPE_TYPES, SIZES, shapesLookAlike } from './shapePalette'
+import { mulberry32, pickOne, randomSeed, shuffle } from './rng'
+import {
+  COLORS,
+  COUNTS,
+  FILLS,
+  INNER_MARKS,
+  NESTED_TYPES,
+  ROTATIONS,
+  SHAPE_TYPES,
+  SIZES,
+  canHoldInner,
+  shapesLookAlike,
+} from './shapePalette'
 import type { ContentSpec, Difficulty, Question, ShapeSpec } from '../types'
 
-type Feature = 'type' | 'color' | 'fill' | 'size' | 'count'
+export type Feature = 'type' | 'color' | 'fill' | 'size' | 'count' | 'inner' | 'nested'
+type Value = string | number | null
 
-const POOLS: Record<Feature, readonly (string | number)[]> = {
-  type: SHAPE_TYPES,
-  color: COLORS,
-  fill: FILLS,
-  size: SIZES,
-  count: COUNTS,
+export function featureValue(shape: ShapeSpec, f: Feature): Value {
+  if (f === 'count') return shape.count ?? 1
+  if (f === 'inner') return shape.nested ? 'none' : (shape.inner ?? 'none')
+  if (f === 'nested') return shape.nested ?? null
+  return shape[f]
 }
 
-function featureValue(shape: ShapeSpec, f: Feature): string | number {
-  return f === 'count' ? (shape.count ?? 1) : shape[f]
-}
-
-function randomShapeWith(rng: RngFn, f: Feature, value: string | number, allowCount: boolean): ShapeSpec {
-  const shape: ShapeSpec = {
-    type: pickOne(rng, SHAPE_TYPES),
-    color: pickOne(rng, COLORS),
-    fill: pickOne(rng, FILLS),
-    size: pickOne(rng, SIZES),
-    rotation: pickOne(rng, ROTATIONS),
-    count: allowCount ? pickOne(rng, COUNTS) : 1,
-  }
-  return { ...shape, [f]: value } as ShapeSpec
+function sharedChoices(difficulty: Difficulty): Feature[] {
+  if (difficulty === 1) return ['type', 'color', 'fill']
+  if (difficulty === 2) return ['type', 'color', 'fill', 'size', 'count', 'inner']
+  return ['type', 'color', 'fill', 'size', 'count', 'inner', 'nested']
 }
 
 // Easier items vary fewer "noise" features, so the shared feature stands out.
 function varyingFeatures(shared: Feature, difficulty: Difficulty): Feature[] {
-  const order: Feature[] = ['type', 'color', 'fill', 'size']
-  const others = order.filter((f) => f !== shared)
+  const others = (['type', 'color', 'fill', 'size'] as Feature[]).filter((f) => f !== shared)
   if (difficulty === 1) return others.slice(0, 1)
   if (difficulty === 2) return others.slice(0, 2)
   return others
@@ -39,40 +39,66 @@ function varyingFeatures(shared: Feature, difficulty: Difficulty): Feature[] {
 
 export function generateFigureClassificationQuestion(difficulty: Difficulty, seed: number = randomSeed()): Question {
   const rng = mulberry32(seed)
-  const shared = pickOne(rng, (difficulty === 1 ? ['type', 'color', 'fill'] : ['type', 'color', 'fill', 'size', 'count']) as Feature[])
-  const sharedValue = pickOne(rng, shared === 'count' ? [2, 3] : POOLS[shared])
-  const allowCount = shared === 'count'
+  const shared = pickOne(rng, sharedChoices(difficulty))
+  const inside = shared === 'inner' || shared === 'nested'
+
+  const pools: Record<Feature, readonly Value[]> = {
+    type: inside ? SHAPE_TYPES.filter(canHoldInner) : SHAPE_TYPES,
+    color: COLORS,
+    fill: difficulty === 1 ? FILLS.filter((f) => f !== 'half') : FILLS,
+    size: inside ? SIZES.filter((s) => s !== 'small') : SIZES,
+    count: COUNTS,
+    inner: INNER_MARKS,
+    nested: [null, ...NESTED_TYPES],
+  }
+  const sharedValue = pickOne(
+    rng,
+    shared === 'count' ? [2, 3] : shared === 'inner' ? ['dot', 'line', 'x'] : shared === 'nested' ? NESTED_TYPES : pools[shared],
+  )
   const varying = varyingFeatures(shared, difficulty)
 
-  // Base shape everything starts from; non-varying features stay fixed so the
-  // only things that change across the examples are noise the child must ignore.
-  const base = randomShapeWith(rng, shared, sharedValue, false)
-  if (allowCount && base.size === 'large') base.size = 'medium'
+  // Everything starts from one base; only the `varying` features change across
+  // examples, so they're the noise the child must learn to ignore.
+  let base: ShapeSpec = {
+    type: pickOne(rng, pools.type) as ShapeSpec['type'],
+    color: pickOne(rng, COLORS),
+    fill: pickOne(rng, pools.fill) as ShapeSpec['fill'],
+    size: pickOne(rng, pools.size) as ShapeSpec['size'],
+    rotation: 0,
+    count: 1,
+    inner: 'none',
+    nested: null,
+  }
+  base = { ...base, [shared]: sharedValue } as ShapeSpec
+  if (shared === 'count' && base.size === 'large') base.size = 'medium'
 
   const makeMember = (): ShapeSpec => {
     let s: ShapeSpec = { ...base, rotation: pickOne(rng, ROTATIONS) }
-    for (const f of varying) {
-      const v = pickOne(rng, POOLS[f])
-      s = { ...s, [f]: v } as ShapeSpec
-    }
+    for (const f of varying) s = { ...s, [f]: pickOne(rng, pools[f]) } as ShapeSpec
     return s
   }
 
-  // Examples must not accidentally share any feature other than the rule.
+  // Examples must not accidentally share any noise feature.
   let examples: ShapeSpec[] = []
   for (let attempt = 0; attempt < 200; attempt++) {
     examples = [makeMember(), makeMember(), makeMember()]
-    const ok = varying.every((f) => new Set(examples.map((e) => featureValue(e, f))).size >= 2)
-    const distinct = !shapesLookAlike(examples[0], examples[1]) && !shapesLookAlike(examples[1], examples[2]) && !shapesLookAlike(examples[0], examples[2])
-    if (ok && distinct) break
+    const varied = varying.every((f) => new Set(examples.map((e) => featureValue(e, f))).size >= 2)
+    const distinct =
+      !shapesLookAlike(examples[0], examples[1]) &&
+      !shapesLookAlike(examples[1], examples[2]) &&
+      !shapesLookAlike(examples[0], examples[2])
+    if (varied && distinct) break
   }
 
   let correct = makeMember()
   for (let i = 0; i < 50 && examples.some((e) => shapesLookAlike(e, correct)); i++) correct = makeMember()
 
   // Distractors look like members (same noise ranges) but break the rule.
+  const wrongValues = shuffle(
+    rng,
+    (shared === 'count' ? [1, 2, 3] : [...pools[shared]]).filter((v) => v !== sharedValue),
+  )
   const distractors: ShapeSpec[] = []
-  const wrongValues = shuffle(rng, (shared === 'count' ? [1, 2, 3] : [...POOLS[shared]]).filter((v) => v !== sharedValue))
   for (let i = 0; distractors.length < 3 && i < 100; i++) {
     const cand = { ...makeMember(), [shared]: wrongValues[i % wrongValues.length] } as ShapeSpec
     if (shapesLookAlike(cand, correct) || distractors.some((d) => shapesLookAlike(d, cand))) continue

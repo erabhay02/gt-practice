@@ -14,9 +14,10 @@ export type SubType =
 export type Difficulty = 1 | 2 | 3
 
 export type ShapeType = 'circle' | 'square' | 'triangle' | 'star' | 'pentagon' | 'hexagon' | 'arrow' | 'cross'
-export type ShapeFill = 'solid' | 'striped' | 'dotted' | 'outline'
+export type ShapeFill = 'solid' | 'striped' | 'dotted' | 'outline' | 'half'
 export type ShapeSize = 'small' | 'medium' | 'large'
 export type ShapeRotation = 0 | 45 | 90 | 135 | 180 | 225 | 270 | 315
+export type InnerMark = 'none' | 'dot' | 'line' | 'x'
 
 export interface ShapeSpec {
   type: ShapeType
@@ -25,6 +26,10 @@ export interface ShapeSpec {
   rotation: ShapeRotation
   fill: ShapeFill
   count?: 1 | 2 | 3
+  // A small mark drawn in the middle (ignored when `nested` is set).
+  inner?: InnerMark
+  // A small outlined shape drawn inside this one.
+  nested?: ShapeType | null
 }
 
 export interface Point {

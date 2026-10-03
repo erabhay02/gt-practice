@@ -1,18 +1,14 @@
 import { describe, expect, it } from 'vitest'
-import { generateFigureClassificationQuestion } from './classificationGenerator'
+import { featureValue as value, generateFigureClassificationQuestion, type Feature } from './classificationGenerator'
 import { shapesLookAlike } from './shapePalette'
 import type { ContentSpec, ShapeSpec } from '../types'
 
-const seeds = Array.from({ length: 80 }, (_, i) => i * 104729 + 3)
-const FEATURES = ['type', 'color', 'fill', 'size', 'count'] as const
+const seeds = Array.from({ length: 200 }, (_, i) => i * 104729 + 3)
+const FEATURES: Feature[] = ['type', 'color', 'fill', 'size', 'count', 'inner', 'nested']
 
 function spec(c: ContentSpec): ShapeSpec {
   if (c.kind !== 'shape') throw new Error('expected shape')
   return c.spec
-}
-
-function value(s: ShapeSpec, f: (typeof FEATURES)[number]) {
-  return f === 'count' ? (s.count ?? 1) : s[f]
 }
 
 describe('generateFigureClassificationQuestion', () => {

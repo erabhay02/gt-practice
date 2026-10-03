@@ -7,7 +7,6 @@ Live app: https://erabhay02.github.io/gt-practice/ (auto-deploys on push to `mai
 - [ ] Confirm with the school: CogAT **Level 8** (vs Level 9) and the test date.
 
 ## In progress / planned
-- [ ] More figure variety (split/half-shaded shapes, inner lines, multi-element figures)
 - [ ] Better progress page (mock vs practice, trend, focus areas)
 - [ ] Settings page (reset progress, speech speed, timer on/off)
 - [ ] Printable worksheets
@@ -20,3 +19,4 @@ Live app: https://erabhay02.github.io/gt-practice/ (auto-deploys on push to `mai
 - [x] Deployed to GitHub Pages with tests gating every deploy
 - [x] Verbal banks doubled: Picture Analogies 60, Picture Classification 60, Sentence Completion 62 (+ integrity tests: 4 distinct choices, answer never in prompt, no duplicates)
 - [x] Mock test: optional untimed example before each part, with a spoken how-to tip; practice mode shows the tip after answering generated questions
+- [x] Figure variety: half-shaded shapes, inner marks (dot / line / ×), shapes nested inside shapes — used by Figure Matrices and Figure Classification on medium/hard items (visually verified via headless-Chrome renders)
