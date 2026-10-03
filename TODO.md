@@ -1,24 +1,36 @@
 # GT Practice — TODO
 
-Live app: https://erabhay02.github.io/gt-practice/ (auto-deploys on push to `main`)
+Live app: https://erabhay02.github.io/gt-practice/ (auto-deploys on every push to `main`; tests must pass first)
 
 ## Needs a parent (can't be done from code)
-- [ ] Install on his device, test offline (airplane mode), eyeball abacus / paper-folding / 2×2 screens, check the read-aloud voice.
+- [ ] Install on his device (iPhone/iPad: Safari → Share → Add to Home Screen; Android: Chrome → Install app).
+- [ ] Settings ⚙️: set the test date, then use "Test the voice" and pick the clearest voice/speed on his device.
 - [ ] Confirm with the school: CogAT **Level 8** (vs Level 9) and the test date.
 
-## In progress / planned
-
 ## Done
-- [x] Phase 1 + 2: all 9 Level 8 subtests, practice mode, read-aloud, adaptive difficulty, repeat avoidance, PWA/offline
-- [x] Realism pass: Number Puzzles / abacus Number Series / picture Number Analogies, 2×2 Figure Matrices, fold-and-punch Paper Folding, plausible distractors, shuffled answer positions, battery-based timed mock tests
-- [x] Deployed to GitHub Pages with tests gating every deploy
-- [x] Verbal banks doubled: Picture Analogies 60, Picture Classification 60, Sentence Completion 62 (+ integrity tests: 4 distinct choices, answer never in prompt, no duplicates)
-- [x] Mock test: optional untimed example before each part, with a spoken how-to tip; practice mode shows the tip after answering generated questions
-- [x] Figure variety: half-shaded shapes, inner marks (dot / line / ×), shapes nested inside shapes — used by Figure Matrices and Figure Classification on medium/hard items (visually verified via headless-Chrome renders)
-- [x] UI verified on an emulated iPhone-size screen (no overflow, no JS errors). Fixed from screenshots: nearly-identical rotated stars/polygons now count as look-alikes (25° rule); abacus beads grouped in fives; stale state when switching directly between practice types
-- [x] Settings page (⚙️ on Home): test date with countdown on Home, read-aloud speed + voice picker + test button, mock-test timer on/off, reset progress (with confirmation)
-- [x] Progress page: countdown / days practiced / questions answered, "Focus next" (weakest recent parts, then untried), per-part recent % + trend bars + current difficulty, mock-test history kept separate from practice (tap a run for per-part scores)
-- [x] Printable worksheets (🖨️ on Home): choose parts + 3/5/8 per part, A–D answer bubbles, Sentence Completion printed as "read aloud", answer key on its own last page; verified by printing to PDF
-- [x] Clarity fixes found in the printout/screenshots: bolder stripe/dot patterns; easy figure items unrotated with recognizable shapes (no pentagon/hexagon mix-ups); paper-folding never shows overlapping holes or mirror-image hole pairs that make wrong answers collapse into the right one
-- [x] Paper folding: diagonal (corner-to-corner) folds, square holes, and triangle cut-outs whose mirror copy flips direction (new "copied but not flipped" wrong answer). Easy = 1 straight fold + 1 round hole; medium = any fold, 2 holes; hard = 2 folds or a triangle cut-out
-- [x] GitHub Actions updated to Node 24 versions (checkout v7, setup-node v7, configure-pages v6, upload-pages-artifact v5, deploy-pages v5)
+### Foundation
+- [x] All 9 CogAT Level 8 subtests, matching the real test's formats:
+  - Verbal: Picture Analogies, Sentence Completion (read aloud), Picture Classification
+  - Quantitative: Number Analogies (pictures of amounts), Number Puzzles (missing number), Number Series (abacus)
+  - Nonverbal: Figure Matrices (2×2), Paper Folding (fold + punch/cut), Figure Classification
+- [x] Practice mode with read-aloud, adaptive difficulty, no repeats until a bank is used up, shuffled answer positions
+- [x] Works offline as an installable app; deployed to GitHub Pages with tests gating every deploy
+
+### This session
+- [x] Verbal banks doubled: Picture Analogies 60, Picture Classification 60, Sentence Completion 62 (+ integrity tests: 4 distinct choices, answer never in the prompt, no duplicates)
+- [x] Mock test: battery-length runs (Verbal / Quantitative / Nonverbal) or a quick mixed test; per-part timer; untimed example + spoken how-to tip before each part
+- [x] Figure variety: half-shaded shapes, inner marks (dot / line / ×), shapes nested inside shapes (medium/hard items)
+- [x] Paper folding: diagonal folds, square holes, triangle cut-outs whose mirror copy flips direction ("copied but not flipped" is a wrong answer). Easy = 1 straight fold + 1 round hole; medium = any fold, 2 holes; hard = 2 folds or a triangle cut-out
+- [x] Settings: test date (countdown on Home), read-aloud speed + voice picker + test button, mock timer on/off, reset progress
+- [x] Progress page: countdown / days practiced / questions answered, "Focus next", per-part recent % + trend + difficulty level, mock-test history separate from practice
+- [x] Printable worksheets: choose parts + 3/5/8 per part, A–D bubbles, Sentence Completion printed as "read aloud", answer key on the last page
+- [x] Clarity fixes found by actually looking at screens and printouts: nearly-identical rotated shapes now count as look-alikes; bolder stripe/dot patterns; easy items use unrotated, recognizable shapes; abacus beads grouped in fives; no overlapping or mirror-collapsing paper holes; stale state when switching directly between practice types
+- [x] GitHub Actions updated to Node 24 versions
+- [x] Verified on the live site in a phone-size browser: offline load + offline practice, a full quick mock test start to finish, progress page records the run, no JS errors. 42 automated tests.
+
+## Ideas for later
+- [ ] If the school says Level 9: add text-based verbal items (verbal analogies / classification / sentence completion with words).
+- [ ] Scores here are practice percentages, not CogAT scores (no age norms/percentiles); mock timing (~45 s/question) is an estimate.
+- [ ] Emoji look differs by device; very old Android phones may show blanks for newer emoji (🪹 🛞 🪶 🪵 🪚).
+- [ ] Optional: a short "how to take the test" walkthrough for him (pick one answer, don't rush, listen to the whole question).
+- [ ] Optional: small rewards/sounds for streaks if motivation dips.
