@@ -49,11 +49,12 @@ function AbacusTile({ counts }: { counts: (number | null)[] }) {
                 ?
               </text>
             ) : (
+              // A small gap after every 5th bead makes counts readable at a glance.
               Array.from({ length: count }, (_, b) => (
                 <ellipse
                   key={b}
                   cx={cx}
-                  cy={baseY - 6 - b * 11}
+                  cy={baseY - 6 - b * 10 - (b >= 5 ? 5 : 0)}
                   rx={9}
                   ry={5.5}
                   fill={BEAD_COLORS[i % BEAD_COLORS.length]}

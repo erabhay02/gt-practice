@@ -63,12 +63,17 @@ export function generateRandomShape(rng: RngFn): ShapeSpec {
   }
 }
 
-/** True when two specs would render as visually identical pictures. */
+// A star turned 90° looks like one turned 18° (its period is 72°), which a
+// child can't tell apart. Rotations closer than this count as the same picture.
+const MIN_VISIBLE_TURN = 25
+
+/** True when two specs would look the same (or nearly the same) to a child. */
 export function shapesLookAlike(a: ShapeSpec, b: ShapeSpec): boolean {
   if (a.type !== b.type || a.color !== b.color || a.size !== b.size || a.fill !== b.fill) return false
   if ((a.count ?? 1) !== (b.count ?? 1)) return false
   if ((a.nested ?? null) !== (b.nested ?? null)) return false
   if (!a.nested && (a.inner ?? 'none') !== (b.inner ?? 'none')) return false
   const period = rotationPeriod(a)
-  return (((a.rotation - b.rotation) % period) + period) % period === 0
+  const diff = (((a.rotation - b.rotation) % period) + period) % period
+  return Math.min(diff, period - diff) < MIN_VISIBLE_TURN
 }

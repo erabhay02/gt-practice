@@ -20,3 +20,4 @@ Live app: https://erabhay02.github.io/gt-practice/ (auto-deploys on push to `mai
 - [x] Verbal banks doubled: Picture Analogies 60, Picture Classification 60, Sentence Completion 62 (+ integrity tests: 4 distinct choices, answer never in prompt, no duplicates)
 - [x] Mock test: optional untimed example before each part, with a spoken how-to tip; practice mode shows the tip after answering generated questions
 - [x] Figure variety: half-shaded shapes, inner marks (dot / line / ×), shapes nested inside shapes — used by Figure Matrices and Figure Classification on medium/hard items (visually verified via headless-Chrome renders)
+- [x] UI verified on an emulated iPhone-size screen (no overflow, no JS errors). Fixed from screenshots: nearly-identical rotated stars/polygons now count as look-alikes (25° rule); abacus beads grouped in fives; stale state when switching directly between practice types
