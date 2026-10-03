@@ -11,7 +11,7 @@ import type { Choice, Question, SubType } from '../content/types'
 import { useSpeech } from '../hooks/useSpeech'
 import { useProgressStore } from '../state/progressStore'
 import { useSettingsStore } from '../state/settingsStore'
-import { QuestionView } from './QuestionView'
+import { AnswerFeedback, QuestionNav, QuestionView } from './QuestionView'
 
 // Not an official figure: a generous per-item budget for the subtest timer.
 const SECONDS_PER_ITEM = 45
@@ -48,7 +48,7 @@ export function MockTestChooser() {
       </header>
       <div className="mx-auto flex max-w-md flex-col gap-3">
         <p className="text-sm text-slate-500">
-          Like the real CogAT, each part is timed, questions get harder as you go, and there are no hints until the end.
+          Like the real CogAT, each part is timed and questions get harder as you go. After each answer he sees Correct or Incorrect, so he can learn from mistakes right away.
           The real test gives each battery on a separate sitting, so one battery at a time is the most realistic practice.
         </p>
         {BATTERIES.map(({ domain, label }) => {
@@ -85,7 +85,7 @@ export function MockTestChooser() {
 export function MockTest() {
   const { mode } = useParams<{ mode: Mode }>()
   const navigate = useNavigate()
-  const { speak, isSupported } = useSpeech()
+  const { speak, stop, isSupported } = useSpeech()
   const recordSession = useProgressStore((s) => s.recordSession)
   const getRecentlyShownIds = useProgressStore((s) => s.getRecentlyShownIds)
   const recordShownQuestions = useProgressStore((s) => s.recordShownQuestions)
@@ -112,16 +112,24 @@ export function MockTest() {
   const [sampleChoice, setSampleChoice] = useState<Choice | null>(null)
   const [deadline, setDeadline] = useState(0)
   const [now, setNow] = useState(() => Date.now())
+  // First answer per question in the current part; Previous shows it again.
+  const [blockAnswers, setBlockAnswers] = useState<Record<number, Choice>>({})
   const resultsRef = useRef<Partial<Record<SubType, BlockResult>>>({})
   const finishedBlocksRef = useRef(new Set<number>())
 
   const block = blocks[blockIdx]
   const current = block?.questions[qIdx]
+  const currentAnswer = blockAnswers[qIdx] ?? null
 
   function finishBlock() {
     if (finishedBlocksRef.current.has(blockIdx)) return
     finishedBlocksRef.current.add(blockIdx)
-    const r = resultsRef.current[block.info.subType] ?? { correct: 0, answered: 0, total: block.questions.length }
+    const given = Object.values(blockAnswers)
+    const r: BlockResult = {
+      correct: given.filter((c) => c.isCorrect).length,
+      answered: given.length,
+      total: block.questions.length,
+    }
     resultsRef.current[block.info.subType] = r
     recordSession({
       subType: block.info.subType,
@@ -137,25 +145,18 @@ export function MockTest() {
     } else {
       setBlockIdx((i) => i + 1)
       setQIdx(0)
+      setBlockAnswers({})
       setPhase('intro')
     }
   }
 
   function handleAnswer(choice: Choice) {
-    const key = block.info.subType
-    const r = resultsRef.current[key] ?? { correct: 0, answered: 0, total: block.questions.length }
-    r.answered += 1
-    if (choice.isCorrect) r.correct += 1
-    resultsRef.current[key] = r
-    if (qIdx === block.questions.length - 1) finishBlock()
-    else setQIdx((i) => i + 1)
+    if (currentAnswer) return
+    setBlockAnswers((a) => ({ ...a, [qIdx]: choice }))
   }
 
-  useEffect(() => {
-    if (phase === 'question' && current) speak(current.promptAudioText)
-    if (phase === 'sample' && block) speak(block.sample.promptAudioText)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [phase, blockIdx, qIdx])
+  // Read aloud only on request; stop any reading when the screen changes.
+  useEffect(() => stop, [phase, blockIdx, qIdx, stop])
 
   useEffect(() => {
     if (phase !== 'question' || !timed) return
@@ -262,25 +263,22 @@ export function MockTest() {
           selectedId={sampleChoice?.id ?? null}
           showFeedback={sampleChoice !== null}
           onSelect={(choice) => {
-            if (sampleChoice) return
-            setSampleChoice(choice)
-            speak(`${choice.isCorrect ? 'That is right!' : 'Not quite. The green one is the answer.'} ${block.info.tip}`)
+            if (!sampleChoice) setSampleChoice(choice)
           }}
-          onReplay={isSupported ? () => speak(block.sample.promptAudioText) : undefined}
+          onSpeak={isSupported ? () => speak(block.sample.promptAudioText) : undefined}
         />
         {sampleChoice && (
-          <div className="mx-auto mt-4 flex w-full max-w-md flex-col items-center gap-3 rounded-2xl bg-white p-4 text-center shadow-sm">
-            <p className={`text-lg font-semibold ${sampleChoice.isCorrect ? 'text-green-600' : 'text-amber-600'}`}>
-              {sampleChoice.isCorrect ? 'That’s right!' : 'Not quite: the green one is the answer.'}
-            </p>
-            <p className="text-sm text-slate-600">{block.info.tip}</p>
-            <button
-              className="rounded-full bg-indigo-600 px-6 py-3 text-lg font-semibold text-white shadow"
-              onClick={startTimedPart}
-            >
-              {timed ? 'Start the timed part' : 'Start'}
-            </button>
-          </div>
+          <>
+            <AnswerFeedback isCorrect={sampleChoice.isCorrect} explanation={block.info.tip} />
+            <div className="mx-auto mt-4 flex w-full max-w-md justify-center">
+              <button
+                className="rounded-full bg-indigo-600 px-6 py-3 text-lg font-semibold text-white shadow"
+                onClick={startTimedPart}
+              >
+                {timed ? 'Start the timed part' : 'Start'}
+              </button>
+            </div>
+          </>
         )}
       </div>
     )
@@ -308,10 +306,28 @@ export function MockTest() {
       <QuestionView
         key={current.id}
         question={current}
-        selectedId={null}
-        showFeedback={false}
+        selectedId={currentAnswer?.id ?? null}
+        showFeedback={currentAnswer !== null}
         onSelect={handleAnswer}
-        onReplay={isSupported ? () => speak(current.promptAudioText) : undefined}
+        onSpeak={isSupported ? () => speak(current.promptAudioText) : undefined}
+      />
+      {currentAnswer && (
+        <AnswerFeedback isCorrect={currentAnswer.isCorrect} explanation={current.explanationAudioText ?? block.info.tip} />
+      )}
+      <QuestionNav
+        canGoBack={qIdx > 0}
+        onPrevious={() => setQIdx((i) => i - 1)}
+        onNext={() => (qIdx === block.questions.length - 1 ? finishBlock() : setQIdx((i) => i + 1))}
+        nextLabel={
+          qIdx === block.questions.length - 1
+            ? blockIdx === blocks.length - 1
+              ? 'Finish test ✓'
+              : 'Finish part ✓'
+            : currentAnswer
+              ? 'Next →'
+              : 'Skip →'
+        }
+        nextEmphasis={currentAnswer !== null}
       />
     </div>
   )

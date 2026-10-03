@@ -26,6 +26,9 @@ Live app: https://erabhay02.github.io/gt-practice/ (auto-deploys on every push t
 - [x] Printable worksheets: choose parts + 3/5/8 per part, A–D bubbles, Sentence Completion printed as "read aloud", answer key on the last page
 - [x] Clarity fixes found by actually looking at screens and printouts: nearly-identical rotated shapes now count as look-alikes; bolder stripe/dot patterns; easy items use unrotated, recognizable shapes; abacus beads grouped in fives; no overlapping or mirror-collapsing paper holes; stale state when switching directly between practice types
 - [x] GitHub Actions updated to Node 24 versions
+- [x] Every answer shows ✓ Correct / ✗ Incorrect right away (practice, mock test, and mock examples); a missed question highlights the right answer and explains the rule. First answer counts.
+- [x] Previous / Next on every question (Next becomes Skip if unanswered; mock-test Previous stays within the current timed part; summary shows skipped count)
+- [x] Questions are read aloud only when the 🔊 button is tapped (no automatic reading; reading stops when moving to another question)
 - [x] Verified on the live site in a phone-size browser: offline load + offline practice, a full quick mock test start to finish, progress page records the run, no JS errors. 42 automated tests.
 
 ## Ideas for later

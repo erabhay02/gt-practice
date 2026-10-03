@@ -54,19 +54,19 @@ interface Props {
   selectedId: string | null
   showFeedback: boolean
   onSelect: (choice: Choice) => void
-  onReplay?: () => void
+  onSpeak?: () => void
 }
 
-export function QuestionView({ question, selectedId, showFeedback, onSelect, onReplay }: Props) {
+export function QuestionView({ question, selectedId, showFeedback, onSelect, onSpeak }: Props) {
   return (
     <div className="mx-auto flex w-full max-w-md flex-col gap-4">
       <div className="flex items-start justify-between gap-2 rounded-2xl bg-white p-4 shadow-sm">
         <p className="text-base text-slate-700">{question.promptAudioText}</p>
-        {onReplay && (
+        {onSpeak && (
           <button
-            aria-label="Hear the question again"
-            className="shrink-0 rounded-full bg-indigo-100 p-2 text-xl"
-            onClick={onReplay}
+            aria-label="Read the question aloud"
+            className="shrink-0 rounded-full bg-indigo-100 p-2 text-xl active:bg-indigo-200"
+            onClick={onSpeak}
           >
             🔊
           </button>
@@ -86,23 +86,86 @@ export function QuestionView({ question, selectedId, showFeedback, onSelect, onR
             ? choice.isCorrect
               ? 'border-green-500 bg-green-50'
               : isSelected
-                ? 'border-red-400 bg-red-50'
+                ? 'border-red-500 bg-red-50'
                 : 'border-slate-200 bg-white opacity-50'
             : isSelected
               ? 'border-indigo-500 bg-indigo-50'
               : 'border-slate-200 bg-white active:bg-indigo-50'
+          // The picked answer always gets a label; the right answer is pointed out when he missed it.
+          const label = !showFeedback
+            ? null
+            : isSelected
+              ? choice.isCorrect
+                ? { text: '✓ Correct', cls: 'bg-green-600 text-white' }
+                : { text: '✗ Incorrect', cls: 'bg-red-600 text-white' }
+              : choice.isCorrect
+                ? { text: '✓ Correct answer', cls: 'bg-green-100 text-green-800' }
+                : null
           return (
             <button
               key={choice.id}
               disabled={showFeedback}
               onClick={() => onSelect(choice)}
-              className={`flex min-h-24 items-center justify-center rounded-2xl border-2 p-2 shadow-sm transition-colors ${stateClasses}`}
+              className={`relative flex min-h-24 flex-col items-center justify-center gap-1 rounded-2xl border-2 p-2 shadow-sm transition-colors ${stateClasses}`}
             >
               <ContentTile content={choice.content} size="large" />
+              {label && <span className={`rounded-full px-2 py-0.5 text-xs font-bold ${label.cls}`}>{label.text}</span>}
             </button>
           )
         })}
       </div>
+    </div>
+  )
+}
+
+/** Big Correct / Incorrect banner shown under an answered question. */
+export function AnswerFeedback({ isCorrect, explanation }: { isCorrect: boolean; explanation?: string }) {
+  return (
+    <div
+      className={`mx-auto mt-4 flex w-full max-w-md flex-col items-center gap-1 rounded-2xl border-2 p-4 text-center ${
+        isCorrect ? 'border-green-300 bg-green-50' : 'border-red-300 bg-red-50'
+      }`}
+    >
+      <p className={`text-2xl font-bold ${isCorrect ? 'text-green-700' : 'text-red-700'}`}>
+        {isCorrect ? '✓ Correct!' : '✗ Incorrect'}
+      </p>
+      {!isCorrect && <p className="text-sm font-medium text-slate-700">The right answer is marked in green.</p>}
+      {explanation && <p className="text-sm text-slate-600">{explanation}</p>}
+    </div>
+  )
+}
+
+/** Previous / Next bar shown on every question. */
+export function QuestionNav({
+  canGoBack,
+  onPrevious,
+  onNext,
+  nextLabel = 'Next →',
+  nextEmphasis = false,
+}: {
+  canGoBack: boolean
+  onPrevious: () => void
+  onNext: () => void
+  nextLabel?: string
+  nextEmphasis?: boolean
+}) {
+  return (
+    <div className="mx-auto mt-4 grid w-full max-w-md grid-cols-2 gap-3">
+      <button
+        onClick={onPrevious}
+        disabled={!canGoBack}
+        className="rounded-full border-2 border-slate-300 py-3 text-base font-semibold text-slate-600 disabled:opacity-30"
+      >
+        ← Previous
+      </button>
+      <button
+        onClick={onNext}
+        className={`rounded-full py-3 text-base font-semibold ${
+          nextEmphasis ? 'bg-indigo-600 text-white shadow' : 'border-2 border-indigo-600 text-indigo-600'
+        }`}
+      >
+        {nextLabel}
+      </button>
     </div>
   )
 }
