@@ -1,0 +1,160 @@
+import type { ContentSpec, PaperRegion, Point } from '../types'
+import { ShapeRenderer } from './primitives'
+
+type TileSize = 'small' | 'medium' | 'large'
+
+const GROUP_COLS: Record<number, string> = {
+  1: 'grid-cols-1',
+  2: 'grid-cols-2',
+  3: 'grid-cols-3',
+  4: 'grid-cols-4',
+}
+
+function groupColumns(count: number): number {
+  if (count <= 1) return 1
+  if (count <= 4) return 2
+  if (count <= 9) return 3
+  return 4
+}
+
+function GroupTile({ emoji, count }: { emoji: string; count: number }) {
+  const cols = groupColumns(count)
+  const textSize = count > 9 ? 'text-base' : count > 4 ? 'text-lg' : 'text-2xl'
+  return (
+    <div className={`grid ${GROUP_COLS[cols]} place-items-center gap-0.5 leading-none ${textSize}`}>
+      {Array.from({ length: count }, (_, i) => (
+        <span key={i}>{emoji}</span>
+      ))}
+    </div>
+  )
+}
+
+const BEAD_COLORS = ['#ef4444', '#3b82f6', '#22c55e', '#f59e0b', '#a855f7']
+
+function AbacusTile({ counts }: { counts: (number | null)[] }) {
+  const rodGap = 22
+  const width = counts.length * rodGap + 12
+  const height = 132
+  const baseY = 122
+  return (
+    <svg viewBox={`0 0 ${width} ${height}`} width={width} height={height}>
+      <rect x={2} y={baseY} width={width - 4} height={8} rx={2} fill="#78716c" />
+      {counts.map((count, i) => {
+        const cx = 6 + rodGap / 2 + i * rodGap
+        return (
+          <g key={i}>
+            <line x1={cx} y1={8} x2={cx} y2={baseY} stroke="#a8a29e" strokeWidth={3} />
+            {count === null ? (
+              <text x={cx} y={70} textAnchor="middle" fontSize={22} fontWeight={700} fill="#64748b">
+                ?
+              </text>
+            ) : (
+              Array.from({ length: count }, (_, b) => (
+                <ellipse
+                  key={b}
+                  cx={cx}
+                  cy={baseY - 6 - b * 11}
+                  rx={9}
+                  ry={5.5}
+                  fill={BEAD_COLORS[i % BEAD_COLORS.length]}
+                  stroke="#1e293b"
+                  strokeWidth={0.75}
+                />
+              ))
+            )}
+          </g>
+        )
+      })}
+    </svg>
+  )
+}
+
+function PaperTile({
+  region,
+  holes,
+  foldLines,
+  px,
+}: {
+  region: PaperRegion
+  holes: Point[]
+  foldLines?: ('vertical' | 'horizontal')[]
+  px: number
+}) {
+  const isFull = region.w === 64 && region.h === 64
+  return (
+    <svg viewBox="-2 -2 68 68" width={px} height={px}>
+      {!isFull && (
+        <rect x={0} y={0} width={64} height={64} fill="none" stroke="#cbd5e1" strokeWidth={1.5} strokeDasharray="3 3" />
+      )}
+      <rect x={region.x} y={region.y} width={region.w} height={region.h} fill="#e2e8f0" stroke="#475569" strokeWidth={2} />
+      {foldLines?.includes('vertical') && (
+        <line
+          x1={region.x + region.w / 2}
+          y1={region.y}
+          x2={region.x + region.w / 2}
+          y2={region.y + region.h}
+          stroke="#475569"
+          strokeWidth={1.5}
+          strokeDasharray="4 3"
+        />
+      )}
+      {foldLines?.includes('horizontal') && (
+        <line
+          x1={region.x}
+          y1={region.y + region.h / 2}
+          x2={region.x + region.w}
+          y2={region.y + region.h / 2}
+          stroke="#475569"
+          strokeWidth={1.5}
+          strokeDasharray="4 3"
+        />
+      )}
+      {holes.map((h, i) => (
+        <circle key={i} cx={h.x} cy={h.y} r={4} fill="#ffffff" stroke="#1e293b" strokeWidth={1.5} />
+      ))}
+    </svg>
+  )
+}
+
+export function ContentTile({ content, size = 'medium' }: { content: ContentSpec; size?: TileSize }) {
+  const emojiSizeClass = size === 'large' ? 'text-5xl' : size === 'small' ? 'text-2xl' : 'text-4xl'
+
+  switch (content.kind) {
+    case 'emoji':
+      return <span className={emojiSizeClass}>{content.value}</span>
+    case 'shape': {
+      const count = content.spec.count ?? 1
+      if (count === 1) return <ShapeRenderer spec={content.spec} />
+      return (
+        <div className="flex items-center gap-0.5">
+          {Array.from({ length: count }, (_, i) => (
+            <ShapeRenderer key={i} spec={content.spec} scale={count === 2 ? 0.6 : 0.45} />
+          ))}
+        </div>
+      )
+    }
+    case 'text':
+      return <span className="text-2xl font-bold text-slate-800">{content.value}</span>
+    case 'blank':
+      return (
+        <div className="flex h-12 w-12 items-center justify-center rounded-lg border-2 border-dashed border-slate-300 text-2xl text-slate-400">
+          ?
+        </div>
+      )
+    case 'group':
+      return <GroupTile emoji={content.emoji} count={content.count} />
+    case 'abacus':
+      return <AbacusTile counts={content.counts} />
+    case 'paper':
+      return (
+        <PaperTile
+          region={content.region}
+          holes={content.holes}
+          foldLines={content.foldLines}
+          px={size === 'large' ? 72 : size === 'small' ? 48 : 60}
+        />
+      )
+    default:
+      return null
+  }
+}

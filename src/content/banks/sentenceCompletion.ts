@@ -1,0 +1,63 @@
+import type { ContentSpec, Question } from '../types'
+
+const emoji = (value: string): ContentSpec => ({ kind: 'emoji', value })
+
+interface RawItem {
+  question: string
+  correct: string
+  distractors: [string, string, string]
+}
+
+// Mirrors the real Sentence Completion format: the question is read aloud and
+// the child picks a picture. Wrong answers are related, so listening carefully
+// to every word ("NOT", "but", "more than") matters.
+const RAW_ITEMS: RawItem[] = [
+  { question: 'If you heard a loud moo, which animal would it be?', correct: '🐄', distractors: ['🐑', '🐖', '🐎'] },
+  { question: 'Which one is NOT alive?', correct: '🪨', distractors: ['🌳', '🐛', '🐟'] },
+  { question: 'Which one is the heaviest?', correct: '🐘', distractors: ['🐕', '🐈', '🐁'] },
+  { question: 'Which one would you find in a kitchen?', correct: '🍳', distractors: ['🛏️', '🚿', '🧸'] },
+  { question: 'Which one helps you see in the dark?', correct: '🔦', distractors: ['🕶️', '🔑', '🧤'] },
+  { question: 'Which one keeps your hands warm in winter?', correct: '🧤', distractors: ['🧣', '🧢', '👟'] },
+  { question: 'Which one grows on a tree?', correct: '🍎', distractors: ['🥕', '🥔', '🍄'] },
+  { question: 'Which one can fly, but is not a bird?', correct: '🦋', distractors: ['🦆', '🦉', '🐧'] },
+  { question: 'Which one has wheels, but no engine?', correct: '🚲', distractors: ['🚗', '🚌', '🛵'] },
+  { question: 'Which one lives in water and has no legs?', correct: '🐟', distractors: ['🐸', '🦀', '🐢'] },
+  { question: 'Which one tells you what time it is?', correct: '⏰', distractors: ['📅', '🧭', '🌡️'] },
+  { question: 'Which one would you use to measure how long something is?', correct: '📏', distractors: ['⚖️', '🌡️', '⏱️'] },
+  { question: 'Which one is the smallest?', correct: '🐜', distractors: ['🐁', '🐈', '🐕'] },
+  { question: 'Which animal has a very long neck?', correct: '🦒', distractors: ['🦓', '🐘', '🐪'] },
+  { question: 'Which one melts when it gets warm?', correct: '🧊', distractors: ['🪨', '🔑', '🧱'] },
+  { question: 'Which one do you use to pay at a store?', correct: '💵', distractors: ['🎟️', '📬', '🔑'] },
+  { question: 'Which one gives us milk?', correct: '🐄', distractors: ['🐖', '🐔', '🐎'] },
+  { question: 'Which one is round and bounces?', correct: '🏀', distractors: ['🎲', '🧱', '🍎'] },
+  { question: 'Which one comes before a butterfly?', correct: '🐛', distractors: ['🐝', '🐞', '🦗'] },
+  { question: 'Which one would a firefighter use?', correct: '🧯', distractors: ['🩺', '🔨', '🍳'] },
+  { question: 'Which one would a doctor use?', correct: '🩺', distractors: ['🧯', '🎨', '🔧'] },
+  { question: 'Which one would you NOT find at the beach?', correct: '⛄', distractors: ['🐚', '🦀', '🌊'] },
+  { question: 'Which one has more legs than a dog?', correct: '🕷️', distractors: ['🐔', '🐟', '🐈'] },
+  { question: 'Which one opens a door?', correct: '🔑', distractors: ['🔒', '🚪', '🧲'] },
+  { question: 'Which one can you write with and also erase?', correct: '✏️', distractors: ['🖊️', '🖍️', '🖌️'] },
+  { question: 'Which one would float on water?', correct: '🪵', distractors: ['🪨', '🔑', '⚓'] },
+  { question: 'Which one is a baby animal?', correct: '🐣', distractors: ['🐓', '🦆', '🦉'] },
+  { question: 'Which one is used to cut wood?', correct: '🪚', distractors: ['✂️', '🔨', '🪛'] },
+  { question: 'Which one shines in the sky at night?', correct: '🌙', distractors: ['☀️', '🌈', '☁️'] },
+  { question: 'Which one is a vegetable?', correct: '🥕', distractors: ['🍎', '🍌', '🍇'] },
+  { question: 'Which one would you wear when it is raining?', correct: '🧥', distractors: ['🩳', '🕶️', '👙'] },
+  { question: 'Which one is bigger than a cat but smaller than a horse?', correct: '🐕', distractors: ['🐁', '🐘', '🐜'] },
+]
+
+export function buildSentenceCompletionBank(): Question[] {
+  return RAW_ITEMS.map((item, i) => ({
+    id: `sentence-completion-${i}`,
+    domain: 'verbal',
+    subType: 'sentence-completion',
+    difficulty: 1,
+    promptAudioText: item.question,
+    choices: [item.correct, ...item.distractors].map((value, ci) => ({
+      id: `c${ci}`,
+      content: emoji(value),
+      isCorrect: ci === 0,
+    })),
+    source: 'authored',
+  }))
+}
