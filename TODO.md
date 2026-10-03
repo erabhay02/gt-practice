@@ -30,6 +30,7 @@ Live app: https://erabhay02.github.io/gt-practice/ (auto-deploys on every push t
 - [x] Previous / Next on every question (Next becomes Skip if unanswered; mock-test Previous stays within the current timed part; summary shows skipped count)
 - [x] Questions are read aloud only when the 🔊 button is tapped (no automatic reading; reading stops when moving to another question)
 - [x] Read-aloud reliability: prefers a built-in device voice over Chrome's online Google voices (known to go silent on Macs), avoids Safari's cancel-then-speak bug, keeps Chrome from dropping speech mid-sentence; 🔊 shows "⏹ Reading…" (tap to stop) and a visible warning if no sound starts
+- [x] Big purple "Listen" button with a speaker icon; Settings → Speech check (speaks one sentence and reports what the browser did); app version shown in Settings; new versions now load automatically instead of waiting for a second reload
 - [x] Verified on the live site in a phone-size browser: offline load + offline practice, a full quick mock test start to finish, progress page records the run, no JS errors. 42 automated tests.
 
 ## Ideas for later

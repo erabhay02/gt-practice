@@ -64,17 +64,33 @@ export interface SpeechControls {
   problem: string | null
 }
 
+export function SpeakerIcon({ className = 'h-6 w-6' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M11 5 6 9H3v6h3l5 4V5z" fill="currentColor" />
+      <path d="M15.5 8.5a5 5 0 0 1 0 7" />
+      <path d="M18.5 5.5a9 9 0 0 1 0 13" />
+    </svg>
+  )
+}
+
 function SpeakButton({ speech }: { speech: SpeechControls }) {
   return (
     <button
       aria-label={speech.speaking ? 'Stop reading' : 'Read the question aloud'}
       onClick={speech.speaking ? speech.stop : speech.speak}
-      className={`flex shrink-0 items-center gap-1 rounded-full px-3 py-2 text-xl transition-colors ${
-        speech.speaking ? 'animate-pulse bg-indigo-600 text-white' : 'bg-indigo-100 active:bg-indigo-200'
+      className={`flex shrink-0 items-center gap-1.5 rounded-full px-4 py-2.5 text-sm font-bold shadow-sm transition-colors ${
+        speech.speaking ? 'animate-pulse bg-indigo-700 text-white' : 'bg-indigo-600 text-white active:bg-indigo-800'
       }`}
     >
-      {speech.speaking ? '⏹' : '🔊'}
-      {speech.speaking && <span className="text-xs font-semibold">Reading…</span>}
+      {speech.speaking ? (
+        <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden="true">
+          <rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor" />
+        </svg>
+      ) : (
+        <SpeakerIcon />
+      )}
+      {speech.speaking ? 'Stop' : 'Listen'}
     </button>
   )
 }

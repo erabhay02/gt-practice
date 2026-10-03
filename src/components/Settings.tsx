@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
-import { useEnglishVoices, useSpeech } from '../hooks/useSpeech'
+import { pickVoice, useEnglishVoices, useSpeech } from '../hooks/useSpeech'
 import { useProgressStore } from '../state/progressStore'
 import { daysUntil, useSettingsStore, type SpeechRate } from '../state/settingsStore'
 
@@ -19,6 +19,61 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
   )
 }
 
+type CheckResult = { ok: boolean; lines: string[]; verdict: string }
+
+// Talks once and reports exactly what the browser's speech engine did, so a
+// "no sound" problem can be pinned to the browser vs. the device's audio.
+function runSpeechCheck(voiceName: string | null, rate: number): Promise<CheckResult> {
+  return new Promise((resolve) => {
+    const lines: string[] = []
+    if (!('speechSynthesis' in window)) {
+      resolve({ ok: false, lines, verdict: 'This browser has no read-aloud support. Try Chrome or Safari.' })
+      return
+    }
+    const synth = window.speechSynthesis
+    const voices = synth.getVoices()
+    const voice = pickVoice(voiceName)
+    lines.push(`Voices available: ${voices.length} (${voices.filter((v) => v.localService).length} built-in)`)
+    lines.push(`Using voice: ${voice ? `${voice.name}${voice.localService ? ' (built-in)' : ' (online)'}` : 'browser default'}`)
+    const u = new SpeechSynthesisUtterance('This is a sound check. Which one can fly, but is not a bird?')
+    u.lang = 'en-US'
+    u.rate = rate
+    if (voice) u.voice = voice
+    const t0 = performance.now()
+    const ms = () => `${Math.round(performance.now() - t0)} ms`
+    let started = false
+    const finish = (r: Omit<CheckResult, 'lines'>) => resolve({ ...r, lines })
+    u.onstart = () => {
+      started = true
+      lines.push(`Started speaking at ${ms()}`)
+    }
+    u.onend = () => {
+      lines.push(`Finished at ${ms()}`)
+      finish({
+        ok: true,
+        verdict:
+          "The browser spoke the sentence. If you didn't hear it, the sound is going somewhere else: check the volume, headphones/Bluetooth, and the Mac's sound output.",
+      })
+    }
+    u.onerror = (e) => {
+      lines.push(`Error: ${e.error} at ${ms()}`)
+      finish({ ok: false, verdict: `The browser refused to speak (${e.error}). Pick a different voice above and run the check again.` })
+    }
+    window.setTimeout(() => {
+      if (started) return
+      synth.cancel()
+      finish({
+        ok: false,
+        verdict:
+          "The browser's speech engine never started. Quit Chrome completely (Cmd+Q) and reopen it, then try again. If it still fails, try the app in Safari.",
+      })
+    }, 4000)
+    ;(window as unknown as { __speechCheck?: SpeechSynthesisUtterance }).__speechCheck = u
+    synth.cancel()
+    window.setTimeout(() => synth.speak(u), 150)
+  })
+}
+
 export function Settings() {
   const settings = useSettingsStore()
   const resetProgress = useProgressStore((s) => s.resetProgress)
@@ -26,6 +81,7 @@ export function Settings() {
   const voices = useEnglishVoices()
   const { speak, isSupported } = useSpeech()
   const [confirmReset, setConfirmReset] = useState(false)
+  const [check, setCheck] = useState<CheckResult | 'running' | null>(null)
   const days = daysUntil(settings.testDate)
 
   return (
@@ -95,6 +151,30 @@ export function Settings() {
           )}
         </Section>
 
+        <Section title="Speech check">
+          <p className="mb-2 text-xs text-slate-500">
+            If Listen makes no sound, run this. It speaks one sentence and shows what the browser did.
+          </p>
+          <button
+            onClick={async () => {
+              setCheck('running')
+              setCheck(await runSpeechCheck(settings.voiceName, settings.speechRate))
+            }}
+            disabled={check === 'running'}
+            className="w-full rounded-lg bg-indigo-600 py-2 text-sm font-semibold text-white disabled:opacity-50"
+          >
+            {check === 'running' ? 'Checking… (listen now)' : 'Run speech check'}
+          </button>
+          {check && check !== 'running' && (
+            <div className={`mt-3 rounded-lg p-3 text-xs ${check.ok ? 'bg-green-50 text-green-900' : 'bg-amber-50 text-amber-900'}`}>
+              {check.lines.map((l) => (
+                <p key={l}>{l}</p>
+              ))}
+              <p className="mt-2 font-semibold">{check.verdict}</p>
+            </div>
+          )}
+        </Section>
+
         <Section title="Mock test timer">
           <label className="flex items-center justify-between gap-3">
             <span className="text-sm text-slate-600">
@@ -140,6 +220,8 @@ export function Settings() {
             </div>
           )}
         </Section>
+
+        <p className="text-center text-xs text-slate-400">App version: {__BUILD_ID__}</p>
       </div>
     </div>
   )

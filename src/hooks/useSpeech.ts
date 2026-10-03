@@ -7,6 +7,21 @@ const supported = typeof window !== 'undefined' && 'speechSynthesis' in window
 // never fires `end`) unless something keeps a reference to it.
 let activeUtterance: SpeechSynthesisUtterance | null = null
 
+/**
+ * The user's chosen voice, else a voice built into the device: Chrome's online
+ * "Google" voices are known to start and then go silent on Macs.
+ */
+export function pickVoice(voiceName: string | null): SpeechSynthesisVoice | undefined {
+  const voices = window.speechSynthesis.getVoices()
+  const chosen = voiceName ? voices.find((v) => v.name === voiceName) : undefined
+  return (
+    chosen ??
+    voices.find((v) => v.localService && v.lang === 'en-US' && v.default) ??
+    voices.find((v) => v.localService && v.lang === 'en-US') ??
+    voices.find((v) => v.localService && v.lang.startsWith('en'))
+  )
+}
+
 /** English voices; the list loads asynchronously on some browsers. */
 export function useEnglishVoices(): SpeechSynthesisVoice[] {
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([])
@@ -43,15 +58,7 @@ export function useSpeech() {
       utterance.lang = 'en-US'
       utterance.rate = rate
       utterance.pitch = 1.05
-      const voices = synth.getVoices()
-      const chosen = voiceName ? voices.find((v) => v.name === voiceName) : undefined
-      // With no voice chosen, prefer a voice built into the device: Chrome's
-      // online "Google" voices are known to start and then go silent on Macs.
-      const builtIn =
-        voices.find((v) => v.localService && v.lang === 'en-US' && v.default) ??
-        voices.find((v) => v.localService && v.lang === 'en-US') ??
-        voices.find((v) => v.localService && v.lang.startsWith('en'))
-      const voice = chosen ?? builtIn
+      const voice = pickVoice(voiceName)
       if (voice) utterance.voice = voice
       utterance.onstart = () => {
         window.clearTimeout(watchdog.current)

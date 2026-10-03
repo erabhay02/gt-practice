@@ -8,6 +8,10 @@ const base = process.env.BASE_PATH ?? '/'
 
 export default defineConfig({
   base,
+  define: {
+    // Shown in Settings so a parent can confirm the device has the newest version.
+    __BUILD_ID__: JSON.stringify(new Date().toISOString().slice(0, 16).replace('T', ' ') + ' UTC'),
+  },
   plugins: [
     react(),
     tailwindcss(),
