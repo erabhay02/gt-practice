@@ -55,12 +55,20 @@ export function Home() {
           </section>
         ))}
 
-        <Link
-          to="/progress"
-          className="rounded-2xl border-2 border-dashed border-slate-300 p-4 text-center text-sm font-medium text-slate-500"
-        >
-          View Progress (for parents)
-        </Link>
+        <div className="grid grid-cols-2 gap-2">
+          <Link
+            to="/progress"
+            className="rounded-2xl border-2 border-dashed border-slate-300 p-4 text-center text-sm font-medium text-slate-500"
+          >
+            📊 Progress
+          </Link>
+          <Link
+            to="/worksheet"
+            className="rounded-2xl border-2 border-dashed border-slate-300 p-4 text-center text-sm font-medium text-slate-500"
+          >
+            🖨️ Worksheet
+          </Link>
+        </div>
       </div>
     </div>
   )

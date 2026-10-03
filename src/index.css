@@ -4,6 +4,13 @@ html, body, #root {
   height: 100%;
 }
 
+@media print {
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
 body {
   -webkit-tap-highlight-color: transparent;
   overscroll-behavior-y: none;

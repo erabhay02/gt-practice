@@ -4,6 +4,7 @@ import { PracticeSession } from './components/PracticeSession'
 import { ProgressDashboard } from './components/ProgressDashboard'
 import { MockTest, MockTestChooser } from './components/MockTest'
 import { Settings } from './components/Settings'
+import { Worksheet } from './components/Worksheet'
 
 // React Router reuses a component when only the URL params change; keying by
 // the param gives each practice type / test mode a fresh session state.
@@ -26,6 +27,7 @@ export default function App() {
         <Route path="/mock-test" element={<MockTestChooser />} />
         <Route path="/mock-test/:mode" element={<KeyedMockTest />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/worksheet" element={<Worksheet />} />
         <Route path="/progress" element={<ProgressDashboard />} />
       </Routes>
     </HashRouter>

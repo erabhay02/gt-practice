@@ -136,10 +136,13 @@ export function ShapeRenderer({ spec, className, scale = 1 }: { spec: ShapeSpec;
       style={{ transform: `rotate(${spec.rotation}deg)` }}
     >
       <defs>
-        <pattern id={patternId} width="6" height="6" patternUnits="userSpaceOnUse">
-          <rect width="6" height="6" fill="white" />
-          {spec.fill === 'striped' && <path d="M0,6 L6,0" stroke={spec.color} strokeWidth="2" />}
-          {spec.fill === 'dotted' && <circle cx="3" cy="3" r="1.5" fill={spec.color} />}
+        {/* Bold, widely spaced tiles so stripes vs dots stay distinguishable on small shapes and printouts. */}
+        <pattern id={patternId} width="9" height="9" patternUnits="userSpaceOnUse">
+          <rect width="9" height="9" fill="white" />
+          {spec.fill === 'striped' && (
+            <path d="M-2,2 L2,-2 M0,9 L9,0 M7,11 L11,7" stroke={spec.color} strokeWidth="2.6" />
+          )}
+          {spec.fill === 'dotted' && <circle cx="4.5" cy="4.5" r="2.2" fill={spec.color} />}
         </pattern>
         <linearGradient id={halfId} x1="0" y1="0" x2="1" y2="0">
           <stop offset="0.5" stopColor={spec.color} />

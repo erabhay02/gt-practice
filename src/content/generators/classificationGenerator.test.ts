@@ -47,3 +47,14 @@ describe('generateFigureClassificationQuestion', () => {
     expect(generateFigureClassificationQuestion(2, 555)).toEqual(generateFigureClassificationQuestion(2, 555))
   })
 })
+
+describe('easy figure classification items', () => {
+  it('are unrotated and never mix pentagons with hexagons', () => {
+    for (const seed of seeds) {
+      const q = generateFigureClassificationQuestion(1, seed)
+      const specs = [...q.promptVisual![0], ...q.choices.map((c) => c.content)].map(spec)
+      expect(specs.every((s) => s.rotation === 0)).toBe(true)
+      expect(specs.some((s) => s.type === 'pentagon') && specs.some((s) => s.type === 'hexagon')).toBe(false)
+    }
+  })
+})

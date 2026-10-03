@@ -59,10 +59,13 @@ function randomHole(rng: RngFn, region: PaperRegion, taken: Point[]): Point {
   const ys: number[] = []
   for (let v = region.x + 8; v <= region.x + region.w - 8; v += 4) xs.push(v)
   for (let v = region.y + 8; v <= region.y + region.h - 8; v += 4) ys.push(v)
-  for (let i = 0; i < 100; i++) {
+  // A second hole at a mirror spot of the first makes every wrong answer
+  // collapse into the right one, so avoid mirrors as well as the holes.
+  const avoid = taken.flatMap((t) => [t, { x: 64 - t.x, y: t.y }, { x: t.x, y: 64 - t.y }, { x: 64 - t.x, y: 64 - t.y }])
+  for (let i = 0; i < 200; i++) {
     const p = { x: pickOne(rng, xs), y: pickOne(rng, ys) }
     const nearFold = Math.abs(p.x - 32) < 6 || Math.abs(p.y - 32) < 6
-    const nearOther = taken.some((t) => Math.abs(t.x - p.x) < 10 && Math.abs(t.y - p.y) < 10)
+    const nearOther = avoid.some((t) => Math.abs(t.x - p.x) < 10 && Math.abs(t.y - p.y) < 10)
     if (!nearFold && !nearOther) return p
   }
   return { x: region.x + region.w / 2, y: region.y + region.h / 2 }
@@ -109,16 +112,36 @@ export function generatePaperFoldingQuestion(difficulty: Difficulty, seed: numbe
   candidates.push(correct.map((p, i) => (i === correct.length - 1 ? translate(reflect(p, folds[0].axis), otherAxis(folds[0].axis)) : p)))
   if (folds.length === 1) {
     candidates.push(unfold(punched, [folds[0], { axis: otherAxis(folds[0].axis), keep: 'first' }]))
+    // Copied to the diagonally opposite spot.
+    candidates.push([...punched, ...punched.map((p) => ({ x: 64 - p.x, y: 64 - p.y }))])
+  }
+  // Right pattern, wrong place on the paper.
+  for (const [dx, dy] of [[16, 0], [-16, 0], [0, 16], [0, -16], [12, 0], [-12, 0], [0, 12], [0, -12], [12, 12], [-12, -12], [12, -12], [-12, 12]]) {
+    const shifted = correct.map((p) => ({ x: p.x + dx, y: p.y + dy }))
+    if (shifted.every((p) => p.x >= 5 && p.x <= 59 && p.y >= 5 && p.y <= 59)) candidates.push(shifted)
   }
 
   const seen = new Set([holeKey(correct)])
   const distractors: Point[][] = []
+  // Overlapping holes within one paper look like a drawing glitch, not an answer.
+  const overlaps = (holes: Point[]) =>
+    holes.some((p, i) => holes.some((q, j) => j > i && Math.abs(p.x - q.x) < 10 && Math.abs(p.y - q.y) < 10))
+
   for (const c of candidates) {
     const key = holeKey(c)
-    if (seen.has(key) || nearlySame(c, correct) || distractors.some((d) => nearlySame(c, d))) continue
+    if (seen.has(key) || overlaps(c) || nearlySame(c, correct) || distractors.some((d) => nearlySame(c, d))) continue
     seen.add(key)
     distractors.push(c)
     if (distractors.length === 3) break
+  }
+  // Last resort for rare symmetric layouts where the deliberate mistakes collapse.
+  const grid = [8, 16, 24, 40, 48, 56]
+  for (let i = 0; distractors.length < 3 && i < 500; i++) {
+    const c = correct.map(() => ({ x: pickOne(rng, grid), y: pickOne(rng, grid) }))
+    const key = holeKey(c)
+    if (seen.has(key) || overlaps(c) || nearlySame(c, correct) || distractors.some((d) => nearlySame(c, d))) continue
+    seen.add(key)
+    distractors.push(c)
   }
 
   const paper = (region: PaperRegion, holes: Point[], foldLines?: Axis[]): ContentSpec => ({

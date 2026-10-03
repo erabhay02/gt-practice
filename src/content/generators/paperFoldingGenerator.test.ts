@@ -58,6 +58,19 @@ describe('generatePaperFoldingQuestion (fold, punch, unfold)', () => {
     }
   })
 
+  it('no paper shows two holes on top of each other', () => {
+    for (let seed = 1; seed <= 400; seed++) {
+      for (const d of [1, 2, 3] as const) {
+        for (const c of generatePaperFoldingQuestion(d, seed).choices) {
+          const h = holes(c.content)
+          for (let i = 0; i < h.length; i++)
+            for (let j = i + 1; j < h.length; j++)
+              expect(Math.abs(h[i].x - h[j].x) >= 10 || Math.abs(h[i].y - h[j].y) >= 10).toBe(true)
+        }
+      }
+    }
+  })
+
   it('uses two folds on the hardest items', () => {
     const q = generatePaperFoldingQuestion(3, 42)
     expect(q.promptVisual![0].filter((c) => c.kind === 'paper')).toHaveLength(3)

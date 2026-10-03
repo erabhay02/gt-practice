@@ -116,7 +116,11 @@ function wrongVersion(rng: RngFn, t: Transform, from: ShapeSpec): Transform {
 function buildItem(rng: RngFn, difficulty: Difficulty) {
   const attrs = pickAttrs(rng, difficulty)
   const usesInside = attrs.includes('inner') || attrs.includes('nested')
-  const typePool = usesInside ? SHAPE_TYPES.filter(canHoldInner) : SHAPE_TYPES
+  const typePool = usesInside
+    ? SHAPE_TYPES.filter(canHoldInner)
+    : difficulty === 1
+      ? SHAPE_TYPES.filter((t) => t !== 'hexagon')
+      : SHAPE_TYPES
 
   const a: ShapeSpec = { ...generateRandomShape(rng), count: 1, type: pickOne(rng, typePool) }
   if (difficulty >= 2 && !attrs.includes('fill')) a.fill = pickOne(rng, FILLS)

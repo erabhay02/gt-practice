@@ -2,6 +2,7 @@ import { mulberry32, pickOne, randomSeed, shuffle } from './rng'
 import {
   COLORS,
   COUNTS,
+  EASY_SHAPE_TYPES,
   FILLS,
   INNER_MARKS,
   NESTED_TYPES,
@@ -43,7 +44,7 @@ export function generateFigureClassificationQuestion(difficulty: Difficulty, see
   const inside = shared === 'inner' || shared === 'nested'
 
   const pools: Record<Feature, readonly Value[]> = {
-    type: inside ? SHAPE_TYPES.filter(canHoldInner) : SHAPE_TYPES,
+    type: inside ? SHAPE_TYPES.filter(canHoldInner) : difficulty === 1 ? EASY_SHAPE_TYPES : SHAPE_TYPES,
     color: COLORS,
     fill: difficulty === 1 ? FILLS.filter((f) => f !== 'half') : FILLS,
     size: inside ? SIZES.filter((s) => s !== 'small') : SIZES,
@@ -73,7 +74,7 @@ export function generateFigureClassificationQuestion(difficulty: Difficulty, see
   if (shared === 'count' && base.size === 'large') base.size = 'medium'
 
   const makeMember = (): ShapeSpec => {
-    let s: ShapeSpec = { ...base, rotation: pickOne(rng, ROTATIONS) }
+    let s: ShapeSpec = { ...base, rotation: difficulty === 1 ? 0 : pickOne(rng, ROTATIONS) }
     for (const f of varying) s = { ...s, [f]: pickOne(rng, pools[f]) } as ShapeSpec
     return s
   }

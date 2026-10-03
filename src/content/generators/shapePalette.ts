@@ -5,6 +5,8 @@ import { pickOne, type RngFn } from './rng'
 // 45° rotations, so rotation-based items would show "different" answers that
 // look the same.
 export const SHAPE_TYPES: ShapeType[] = ['triangle', 'star', 'pentagon', 'hexagon', 'arrow']
+// Easy items: unrotated, instantly recognizable silhouettes (no pentagon/hexagon mix-ups).
+export const EASY_SHAPE_TYPES: ShapeType[] = ['circle', 'square', 'triangle', 'star', 'arrow']
 export const COLORS = ['#ef4444', '#3b82f6', '#22c55e', '#f59e0b', '#a855f7']
 export const SIZES: ShapeSize[] = ['small', 'medium', 'large']
 export const ROTATIONS: ShapeRotation[] = [0, 45, 90, 135, 180, 225, 270, 315]
