@@ -88,18 +88,56 @@ export interface SubtestInfo {
   // Approximate number of items on the real Level 8 subtest.
   realLength: number
   shortDescription: string
+  // How to solve this kind of question; read aloud after the mock-test example.
+  tip: string
 }
 
 export const AVAILABLE_SUBTYPES: SubtestInfo[] = [
-  { domain: 'verbal', subType: 'picture-analogy', label: 'Picture Analogies', realLength: 16, shortDescription: 'A goes with B, so C goes with ?' },
-  { domain: 'verbal', subType: 'sentence-completion', label: 'Sentence Completion', realLength: 16, shortDescription: 'Listen, then pick the picture' },
-  { domain: 'verbal', subType: 'picture-classification', label: 'Picture Classification', realLength: 16, shortDescription: 'Which one belongs with the three?' },
-  { domain: 'quantitative', subType: 'number-analogy', label: 'Number Analogies', realLength: 16, shortDescription: 'How do the amounts change?' },
-  { domain: 'quantitative', subType: 'number-puzzle', label: 'Number Puzzles', realLength: 14, shortDescription: 'Find the missing number' },
-  { domain: 'quantitative', subType: 'number-series', label: 'Number Series', realLength: 16, shortDescription: 'Abacus bead patterns' },
-  { domain: 'nonverbal', subType: 'figure-matrix', label: 'Figure Matrices', realLength: 16, shortDescription: 'Shape A changes to B, so C changes to ?' },
-  { domain: 'nonverbal', subType: 'paper-folding', label: 'Paper Folding', realLength: 14, shortDescription: 'Fold, punch, unfold' },
-  { domain: 'nonverbal', subType: 'figure-classification', label: 'Figure Classification', realLength: 16, shortDescription: 'Which shape belongs with the three?' },
+  {
+    domain: 'verbal', subType: 'picture-analogy', label: 'Picture Analogies', realLength: 16,
+    shortDescription: 'A goes with B, so C goes with ?',
+    tip: 'First figure out how the two top pictures go together. Then find the picture that goes with the bottom picture in the very same way.',
+  },
+  {
+    domain: 'verbal', subType: 'sentence-completion', label: 'Sentence Completion', realLength: 16,
+    shortDescription: 'Listen, then pick the picture',
+    tip: 'Listen to every word of the question, especially words like NOT and but. You can tap the speaker to hear it again.',
+  },
+  {
+    domain: 'verbal', subType: 'picture-classification', label: 'Picture Classification', realLength: 16,
+    shortDescription: 'Which one belongs with the three?',
+    tip: 'Think about how the three top pictures are all alike. Pick the one picture that is alike in that same way.',
+  },
+  {
+    domain: 'quantitative', subType: 'number-analogy', label: 'Number Analogies', realLength: 16,
+    shortDescription: 'How do the amounts change?',
+    tip: 'Count the top pictures. Did the number go up or down, and by how many? Make the same change to the bottom picture.',
+  },
+  {
+    domain: 'quantitative', subType: 'number-puzzle', label: 'Number Puzzles', realLength: 14,
+    shortDescription: 'Find the missing number',
+    tip: 'Both sides of the equals sign must be the same amount. Try each answer in place of the question mark and check.',
+  },
+  {
+    domain: 'quantitative', subType: 'number-series', label: 'Number Series', realLength: 16,
+    shortDescription: 'Abacus bead patterns',
+    tip: 'Count the beads on each rod, left to right. Look for the pattern, like adding one each time or repeating, and continue it.',
+  },
+  {
+    domain: 'nonverbal', subType: 'figure-matrix', label: 'Figure Matrices', realLength: 16,
+    shortDescription: 'Shape A changes to B, so C changes to ?',
+    tip: 'Look at what changes from the first shape to the second: color, pattern, size, turning, or how many. Make the same changes to the bottom shape.',
+  },
+  {
+    domain: 'nonverbal', subType: 'paper-folding', label: 'Paper Folding', realLength: 14,
+    shortDescription: 'Fold, punch, unfold',
+    tip: 'The hole goes through every layer. When you unfold, each fold makes a mirror copy of the hole on the other side of the fold line.',
+  },
+  {
+    domain: 'nonverbal', subType: 'figure-classification', label: 'Figure Classification', realLength: 16,
+    shortDescription: 'Which shape belongs with the three?',
+    tip: 'Find the one thing all three top shapes share, like the same shape, color, or pattern. Ignore the things that are different.',
+  },
 ]
 
 export const BATTERIES: { domain: Domain; label: string }[] = [

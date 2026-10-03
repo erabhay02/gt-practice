@@ -1,6 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { AVAILABLE_SUBTYPES, BATTERIES, getRampedQuestions, type SubtestInfo } from '../content/contentLoader'
+import {
+  AVAILABLE_SUBTYPES,
+  BATTERIES,
+  getQuestionPool,
+  getRampedQuestions,
+  type SubtestInfo,
+} from '../content/contentLoader'
 import type { Choice, Question, SubType } from '../content/types'
 import { useSpeech } from '../hooks/useSpeech'
 import { useProgressStore } from '../state/progressStore'
@@ -15,6 +21,8 @@ type Mode = 'verbal' | 'quantitative' | 'nonverbal' | 'quick'
 interface Block {
   info: SubtestInfo
   questions: Question[]
+  // Untimed, not scored: like the examples the teacher walks through on the real test.
+  sample: Question
   seconds: number
 }
 
@@ -85,16 +93,19 @@ export function MockTest() {
     const infos = mode === 'quick' ? AVAILABLE_SUBTYPES : AVAILABLE_SUBTYPES.filter((s) => s.domain === mode)
     return infos.map((info) => {
       const count = mode === 'quick' ? QUICK_ITEMS_PER_SUBTEST : info.realLength
-      const questions = getRampedQuestions(info.subType, count, getRecentlyShownIds(info.subType))
-      recordShownQuestions(info.subType, questions.map((q) => q.id))
-      return { info, questions, seconds: count * SECONDS_PER_ITEM }
+      const recent = getRecentlyShownIds(info.subType)
+      const questions = getRampedQuestions(info.subType, count, recent)
+      const [sample] = getQuestionPool(info.subType, 1, 1, [...recent, ...questions.map((q) => q.id)])
+      recordShownQuestions(info.subType, [sample, ...questions].map((q) => q.id))
+      return { info, questions, sample, seconds: count * SECONDS_PER_ITEM }
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode])
 
   const [blockIdx, setBlockIdx] = useState(0)
   const [qIdx, setQIdx] = useState(0)
-  const [phase, setPhase] = useState<'intro' | 'question' | 'complete'>('intro')
+  const [phase, setPhase] = useState<'intro' | 'sample' | 'question' | 'complete'>('intro')
+  const [sampleChoice, setSampleChoice] = useState<Choice | null>(null)
   const [deadline, setDeadline] = useState(0)
   const [now, setNow] = useState(() => Date.now())
   const resultsRef = useRef<Partial<Record<SubType, BlockResult>>>({})
@@ -135,6 +146,7 @@ export function MockTest() {
 
   useEffect(() => {
     if (phase === 'question' && current) speak(current.promptAudioText)
+    if (phase === 'sample' && block) speak(block.sample.promptAudioText)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase, blockIdx, qIdx])
 
@@ -196,6 +208,12 @@ export function MockTest() {
     )
   }
 
+  function startTimedPart() {
+    setDeadline(Date.now() + block.seconds * 1000)
+    setNow(Date.now())
+    setPhase('question')
+  }
+
   if (phase === 'intro') {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-slate-50 p-6 text-center">
@@ -210,13 +228,53 @@ export function MockTest() {
         <button
           className="rounded-full bg-indigo-600 px-8 py-3 text-lg font-semibold text-white shadow"
           onClick={() => {
-            setDeadline(Date.now() + block.seconds * 1000)
-            setNow(Date.now())
-            setPhase('question')
+            setSampleChoice(null)
+            setPhase('sample')
           }}
         >
-          Start
+          Try an example first
         </button>
+        <button className="text-sm text-slate-500 underline" onClick={startTimedPart}>
+          Skip the example and start
+        </button>
+      </div>
+    )
+  }
+
+  if (phase === 'sample') {
+    return (
+      <div className="flex min-h-screen flex-col bg-slate-50 p-4">
+        <header className="mb-4 flex items-center justify-between">
+          <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">
+            Example · not timed
+          </span>
+          <span className="text-sm font-medium text-slate-500">{block.info.label}</span>
+        </header>
+        <QuestionView
+          question={block.sample}
+          selectedId={sampleChoice?.id ?? null}
+          showFeedback={sampleChoice !== null}
+          onSelect={(choice) => {
+            if (sampleChoice) return
+            setSampleChoice(choice)
+            speak(`${choice.isCorrect ? 'That is right!' : 'Not quite. The green one is the answer.'} ${block.info.tip}`)
+          }}
+          onReplay={isSupported ? () => speak(block.sample.promptAudioText) : undefined}
+        />
+        {sampleChoice && (
+          <div className="mx-auto mt-4 flex w-full max-w-md flex-col items-center gap-3 rounded-2xl bg-white p-4 text-center shadow-sm">
+            <p className={`text-lg font-semibold ${sampleChoice.isCorrect ? 'text-green-600' : 'text-amber-600'}`}>
+              {sampleChoice.isCorrect ? 'That’s right!' : 'Not quite: the green one is the answer.'}
+            </p>
+            <p className="text-sm text-slate-600">{block.info.tip}</p>
+            <button
+              className="rounded-full bg-indigo-600 px-6 py-3 text-lg font-semibold text-white shadow"
+              onClick={startTimedPart}
+            >
+              Start the timed part
+            </button>
+          </div>
+        )}
       </div>
     )
   }

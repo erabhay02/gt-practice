@@ -127,7 +127,7 @@ export function PracticeSession() {
           <p className={`text-lg font-semibold ${selected.isCorrect ? 'text-green-600' : 'text-amber-600'}`}>
             {selected.isCorrect ? 'Yes! Nice work.' : 'Good try! The green one is the answer.'}
           </p>
-          {current.explanationAudioText && <p className="text-sm text-slate-500">{current.explanationAudioText}</p>}
+          <p className="text-sm text-slate-500">{current.explanationAudioText ?? info.tip}</p>
           <button className="rounded-full bg-indigo-600 px-6 py-2 font-semibold text-white" onClick={handleNext}>
             {index === questions.length - 1 ? 'Finish' : 'Next'}
           </button>
