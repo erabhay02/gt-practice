@@ -1,15 +1,25 @@
 import { Link } from 'react-router-dom'
 import { AVAILABLE_SUBTYPES, BATTERIES } from '../content/contentLoader'
 import { useProgressStore } from '../state/progressStore'
+import { daysUntil, useSettingsStore } from '../state/settingsStore'
 
 export function Home() {
   const streak = useProgressStore((s) => s.streak)
+  const days = daysUntil(useSettingsStore((s) => s.testDate))
 
   return (
     <div className="min-h-screen bg-slate-50 p-6">
-      <header className="mb-6 text-center">
+      <header className="relative mb-6 text-center">
+        <Link to="/settings" aria-label="Settings" className="absolute right-0 top-1 text-2xl text-slate-400">
+          ⚙️
+        </Link>
         <h1 className="text-3xl font-bold text-slate-800">GT Practice</h1>
-        {streak > 0 && <p className="mt-1 text-sm font-medium text-amber-600">🔥 {streak} day streak</p>}
+        <div className="mt-1 flex justify-center gap-3 text-sm font-medium">
+          {streak > 0 && <span className="text-amber-600">🔥 {streak} day streak</span>}
+          {days !== null && days >= 0 && (
+            <span className="text-indigo-600">📅 {days === 0 ? 'Test day!' : `${days} days to the test`}</span>
+          )}
+        </div>
       </header>
 
       <div className="mx-auto flex max-w-md flex-col gap-6">

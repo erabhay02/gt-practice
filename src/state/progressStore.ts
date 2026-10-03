@@ -20,6 +20,7 @@ interface ProgressState {
   difficultyForSubType: (subType: SubType) => Difficulty
   getRecentlyShownIds: (subType: SubType) => string[]
   recordShownQuestions: (subType: SubType, ids: string[]) => void
+  resetProgress: () => void
 }
 
 const RECENT_SESSIONS_FOR_DIFFICULTY = 3
@@ -92,6 +93,7 @@ export const useProgressStore = create<ProgressState>()(
           return { shownQuestionIds: { ...state.shownQuestionIds, [subType]: combined } }
         })
       },
+      resetProgress: () => set({ sessions: [], lastPracticeDate: null, streak: 0, shownQuestionIds: {} }),
     }),
     { name: 'gt-practice-progress' },
   ),

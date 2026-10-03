@@ -10,6 +10,7 @@ import {
 import type { Choice, Question, SubType } from '../content/types'
 import { useSpeech } from '../hooks/useSpeech'
 import { useProgressStore } from '../state/progressStore'
+import { useSettingsStore } from '../state/settingsStore'
 import { QuestionView } from './QuestionView'
 
 // Not an official figure: a generous per-item budget for the subtest timer.
@@ -88,6 +89,8 @@ export function MockTest() {
   const recordSession = useProgressStore((s) => s.recordSession)
   const getRecentlyShownIds = useProgressStore((s) => s.getRecentlyShownIds)
   const recordShownQuestions = useProgressStore((s) => s.recordShownQuestions)
+  // Frozen for the whole run so toggling the setting mid-test can't break timing.
+  const [timed] = useState(() => useSettingsStore.getState().timerEnabled)
 
   const blocks = useMemo<Block[]>(() => {
     const infos = mode === 'quick' ? AVAILABLE_SUBTYPES : AVAILABLE_SUBTYPES.filter((s) => s.domain === mode)
@@ -151,7 +154,7 @@ export function MockTest() {
   }, [phase, blockIdx, qIdx])
 
   useEffect(() => {
-    if (phase !== 'question') return
+    if (phase !== 'question' || !timed) return
     const t = setInterval(() => setNow(Date.now()), 500)
     return () => clearInterval(t)
   }, [phase])
@@ -209,7 +212,7 @@ export function MockTest() {
   }
 
   function startTimedPart() {
-    setDeadline(Date.now() + block.seconds * 1000)
+    setDeadline(timed ? Date.now() + block.seconds * 1000 : Infinity)
     setNow(Date.now())
     setPhase('question')
   }
@@ -223,7 +226,7 @@ export function MockTest() {
         <h2 className="text-2xl font-bold text-slate-800">{block.info.label}</h2>
         <p className="text-slate-600">{block.info.shortDescription}</p>
         <p className="text-sm text-slate-500">
-          {block.questions.length} questions · {minutes(block.seconds)}
+          {block.questions.length} questions · {timed ? minutes(block.seconds) : 'untimed'}
         </p>
         <button
           className="rounded-full bg-indigo-600 px-8 py-3 text-lg font-semibold text-white shadow"
@@ -271,7 +274,7 @@ export function MockTest() {
               className="rounded-full bg-indigo-600 px-6 py-3 text-lg font-semibold text-white shadow"
               onClick={startTimedPart}
             >
-              Start the timed part
+              {timed ? 'Start the timed part' : 'Start'}
             </button>
           </div>
         )}
@@ -292,7 +295,7 @@ export function MockTest() {
           {block.info.label} · {qIdx + 1} / {block.questions.length}
         </span>
       </header>
-      <div className="mb-4 h-2 w-full overflow-hidden rounded-full bg-slate-200">
+      <div className={`mb-4 h-2 w-full overflow-hidden rounded-full bg-slate-200 ${timed ? '' : 'invisible'}`}>
         <div
           className={`h-full rounded-full transition-all ${pct < 15 ? 'bg-amber-500' : 'bg-indigo-500'}`}
           style={{ width: `${pct}%` }}
