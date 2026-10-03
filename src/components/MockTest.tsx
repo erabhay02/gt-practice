@@ -85,7 +85,7 @@ export function MockTestChooser() {
 export function MockTest() {
   const { mode } = useParams<{ mode: Mode }>()
   const navigate = useNavigate()
-  const { speak, stop, isSupported } = useSpeech()
+  const { speak, stop, speaking, problem, isSupported } = useSpeech()
   const recordSession = useProgressStore((s) => s.recordSession)
   const getRecentlyShownIds = useProgressStore((s) => s.getRecentlyShownIds)
   const recordShownQuestions = useProgressStore((s) => s.recordShownQuestions)
@@ -265,7 +265,7 @@ export function MockTest() {
           onSelect={(choice) => {
             if (!sampleChoice) setSampleChoice(choice)
           }}
-          onSpeak={isSupported ? () => speak(block.sample.promptAudioText) : undefined}
+          speech={isSupported ? { speak: () => speak(block.sample.promptAudioText), stop, speaking, problem } : undefined}
         />
         {sampleChoice && (
           <>
@@ -309,7 +309,7 @@ export function MockTest() {
         selectedId={currentAnswer?.id ?? null}
         showFeedback={currentAnswer !== null}
         onSelect={handleAnswer}
-        onSpeak={isSupported ? () => speak(current.promptAudioText) : undefined}
+        speech={isSupported ? { speak: () => speak(current.promptAudioText), stop, speaking, problem } : undefined}
       />
       {currentAnswer && (
         <AnswerFeedback isCorrect={currentAnswer.isCorrect} explanation={current.explanationAudioText ?? block.info.tip} />

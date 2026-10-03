@@ -11,7 +11,7 @@ const SESSION_LENGTH = 8
 export function PracticeSession() {
   const { subtype } = useParams<{ domain: string; subtype: SubType }>()
   const navigate = useNavigate()
-  const { speak, stop, isSupported } = useSpeech()
+  const { speak, stop, speaking, problem, isSupported } = useSpeech()
   const recordSession = useProgressStore((s) => s.recordSession)
   const difficultyForSubType = useProgressStore((s) => s.difficultyForSubType)
   const getRecentlyShownIds = useProgressStore((s) => s.getRecentlyShownIds)
@@ -120,7 +120,7 @@ export function PracticeSession() {
         selectedId={selected?.id ?? null}
         showFeedback={selected !== null}
         onSelect={handleSelect}
-        onSpeak={isSupported ? () => speak(current.promptAudioText) : undefined}
+        speech={isSupported ? { speak: () => speak(current.promptAudioText), stop, speaking, problem } : undefined}
       />
 
       {selected && <AnswerFeedback isCorrect={selected.isCorrect} explanation={current.explanationAudioText ?? info.tip} />}

@@ -54,23 +54,40 @@ interface Props {
   selectedId: string | null
   showFeedback: boolean
   onSelect: (choice: Choice) => void
-  onSpeak?: () => void
+  speech?: SpeechControls
 }
 
-export function QuestionView({ question, selectedId, showFeedback, onSelect, onSpeak }: Props) {
+export interface SpeechControls {
+  speak: () => void
+  stop: () => void
+  speaking: boolean
+  problem: string | null
+}
+
+function SpeakButton({ speech }: { speech: SpeechControls }) {
+  return (
+    <button
+      aria-label={speech.speaking ? 'Stop reading' : 'Read the question aloud'}
+      onClick={speech.speaking ? speech.stop : speech.speak}
+      className={`flex shrink-0 items-center gap-1 rounded-full px-3 py-2 text-xl transition-colors ${
+        speech.speaking ? 'animate-pulse bg-indigo-600 text-white' : 'bg-indigo-100 active:bg-indigo-200'
+      }`}
+    >
+      {speech.speaking ? '⏹' : '🔊'}
+      {speech.speaking && <span className="text-xs font-semibold">Reading…</span>}
+    </button>
+  )
+}
+
+export function QuestionView({ question, selectedId, showFeedback, onSelect, speech }: Props) {
   return (
     <div className="mx-auto flex w-full max-w-md flex-col gap-4">
-      <div className="flex items-start justify-between gap-2 rounded-2xl bg-white p-4 shadow-sm">
-        <p className="text-base text-slate-700">{question.promptAudioText}</p>
-        {onSpeak && (
-          <button
-            aria-label="Read the question aloud"
-            className="shrink-0 rounded-full bg-indigo-100 p-2 text-xl active:bg-indigo-200"
-            onClick={onSpeak}
-          >
-            🔊
-          </button>
-        )}
+      <div className="rounded-2xl bg-white p-4 shadow-sm">
+        <div className="flex items-start justify-between gap-2">
+          <p className="text-base text-slate-700">{question.promptAudioText}</p>
+          {speech && <SpeakButton speech={speech} />}
+        </div>
+        {speech?.problem && <p className="mt-2 rounded-lg bg-amber-50 p-2 text-xs text-amber-800">{speech.problem}</p>}
       </div>
 
       {question.promptVisual && (
