@@ -7,7 +7,6 @@ Live app: https://erabhay02.github.io/gt-practice/ (auto-deploys on push to `mai
 - [ ] Confirm with the school: CogAT **Level 8** (vs Level 9) and the test date.
 
 ## In progress / planned
-- [ ] Paper folding: diagonal folds + cut-out shapes
 - [ ] Update GitHub Actions versions (Node 20 deprecation warning)
 
 ## Done
@@ -22,3 +21,4 @@ Live app: https://erabhay02.github.io/gt-practice/ (auto-deploys on push to `mai
 - [x] Progress page: countdown / days practiced / questions answered, "Focus next" (weakest recent parts, then untried), per-part recent % + trend bars + current difficulty, mock-test history kept separate from practice (tap a run for per-part scores)
 - [x] Printable worksheets (🖨️ on Home): choose parts + 3/5/8 per part, A–D answer bubbles, Sentence Completion printed as "read aloud", answer key on its own last page; verified by printing to PDF
 - [x] Clarity fixes found in the printout/screenshots: bolder stripe/dot patterns; easy figure items unrotated with recognizable shapes (no pentagon/hexagon mix-ups); paper-folding never shows overlapping holes or mirror-image hole pairs that make wrong answers collapse into the right one
+- [x] Paper folding: diagonal (corner-to-corner) folds, square holes, and triangle cut-outs whose mirror copy flips direction (new "copied but not flipped" wrong answer). Easy = 1 straight fold + 1 round hole; medium = any fold, 2 holes; hard = 2 folds or a triangle cut-out

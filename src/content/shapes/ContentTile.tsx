@@ -1,4 +1,4 @@
-import type { ContentSpec, PaperRegion, Point } from '../types'
+import type { ContentSpec, FoldLine, Hole, PaperRegion, Point } from '../types'
 import { ShapeRenderer } from './primitives'
 
 type TileSize = 'small' | 'medium' | 'large'
@@ -70,48 +70,51 @@ function AbacusTile({ counts }: { counts: (number | null)[] }) {
   )
 }
 
+function HoleMark({ hole }: { hole: Hole }) {
+  const props = { fill: '#ffffff', stroke: '#1e293b', strokeWidth: 1.5 }
+  if (hole.cut === 'square') return <rect x={hole.x - 4} y={hole.y - 4} width={8} height={8} {...props} />
+  if (hole.cut === 'triangle') {
+    // Narrow isosceles triangle so its pointing direction is obvious.
+    const a = ((hole.angle ?? 0) * Math.PI) / 180
+    const pt = (r: number, da: number) => `${hole.x + r * Math.cos(a + da)},${hole.y + r * Math.sin(a + da)}`
+    return <polygon points={`${pt(7, 0)} ${pt(6, 2.45)} ${pt(6, -2.45)}`} {...props} strokeLinejoin="round" />
+  }
+  return <circle cx={hole.x} cy={hole.y} r={4} {...props} />
+}
+
 function PaperTile({
   region,
+  polygon,
   holes,
   foldLines,
   px,
 }: {
   region: PaperRegion
-  holes: Point[]
-  foldLines?: ('vertical' | 'horizontal')[]
+  polygon?: Point[]
+  holes: Hole[]
+  foldLines?: FoldLine[]
   px: number
 }) {
-  const isFull = region.w === 64 && region.h === 64
+  const isFull = !polygon && region.w === 64 && region.h === 64
+  const line = (x1: number, y1: number, x2: number, y2: number) => (
+    <line x1={x1} y1={y1} x2={x2} y2={y2} stroke="#475569" strokeWidth={1.5} strokeDasharray="4 3" />
+  )
   return (
     <svg viewBox="-2 -2 68 68" width={px} height={px}>
       {!isFull && (
         <rect x={0} y={0} width={64} height={64} fill="none" stroke="#cbd5e1" strokeWidth={1.5} strokeDasharray="3 3" />
       )}
-      <rect x={region.x} y={region.y} width={region.w} height={region.h} fill="#e2e8f0" stroke="#475569" strokeWidth={2} />
-      {foldLines?.includes('vertical') && (
-        <line
-          x1={region.x + region.w / 2}
-          y1={region.y}
-          x2={region.x + region.w / 2}
-          y2={region.y + region.h}
-          stroke="#475569"
-          strokeWidth={1.5}
-          strokeDasharray="4 3"
-        />
+      {polygon ? (
+        <polygon points={polygon.map((p) => `${p.x},${p.y}`).join(' ')} fill="#e2e8f0" stroke="#475569" strokeWidth={2} strokeLinejoin="round" />
+      ) : (
+        <rect x={region.x} y={region.y} width={region.w} height={region.h} fill="#e2e8f0" stroke="#475569" strokeWidth={2} />
       )}
-      {foldLines?.includes('horizontal') && (
-        <line
-          x1={region.x}
-          y1={region.y + region.h / 2}
-          x2={region.x + region.w}
-          y2={region.y + region.h / 2}
-          stroke="#475569"
-          strokeWidth={1.5}
-          strokeDasharray="4 3"
-        />
-      )}
+      {foldLines?.includes('vertical') && line(region.x + region.w / 2, region.y, region.x + region.w / 2, region.y + region.h)}
+      {foldLines?.includes('horizontal') && line(region.x, region.y + region.h / 2, region.x + region.w, region.y + region.h / 2)}
+      {foldLines?.includes('diagonal') && line(0, 0, 64, 64)}
+      {foldLines?.includes('anti-diagonal') && line(64, 0, 0, 64)}
       {holes.map((h, i) => (
-        <circle key={i} cx={h.x} cy={h.y} r={4} fill="#ffffff" stroke="#1e293b" strokeWidth={1.5} />
+        <HoleMark key={i} hole={h} />
       ))}
     </svg>
   )
@@ -150,6 +153,7 @@ export function ContentTile({ content, size = 'medium' }: { content: ContentSpec
       return (
         <PaperTile
           region={content.region}
+          polygon={content.polygon}
           holes={content.holes}
           foldLines={content.foldLines}
           px={size === 'large' ? 72 : size === 'small' ? 48 : 60}

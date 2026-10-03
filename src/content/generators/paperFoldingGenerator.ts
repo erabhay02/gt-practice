@@ -1,162 +1,247 @@
 import { mulberry32, pickOne, randomSeed, shuffle, type RngFn } from './rng'
-import type { ContentSpec, Difficulty, PaperRegion, Point, Question } from '../types'
-
-type Axis = 'vertical' | 'horizontal'
+import type { ContentSpec, Difficulty, FoldLine, Hole, PaperRegion, Point, Question } from '../types'
 
 interface Fold {
-  axis: Axis
-  // Which half stays visible after folding (the other half folds on top of it).
+  axis: FoldLine
+  // Which side stays visible after folding (the other side folds on top of it).
   keep: 'first' | 'second'
 }
 
+interface PaperShape {
+  region: PaperRegion
+  polygon?: Point[]
+}
+
 const FULL: PaperRegion = { x: 0, y: 0, w: 64, h: 64 }
+const CARDINALS = [0, 90, 180, 270]
+const norm = (a: number) => ((a % 360) + 360) % 360
 
-function foldRegion(region: PaperRegion, fold: Fold): PaperRegion {
-  if (fold.axis === 'vertical') {
-    const w = region.w / 2
-    return { ...region, w, x: fold.keep === 'first' ? region.x : region.x + w }
+function foldShape(shape: PaperShape, fold: Fold): PaperShape {
+  const r = shape.region
+  switch (fold.axis) {
+    case 'vertical': {
+      const w = r.w / 2
+      return { region: { ...r, w, x: fold.keep === 'first' ? r.x : r.x + w } }
+    }
+    case 'horizontal': {
+      const h = r.h / 2
+      return { region: { ...r, h, y: fold.keep === 'first' ? r.y : r.y + h } }
+    }
+    case 'diagonal': // line y = x; first = upper-right triangle
+      return {
+        region: FULL,
+        polygon: fold.keep === 'first' ? [{ x: 0, y: 0 }, { x: 64, y: 0 }, { x: 64, y: 64 }] : [{ x: 0, y: 0 }, { x: 0, y: 64 }, { x: 64, y: 64 }],
+      }
+    case 'anti-diagonal': // line x + y = 64; first = upper-left triangle
+      return {
+        region: FULL,
+        polygon: fold.keep === 'first' ? [{ x: 0, y: 0 }, { x: 64, y: 0 }, { x: 0, y: 64 }] : [{ x: 64, y: 0 }, { x: 64, y: 64 }, { x: 0, y: 64 }],
+      }
   }
-  const h = region.h / 2
-  return { ...region, h, y: fold.keep === 'first' ? region.y : region.y + h }
 }
 
-function reflect(p: Point, axis: Axis): Point {
-  return axis === 'vertical' ? { x: 64 - p.x, y: p.y } : { x: p.x, y: 64 - p.y }
+function inside(shape: PaperShape, p: Point, margin: number): boolean {
+  const r = shape.region
+  const inRect = p.x >= r.x + margin && p.x <= r.x + r.w - margin && p.y >= r.y + margin && p.y <= r.y + r.h - margin
+  if (!inRect) return false
+  if (!shape.polygon) return true
+  const [a, b, c] = shape.polygon
+  // Point-in-triangle via sign of cross products.
+  const cross = (o: Point, u: Point, v: Point) => (u.x - o.x) * (v.y - o.y) - (u.y - o.y) * (v.x - o.x)
+  const d1 = cross(a, b, p)
+  const d2 = cross(b, c, p)
+  const d3 = cross(c, a, p)
+  return (d1 >= 0 && d2 >= 0 && d3 >= 0) || (d1 <= 0 && d2 <= 0 && d3 <= 0)
 }
 
-function translate(p: Point, axis: Axis): Point {
-  if (axis === 'vertical') return { x: p.x < 32 ? p.x + 32 : p.x - 32, y: p.y }
-  return { x: p.x, y: p.y < 32 ? p.y + 32 : p.y - 32 }
+function distanceFromFold(p: Point, axis: FoldLine): number {
+  switch (axis) {
+    case 'vertical':
+      return Math.abs(p.x - 32)
+    case 'horizontal':
+      return Math.abs(p.y - 32)
+    case 'diagonal':
+      return Math.abs(p.x - p.y) / Math.SQRT2
+    case 'anti-diagonal':
+      return Math.abs(p.x + p.y - 64) / Math.SQRT2
+  }
+}
+
+/** Mirror a hole across a fold line, flipping a triangle's direction too. */
+function reflect(h: Hole, axis: FoldLine): Hole {
+  const a = h.angle ?? 0
+  switch (axis) {
+    case 'vertical':
+      return { ...h, x: 64 - h.x, angle: norm(180 - a) }
+    case 'horizontal':
+      return { ...h, y: 64 - h.y, angle: norm(-a) }
+    case 'diagonal':
+      return { ...h, x: h.y, y: h.x, angle: norm(90 - a) }
+    case 'anti-diagonal':
+      return { ...h, x: 64 - h.y, y: 64 - h.x, angle: norm(-90 - a) }
+  }
+}
+
+// Classic mistake: copy lands in the mirror spot but isn't flipped.
+const reflectNoFlip = (h: Hole, axis: FoldLine): Hole => ({ ...reflect(h, axis), angle: h.angle })
+
+// Classic mistake: copy slides across instead of flipping.
+function slide(h: Hole, axis: FoldLine): Hole {
+  if (axis === 'vertical') return { ...h, x: h.x < 32 ? h.x + 32 : h.x - 32 }
+  if (axis === 'horizontal') return { ...h, y: h.y < 32 ? h.y + 32 : h.y - 32 }
+  return reflectNoFlip(h, axis)
 }
 
 // Unfold in reverse order; each fold doubles every hole across its fold line.
-function unfold(holes: Point[], folds: Fold[], op: (p: Point, a: Axis) => Point = reflect): Point[] {
+function unfold(holes: Hole[], folds: Fold[], op: (h: Hole, a: FoldLine) => Hole = reflect): Hole[] {
   let result = holes
-  for (const fold of [...folds].reverse()) {
-    result = [...result, ...result.map((p) => op(p, fold.axis))]
-  }
+  for (const fold of [...folds].reverse()) result = [...result, ...result.map((h) => op(h, fold.axis))]
   return result
 }
 
-// Different hole sets that would look the same at phone size are unfair, not tricky.
-function nearlySame(a: Point[], b: Point[]): boolean {
-  if (a.length !== b.length) return false
-  const close = (p: Point, set: Point[]) => set.some((q) => Math.abs(p.x - q.x) < 12 && Math.abs(p.y - q.y) < 12)
-  return a.every((p) => close(p, b)) && b.every((p) => close(p, a))
-}
-
-function holeKey(holes: Point[]): string {
+function holeKey(holes: Hole[]): string {
   return holes
-    .map((h) => `${Math.round(h.x)},${Math.round(h.y)}`)
+    .map((h) => `${Math.round(h.x)},${Math.round(h.y)},${h.cut ?? 'circle'},${h.cut === 'triangle' ? norm(h.angle ?? 0) : 0}`)
     .sort()
     .join('|')
 }
 
-// Holes sit on a coarse grid inside the folded region, away from edges and
-// fold lines so the unfolded copies are clearly separate.
-function randomHole(rng: RngFn, region: PaperRegion, taken: Point[]): Point {
-  const xs: number[] = []
-  const ys: number[] = []
-  for (let v = region.x + 8; v <= region.x + region.w - 8; v += 4) xs.push(v)
-  for (let v = region.y + 8; v <= region.y + region.h - 8; v += 4) ys.push(v)
-  // A second hole at a mirror spot of the first makes every wrong answer
-  // collapse into the right one, so avoid mirrors as well as the holes.
-  const avoid = taken.flatMap((t) => [t, { x: 64 - t.x, y: t.y }, { x: t.x, y: 64 - t.y }, { x: 64 - t.x, y: 64 - t.y }])
-  for (let i = 0; i < 200; i++) {
-    const p = { x: pickOne(rng, xs), y: pickOne(rng, ys) }
-    const nearFold = Math.abs(p.x - 32) < 6 || Math.abs(p.y - 32) < 6
-    const nearOther = avoid.some((t) => Math.abs(t.x - p.x) < 10 && Math.abs(t.y - p.y) < 10)
-    if (!nearFold && !nearOther) return p
-  }
-  return { x: region.x + region.w / 2, y: region.y + region.h / 2 }
+const sameLook = (p: Hole, q: Hole) =>
+  (p.cut ?? 'circle') === (q.cut ?? 'circle') && (p.cut !== 'triangle' || norm(p.angle ?? 0) === norm(q.angle ?? 0))
+
+// Different hole sets that would look the same at phone size are unfair, not tricky.
+function nearlySame(a: Hole[], b: Hole[]): boolean {
+  if (a.length !== b.length) return false
+  const close = (p: Hole, set: Hole[]) => set.some((q) => Math.abs(p.x - q.x) < 12 && Math.abs(p.y - q.y) < 12 && sameLook(p, q))
+  return a.every((p) => close(p, b)) && b.every((p) => close(p, a))
 }
 
-function buildFolds(rng: RngFn, difficulty: Difficulty): Fold[] {
-  const first: Fold = { axis: pickOne(rng, ['vertical', 'horizontal'] as Axis[]), keep: pickOne(rng, ['first', 'second'] as const) }
-  if (difficulty < 3) return [first]
-  const second: Fold = {
-    axis: first.axis === 'vertical' ? 'horizontal' : 'vertical',
-    keep: pickOne(rng, ['first', 'second'] as const),
+// Overlapping holes within one paper look like a drawing glitch, not an answer.
+const overlaps = (holes: Hole[]) =>
+  holes.some((p, i) => holes.some((q, j) => j > i && Math.abs(p.x - q.x) < 10 && Math.abs(p.y - q.y) < 10))
+
+const allMirrors = (p: Point): Point[] => [
+  p,
+  { x: 64 - p.x, y: p.y },
+  { x: p.x, y: 64 - p.y },
+  { x: 64 - p.x, y: 64 - p.y },
+  { x: p.y, y: p.x },
+  { x: 64 - p.y, y: 64 - p.x },
+]
+
+// Holes sit on a coarse grid inside the folded paper, away from edges and fold
+// lines, and away from mirror spots of other holes (which would make the
+// wrong answers collapse into the right one).
+function randomHole(rng: RngFn, shape: PaperShape, folds: Fold[], taken: Point[]): Point {
+  const grid: Point[] = []
+  for (let x = 8; x <= 56; x += 4) for (let y = 8; y <= 56; y += 4) grid.push({ x, y })
+  const avoid = taken.flatMap(allMirrors)
+  const ok = (p: Point) =>
+    inside(shape, p, 7) &&
+    folds.every((f) => distanceFromFold(p, f.axis) >= 7) &&
+    !avoid.some((t) => Math.abs(t.x - p.x) < 10 && Math.abs(t.y - p.y) < 10)
+  const options = grid.filter(ok)
+  return options.length > 0 ? pickOne(rng, options) : { x: 16, y: 16 }
+}
+
+type Variant = { folds: Fold[]; holeCount: number; cut: Hole['cut'] }
+
+function chooseVariant(rng: RngFn, difficulty: Difficulty): Variant {
+  const straight = (): FoldLine => pickOne(rng, ['vertical', 'horizontal'] as FoldLine[])
+  const keep = () => pickOne(rng, ['first', 'second'] as const)
+  if (difficulty === 1) return { folds: [{ axis: straight(), keep: keep() }], holeCount: 1, cut: 'circle' }
+  if (difficulty === 2) {
+    const axis = pickOne(rng, ['vertical', 'horizontal', 'diagonal', 'anti-diagonal'] as FoldLine[])
+    return { folds: [{ axis, keep: keep() }], holeCount: 2, cut: pickOne(rng, ['circle', 'square'] as const) }
   }
-  return [first, second]
+  if (rng() < 0.5) {
+    const first = straight()
+    const second: FoldLine = first === 'vertical' ? 'horizontal' : 'vertical'
+    return { folds: [{ axis: first, keep: keep() }, { axis: second, keep: keep() }], holeCount: 1, cut: 'circle' }
+  }
+  const axis = pickOne(rng, ['vertical', 'horizontal', 'diagonal', 'anti-diagonal'] as FoldLine[])
+  return { folds: [{ axis, keep: keep() }], holeCount: 1, cut: 'triangle' }
+}
+
+// A triangle must point somewhere its mirror copy visibly flips.
+function triangleAngle(rng: RngFn, axis: FoldLine): number {
+  if (axis === 'vertical') return pickOne(rng, [0, 180])
+  if (axis === 'horizontal') return pickOne(rng, [90, 270])
+  return pickOne(rng, CARDINALS)
+}
+
+const OTHER_AXIS: Record<FoldLine, FoldLine> = {
+  vertical: 'horizontal',
+  horizontal: 'vertical',
+  diagonal: 'anti-diagonal',
+  'anti-diagonal': 'diagonal',
 }
 
 export function generatePaperFoldingQuestion(difficulty: Difficulty, seed: number = randomSeed()): Question {
   const rng = mulberry32(seed)
-  const folds = buildFolds(rng, difficulty)
+  const { folds, holeCount, cut } = chooseVariant(rng, difficulty)
 
-  const regions: PaperRegion[] = [FULL]
-  for (const f of folds) regions.push(foldRegion(regions[regions.length - 1], f))
-  const finalRegion = regions[regions.length - 1]
+  const shapes: PaperShape[] = [{ region: FULL }]
+  for (const f of folds) shapes.push(foldShape(shapes[shapes.length - 1], f))
+  const finalShape = shapes[shapes.length - 1]
 
-  const holeCount = difficulty === 2 ? 2 : 1
-  const punched: Point[] = []
-  for (let i = 0; i < holeCount; i++) punched.push(randomHole(rng, finalRegion, punched))
+  const punched: Hole[] = []
+  for (let i = 0; i < holeCount; i++) {
+    const p = randomHole(rng, finalShape, folds, punched)
+    punched.push(cut === 'triangle' ? { ...p, cut, angle: triangleAngle(rng, folds[0].axis) } : { ...p, cut })
+  }
 
   const correct = unfold(punched, folds)
-  const otherAxis = (a: Axis): Axis => (a === 'vertical' ? 'horizontal' : 'vertical')
 
-  const candidates: Point[][] = [
-    // Forgot to unfold: only the punched hole(s).
-    punched,
-    // Slid the copy across instead of flipping it.
-    unfold(punched, folds, translate),
-    // Flipped across the wrong line.
-    unfold(punched, folds.map((f) => ({ ...f, axis: otherAxis(f.axis) }))),
+  const candidates: Hole[][] = [
+    punched, // forgot to unfold
+    unfold(punched, folds, reflectNoFlip), // copied to the mirror spot without flipping
+    unfold(punched, folds, slide), // slid across instead of flipping
+    unfold(punched, folds.map((f) => ({ ...f, axis: OTHER_AXIS[f.axis] }))), // flipped across the wrong line
   ]
-  if (folds.length === 2) {
-    // Unfolded only once.
-    candidates.unshift(unfold(punched, folds.slice(1)))
-  }
-  // Fallbacks: right count with one copy misplaced; too many holes.
-  candidates.push(correct.map((p, i) => (i === correct.length - 1 ? translate(reflect(p, folds[0].axis), otherAxis(folds[0].axis)) : p)))
+  if (folds.length === 2) candidates.unshift(unfold(punched, folds.slice(1))) // unfolded only once
   if (folds.length === 1) {
-    candidates.push(unfold(punched, [folds[0], { axis: otherAxis(folds[0].axis), keep: 'first' }]))
-    // Copied to the diagonally opposite spot.
-    candidates.push([...punched, ...punched.map((p) => ({ x: 64 - p.x, y: 64 - p.y }))])
+    candidates.push(unfold(punched, [folds[0], { axis: OTHER_AXIS[folds[0].axis], keep: 'first' }])) // too many
+    candidates.push([...punched, ...punched.map((h) => ({ ...h, x: 64 - h.x, y: 64 - h.y }))]) // diagonal copy
   }
   // Right pattern, wrong place on the paper.
-  for (const [dx, dy] of [[16, 0], [-16, 0], [0, 16], [0, -16], [12, 0], [-12, 0], [0, 12], [0, -12], [12, 12], [-12, -12], [12, -12], [-12, 12]]) {
-    const shifted = correct.map((p) => ({ x: p.x + dx, y: p.y + dy }))
-    if (shifted.every((p) => p.x >= 5 && p.x <= 59 && p.y >= 5 && p.y <= 59)) candidates.push(shifted)
+  for (const [dx, dy] of [[16, 0], [-16, 0], [0, 16], [0, -16], [12, 12], [-12, -12], [12, -12], [-12, 12]]) {
+    const shifted = correct.map((h) => ({ ...h, x: h.x + dx, y: h.y + dy }))
+    if (shifted.every((h) => h.x >= 5 && h.x <= 59 && h.y >= 5 && h.y <= 59)) candidates.push(shifted)
   }
 
   const seen = new Set([holeKey(correct)])
-  const distractors: Point[][] = []
-  // Overlapping holes within one paper look like a drawing glitch, not an answer.
-  const overlaps = (holes: Point[]) =>
-    holes.some((p, i) => holes.some((q, j) => j > i && Math.abs(p.x - q.x) < 10 && Math.abs(p.y - q.y) < 10))
-
-  for (const c of candidates) {
+  const distractors: Hole[][] = []
+  const accept = (c: Hole[]) => {
     const key = holeKey(c)
-    if (seen.has(key) || overlaps(c) || nearlySame(c, correct) || distractors.some((d) => nearlySame(c, d))) continue
+    if (seen.has(key) || overlaps(c) || nearlySame(c, correct) || distractors.some((d) => nearlySame(c, d))) return
     seen.add(key)
     distractors.push(c)
+  }
+  for (const c of candidates) {
     if (distractors.length === 3) break
+    accept(c)
   }
   // Last resort for rare symmetric layouts where the deliberate mistakes collapse.
-  const grid = [8, 16, 24, 40, 48, 56]
+  const spots = [8, 16, 24, 40, 48, 56]
   for (let i = 0; distractors.length < 3 && i < 500; i++) {
-    const c = correct.map(() => ({ x: pickOne(rng, grid), y: pickOne(rng, grid) }))
-    const key = holeKey(c)
-    if (seen.has(key) || overlaps(c) || nearlySame(c, correct) || distractors.some((d) => nearlySame(c, d))) continue
-    seen.add(key)
-    distractors.push(c)
+    accept(correct.map((h) => ({ ...h, x: pickOne(rng, spots), y: pickOne(rng, spots) })))
   }
 
-  const paper = (region: PaperRegion, holes: Point[], foldLines?: Axis[]): ContentSpec => ({
+  const paper = (shape: PaperShape, holes: Hole[], foldLines?: FoldLine[]): ContentSpec => ({
     kind: 'paper',
-    region,
+    region: shape.region,
+    polygon: shape.polygon,
     holes,
     foldLines,
   })
   const arrow: ContentSpec = { kind: 'text', value: '→' }
 
   const promptRow: ContentSpec[] = []
-  regions.forEach((region, i) => {
-    const isLast = i === regions.length - 1
+  shapes.forEach((shape, i) => {
+    const isLast = i === shapes.length - 1
     if (i > 0) promptRow.push(arrow)
-    promptRow.push(paper(region, isLast ? punched : [], isLast ? undefined : [folds[i].axis]))
+    promptRow.push(paper(shape, isLast ? punched : [], isLast ? undefined : [folds[i].axis]))
   })
 
   const options = shuffle(rng, [
@@ -164,17 +249,17 @@ export function generatePaperFoldingQuestion(difficulty: Difficulty, seed: numbe
     ...distractors.map((holes) => ({ holes, isCorrect: false })),
   ])
 
+  const action = cut === 'triangle' ? 'a triangle is cut out of it' : cut === 'square' ? 'square holes are punched through it' : holeCount > 1 ? 'holes are punched through it' : 'a hole is punched through it'
+  const foldText = folds.length === 2 ? 'folded two times' : 'folded along the dotted line'
+
   return {
     id: `paper-folding-${difficulty}-${seed}`,
     domain: 'nonverbal',
     subType: 'paper-folding',
     difficulty,
-    promptAudioText:
-      folds.length === 1
-        ? 'A piece of paper is folded along the dotted line. Then a hole is punched through it. When the paper is opened up, what will it look like?'
-        : 'A piece of paper is folded two times. Then a hole is punched through it. When the paper is opened up, what will it look like?',
+    promptAudioText: `A piece of paper is ${foldText}. Then ${action}. When the paper is opened up, what will it look like?`,
     promptVisual: [promptRow],
-    choices: options.map((o, i) => ({ id: `c${i}`, content: paper(FULL, o.holes), isCorrect: o.isCorrect })),
+    choices: options.map((o, i) => ({ id: `c${i}`, content: paper({ region: FULL }, o.holes), isCorrect: o.isCorrect })),
     source: 'generated',
     generatorSeed: seed,
   }

@@ -45,6 +45,15 @@ export interface PaperRegion {
   h: number
 }
 
+export type FoldLine = 'vertical' | 'horizontal' | 'diagonal' | 'anti-diagonal'
+
+// A punched or cut hole. Triangles point toward `angle` (0 = right), so a
+// mirror copy visibly flips direction.
+export interface Hole extends Point {
+  cut?: 'circle' | 'square' | 'triangle'
+  angle?: number
+}
+
 export type ContentSpec =
   | { kind: 'emoji'; value: string }
   | { kind: 'shape'; spec: ShapeSpec }
@@ -52,7 +61,14 @@ export type ContentSpec =
   | { kind: 'blank' }
   | { kind: 'group'; emoji: string; count: number }
   | { kind: 'abacus'; counts: (number | null)[] }
-  | { kind: 'paper'; region: PaperRegion; holes: Point[]; foldLines?: ('vertical' | 'horizontal')[] }
+  | {
+      kind: 'paper'
+      region: PaperRegion
+      // When set, the visible (folded) paper is this triangle instead of `region`.
+      polygon?: Point[]
+      holes: Hole[]
+      foldLines?: FoldLine[]
+    }
 
 export interface Choice {
   id: string
