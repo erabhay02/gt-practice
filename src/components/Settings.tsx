@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
-import { pickVoice, useEnglishVoices, useSpeech } from '../hooks/useSpeech'
+import { clipUrl, useEnglishVoices, useSpeech } from '../hooks/useSpeech'
+import { SOUND_CHECK_TEXT } from '../audio/promptCatalog'
 import { useProgressStore } from '../state/progressStore'
 import { daysUntil, useSettingsStore, type SpeechRate } from '../state/settingsStore'
 
@@ -21,56 +22,37 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
 
 type CheckResult = { ok: boolean; lines: string[]; verdict: string }
 
-// Talks once and reports exactly what the browser's speech engine did, so a
-// "no sound" problem can be pinned to the browser vs. the device's audio.
-function runSpeechCheck(voiceName: string | null, rate: number): Promise<CheckResult> {
+// Plays one recorded question and reports what happened, so a "no sound"
+// problem can be pinned to the app vs. the device's audio.
+function runSoundCheck(): Promise<CheckResult> {
   return new Promise((resolve) => {
     const lines: string[] = []
-    if (!('speechSynthesis' in window)) {
-      resolve({ ok: false, lines, verdict: 'This browser has no read-aloud support. Try Chrome or Safari.' })
+    const url = clipUrl(SOUND_CHECK_TEXT)
+    if (!url) {
+      resolve({ ok: false, lines, verdict: 'The sound-check recording is missing from this version of the app.' })
       return
     }
-    const synth = window.speechSynthesis
-    const voices = synth.getVoices()
-    const voice = pickVoice(voiceName)
-    lines.push(`Voices available: ${voices.length} (${voices.filter((v) => v.localService).length} built-in)`)
-    lines.push(`Using voice: ${voice ? `${voice.name}${voice.localService ? ' (built-in)' : ' (online)'}` : 'browser default'}`)
-    const u = new SpeechSynthesisUtterance('This is a sound check. Which one can fly, but is not a bird?')
-    u.lang = 'en-US'
-    u.rate = rate
-    if (voice) u.voice = voice
+    const audio = new Audio(url)
     const t0 = performance.now()
     const ms = () => `${Math.round(performance.now() - t0)} ms`
-    let started = false
-    const finish = (r: Omit<CheckResult, 'lines'>) => resolve({ ...r, lines })
-    u.onstart = () => {
-      started = true
-      lines.push(`Started speaking at ${ms()}`)
+    let done = false
+    const finish = (r: Omit<CheckResult, 'lines'>) => {
+      if (done) return
+      done = true
+      resolve({ ...r, lines })
     }
-    u.onend = () => {
-      lines.push(`Finished at ${ms()}`)
+    audio.onplaying = () => lines.push(`Recording started at ${ms()}`)
+    audio.onended = () => {
+      lines.push(`Recording finished at ${ms()}`)
       finish({
         ok: true,
         verdict:
-          "The browser spoke the sentence. If you didn't hear it, the sound is going somewhere else: check the volume, headphones/Bluetooth, and the Mac's sound output.",
+          "The app played the recording. If you didn't hear it: turn the volume up, check headphones/Bluetooth, and on iPhone make sure the Silent switch is off.",
       })
     }
-    u.onerror = (e) => {
-      lines.push(`Error: ${e.error} at ${ms()}`)
-      finish({ ok: false, verdict: `The browser refused to speak (${e.error}). Pick a different voice above and run the check again.` })
-    }
-    window.setTimeout(() => {
-      if (started) return
-      synth.cancel()
-      finish({
-        ok: false,
-        verdict:
-          "The browser's speech engine never started. Quit Chrome completely (Cmd+Q) and reopen it, then try again. If it still fails, try the app in Safari.",
-      })
-    }, 4000)
-    ;(window as unknown as { __speechCheck?: SpeechSynthesisUtterance }).__speechCheck = u
-    synth.cancel()
-    window.setTimeout(() => synth.speak(u), 150)
+    audio.onerror = () => finish({ ok: false, verdict: 'The recording could not be loaded. Connect to the internet once, then try again.' })
+    audio.play().catch((e: DOMException) => finish({ ok: false, verdict: `The browser blocked playback (${e.name}). Tap the button again.` }))
+    window.setTimeout(() => finish({ ok: false, verdict: 'The recording did not finish playing. Check your connection and try again.' }), 12000)
   })
 }
 
@@ -126,7 +108,8 @@ export function Settings() {
           </div>
           {voices.length > 0 && (
             <>
-              <p className="mb-2 text-xs text-slate-500">Voice</p>
+              <p className="mb-1 text-xs text-slate-500">Backup voice</p>
+              <p className="mb-2 text-xs text-slate-400">Questions use a recorded voice. This is only used if a recording is missing.</p>
               <select
                 value={settings.voiceName ?? ''}
                 onChange={(e) => settings.setVoiceName(e.target.value || null)}
@@ -153,12 +136,12 @@ export function Settings() {
 
         <Section title="Speech check">
           <p className="mb-2 text-xs text-slate-500">
-            If Listen makes no sound, run this. It speaks one sentence and shows what the browser did.
+            If Listen makes no sound, run this. It plays one recorded sentence and shows what happened.
           </p>
           <button
             onClick={async () => {
               setCheck('running')
-              setCheck(await runSpeechCheck(settings.voiceName, settings.speechRate))
+              setCheck(await runSoundCheck())
             }}
             disabled={check === 'running'}
             className="w-full rounded-lg bg-indigo-600 py-2 text-sm font-semibold text-white disabled:opacity-50"

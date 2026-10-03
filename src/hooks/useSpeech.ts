@@ -1,7 +1,24 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import clipIds from '../audio/clips.json'
+import { clipId } from '../audio/clipId'
 import { useSettingsStore } from '../state/settingsStore'
 
-const supported = typeof window !== 'undefined' && 'speechSynthesis' in window
+const supported = typeof window !== 'undefined' && ('Audio' in window || 'speechSynthesis' in window)
+const hasBrowserVoice = typeof window !== 'undefined' && 'speechSynthesis' in window
+const CLIPS = new Set<string>(clipIds)
+
+export function clipUrl(text: string): string | null {
+  const id = clipId(text)
+  return CLIPS.has(id) ? `${import.meta.env.BASE_URL}audio/${id}.m4a` : null
+}
+
+// One shared element: on iPhones, an audio element that has played once from a
+// tap can play again later, so reusing it avoids "not allowed" errors.
+let sharedAudio: HTMLAudioElement | null = null
+function audioElement(): HTMLAudioElement {
+  sharedAudio ??= new Audio()
+  return sharedAudio
+}
 
 // Chrome can garbage-collect an utterance mid-sentence (it goes silent and
 // never fires `end`) unless something keeps a reference to it.
@@ -26,7 +43,7 @@ export function pickVoice(voiceName: string | null): SpeechSynthesisVoice | unde
 export function useEnglishVoices(): SpeechSynthesisVoice[] {
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([])
   useEffect(() => {
-    if (!supported) return
+    if (!hasBrowserVoice) return
     const load = () => setVoices(window.speechSynthesis.getVoices().filter((v) => v.lang.toLowerCase().startsWith('en')))
     load()
     window.speechSynthesis.addEventListener('voiceschanged', load)
@@ -34,6 +51,9 @@ export function useEnglishVoices(): SpeechSynthesisVoice[] {
   }, [])
   return voices
 }
+
+// Settings speeds were tuned for the browser voice (0.9 = normal).
+const playbackRateFor = (speechRate: number) => Math.min(1.3, Math.max(0.7, speechRate / 0.9))
 
 export function useSpeech() {
   const rate = useSettingsStore((s) => s.speechRate)
@@ -43,16 +63,24 @@ export function useSpeech() {
   const watchdog = useRef<number | undefined>(undefined)
 
   const stop = useCallback(() => {
-    if (!supported) return
     window.clearTimeout(watchdog.current)
-    activeUtterance = null
-    window.speechSynthesis.cancel()
+    if (sharedAudio) {
+      sharedAudio.onended = sharedAudio.onerror = sharedAudio.onplaying = null
+      sharedAudio.pause()
+    }
+    if (hasBrowserVoice) {
+      activeUtterance = null
+      window.speechSynthesis.cancel()
+    }
     setSpeaking(false)
   }, [])
 
-  const speak = useCallback(
+  const speakWithBrowserVoice = useCallback(
     (text: string) => {
-      if (!supported) return
+      if (!hasBrowserVoice) {
+        setProblem("This browser can't read aloud.")
+        return
+      }
       const synth = window.speechSynthesis
       const utterance = new SpeechSynthesisUtterance(text)
       utterance.lang = 'en-US'
@@ -72,22 +100,17 @@ export function useSpeech() {
       utterance.onerror = (e) => {
         window.clearTimeout(watchdog.current)
         setSpeaking(false)
-        // Interruptions are just us stopping/replacing the reading.
         if (e.error !== 'interrupted' && e.error !== 'canceled') {
           setProblem(`Couldn't play the voice (${e.error}). Check the volume, or pick another voice in Settings.`)
         }
       }
       activeUtterance = utterance
-      setProblem(null)
-
-      // If the browser never starts speaking, say so instead of failing silently.
       window.clearTimeout(watchdog.current)
       watchdog.current = window.setTimeout(() => {
         if (activeUtterance === utterance && !synth.speaking) {
-          setProblem('No sound came out. Check the volume, or try another voice in Settings → Test the voice.')
+          setProblem('No sound came out. Check the volume and that the iPhone is not on Silent.')
         }
       }, 2500)
-
       if (synth.speaking || synth.pending) {
         synth.cancel()
         // Safari drops an utterance queued in the same tick as cancel().
@@ -95,7 +118,6 @@ export function useSpeech() {
           if (activeUtterance === utterance) synth.speak(utterance)
         }, 150)
       } else {
-        // Chrome can be left paused (e.g. after the tab was hidden); this un-sticks it.
         synth.resume()
         synth.speak(utterance)
       }
@@ -103,7 +125,51 @@ export function useSpeech() {
     [rate, voiceName],
   )
 
+  const speak = useCallback(
+    (text: string) => {
+      stop()
+      setProblem(null)
+      const url = clipUrl(text)
+      if (!url) {
+        speakWithBrowserVoice(text)
+        return
+      }
+      // Recorded clip: plays the same on every device, independent of the
+      // browser's speech engine (which iPhones mute in Silent mode).
+      const audio = audioElement()
+      audio.onplaying = () => setSpeaking(true)
+      audio.onended = () => setSpeaking(false)
+      audio.onerror = () => {
+        setSpeaking(false)
+        speakWithBrowserVoice(text)
+      }
+      audio.src = url
+      audio.playbackRate = playbackRateFor(rate)
+      audio.play().catch((err: DOMException) => {
+        setSpeaking(false)
+        if (err.name === 'NotAllowedError') setProblem('The browser blocked the sound. Tap Listen again.')
+        else if (err.name !== 'AbortError') speakWithBrowserVoice(text)
+      })
+    },
+    [rate, speakWithBrowserVoice, stop],
+  )
+
   useEffect(() => stop, [stop])
 
-  return { speak, stop, speaking, problem, isSupported: supported }
+  return { speak, stop, speaking, problem, isSupported: supported, speakWithBrowserVoice }
+}
+
+/** Downloads every recording into the offline cache so Listen works without internet. */
+export async function warmAudioCache(): Promise<void> {
+  if (!('caches' in window)) return
+  for (const id of clipIds) {
+    const url = `${import.meta.env.BASE_URL}audio/${id}.m4a`
+    try {
+      // Goes through the service worker, which keeps a copy (see vite.config.ts).
+      const cached = await caches.match(url)
+      if (!cached) await fetch(url)
+    } catch {
+      return // offline or blocked; try again next launch
+    }
+  }
 }

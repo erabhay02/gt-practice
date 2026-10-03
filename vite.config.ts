@@ -34,6 +34,20 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,ico}'],
+        // Recordings are cached as they're fetched (the app pre-fetches them all
+        // once). Range support matters: iPhones request audio in byte ranges and
+        // won't play a full response served from the cache.
+        runtimeCaching: [
+          {
+            urlPattern: ({ url }) => url.pathname.includes('/audio/') && url.pathname.endsWith('.m4a'),
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'question-audio',
+              rangeRequests: true,
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+        ],
       },
     }),
   ],
