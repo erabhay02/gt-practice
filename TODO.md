@@ -7,7 +7,6 @@ Live app: https://erabhay02.github.io/gt-practice/ (auto-deploys on push to `mai
 - [ ] Confirm with the school: CogAT **Level 8** (vs Level 9) and the test date.
 
 ## In progress / planned
-- [ ] Update GitHub Actions versions (Node 20 deprecation warning)
 
 ## Done
 - [x] Phase 1 + 2: all 9 Level 8 subtests, practice mode, read-aloud, adaptive difficulty, repeat avoidance, PWA/offline
@@ -22,3 +21,4 @@ Live app: https://erabhay02.github.io/gt-practice/ (auto-deploys on push to `mai
 - [x] Printable worksheets (🖨️ on Home): choose parts + 3/5/8 per part, A–D answer bubbles, Sentence Completion printed as "read aloud", answer key on its own last page; verified by printing to PDF
 - [x] Clarity fixes found in the printout/screenshots: bolder stripe/dot patterns; easy figure items unrotated with recognizable shapes (no pentagon/hexagon mix-ups); paper-folding never shows overlapping holes or mirror-image hole pairs that make wrong answers collapse into the right one
 - [x] Paper folding: diagonal (corner-to-corner) folds, square holes, and triangle cut-outs whose mirror copy flips direction (new "copied but not flipped" wrong answer). Easy = 1 straight fold + 1 round hole; medium = any fold, 2 holes; hard = 2 folds or a triangle cut-out
+- [x] GitHub Actions updated to Node 24 versions (checkout v7, setup-node v7, configure-pages v6, upload-pages-artifact v5, deploy-pages v5)
