@@ -7,6 +7,11 @@ export interface SessionResult {
   correct: number
   total: number
   completedAt: string // ISO timestamp
+  // Missing on sessions saved before mock tracking existed; treated as practice.
+  kind?: 'practice' | 'mock'
+  // Groups the parts of one mock-test run.
+  mockRunId?: string
+  mockMode?: string
 }
 
 interface ProgressState {

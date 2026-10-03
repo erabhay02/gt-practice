@@ -95,6 +95,7 @@ export function PracticeSession() {
         correct: correctCount,
         total: questions.length,
         completedAt: new Date().toISOString(),
+        kind: 'practice',
       })
       setComplete(true)
       return

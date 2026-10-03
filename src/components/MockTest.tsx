@@ -91,6 +91,7 @@ export function MockTest() {
   const recordShownQuestions = useProgressStore((s) => s.recordShownQuestions)
   // Frozen for the whole run so toggling the setting mid-test can't break timing.
   const [timed] = useState(() => useSettingsStore.getState().timerEnabled)
+  const [runId] = useState(() => `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`)
 
   const blocks = useMemo<Block[]>(() => {
     const infos = mode === 'quick' ? AVAILABLE_SUBTYPES : AVAILABLE_SUBTYPES.filter((s) => s.domain === mode)
@@ -127,6 +128,9 @@ export function MockTest() {
       correct: r.correct,
       total: r.total,
       completedAt: new Date().toISOString(),
+      kind: 'mock',
+      mockRunId: runId,
+      mockMode: mode,
     })
     if (blockIdx === blocks.length - 1) {
       setPhase('complete')

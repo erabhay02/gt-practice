@@ -7,7 +7,6 @@ Live app: https://erabhay02.github.io/gt-practice/ (auto-deploys on push to `mai
 - [ ] Confirm with the school: CogAT **Level 8** (vs Level 9) and the test date.
 
 ## In progress / planned
-- [ ] Better progress page (mock vs practice, trend, focus areas)
 - [ ] Printable worksheets
 - [ ] Paper folding: diagonal folds + cut-out shapes
 - [ ] Update GitHub Actions versions (Node 20 deprecation warning)
@@ -21,3 +20,4 @@ Live app: https://erabhay02.github.io/gt-practice/ (auto-deploys on push to `mai
 - [x] Figure variety: half-shaded shapes, inner marks (dot / line / ×), shapes nested inside shapes — used by Figure Matrices and Figure Classification on medium/hard items (visually verified via headless-Chrome renders)
 - [x] UI verified on an emulated iPhone-size screen (no overflow, no JS errors). Fixed from screenshots: nearly-identical rotated stars/polygons now count as look-alikes (25° rule); abacus beads grouped in fives; stale state when switching directly between practice types
 - [x] Settings page (⚙️ on Home): test date with countdown on Home, read-aloud speed + voice picker + test button, mock-test timer on/off, reset progress (with confirmation)
+- [x] Progress page: countdown / days practiced / questions answered, "Focus next" (weakest recent parts, then untried), per-part recent % + trend bars + current difficulty, mock-test history kept separate from practice (tap a run for per-part scores)
