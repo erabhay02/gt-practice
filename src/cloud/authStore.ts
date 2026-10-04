@@ -30,7 +30,7 @@ interface AuthState {
 export function friendlyError(e: unknown): string {
   const msg = e instanceof Error ? e.message : String(e)
   if (/invalid login credentials/i.test(msg)) return 'That email and password don\'t match. Try again or reset your password.'
-  if (/email not confirmed/i.test(msg)) return 'Please confirm your email first. Check your inbox for the 6-digit code.'
+  if (/email not confirmed/i.test(msg)) return 'Please confirm your email first. Check your inbox for the code we sent.'
   if (/token has expired|invalid.*otp|otp.*invalid/i.test(msg)) return 'That code didn\'t work or has expired. Request a new one.'
   if (/already registered|already exists/i.test(msg)) return 'There\'s already an account with that email. Try signing in.'
   if (/password should be|weak password/i.test(msg)) return 'Please choose a longer password (at least 8 characters).'

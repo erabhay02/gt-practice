@@ -8,6 +8,11 @@ export const TERMS_URL = `${import.meta.env.BASE_URL}terms.html`
 
 type Step = 'signIn' | 'signUp' | 'verify' | 'forgot' | 'reset'
 
+// Supabase email codes are 6–10 digits depending on the project's setting.
+const MIN_CODE = 6
+const MAX_CODE = 10
+const codeLooksRight = (code: string) => code.length >= MIN_CODE && code.length <= MAX_CODE
+
 const input = 'w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-base outline-none focus:border-sprout-500'
 const primary = 'w-full rounded-xl bg-sprout-500 py-3 font-semibold text-white disabled:opacity-50'
 const linkBtn = 'text-sm font-semibold text-sprout-700 underline'
@@ -84,7 +89,22 @@ export function AuthScreens() {
   if (step === 'signIn') {
     return (
       <Shell title="Sign in" subtitle="Welcome back! Sign in to practice and keep progress in sync.">
-        <form className="flex flex-col gap-3" onSubmit={submit(() => auth.signIn(email.trim(), password))}>
+        <form
+          className="flex flex-col gap-3"
+          onSubmit={submit(async () => {
+            try {
+              await auth.signIn(email.trim(), password)
+            } catch (e) {
+              // Signed up earlier but never entered the emailed code: go finish that.
+              if (e instanceof Error && /email not confirmed/i.test(e.message)) {
+                go('verify')
+                setInfo(`Your email isn't confirmed yet. Enter the code we emailed to ${email.trim()}, or send a new one.`)
+                return
+              }
+              throw e
+            }
+          })}
+        >
           <input className={input} type="email" autoComplete="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
           <input className={input} type="password" autoComplete="current-password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
           <button className={primary} disabled={busy}>
@@ -115,7 +135,7 @@ export function AuthScreens() {
             if (!ok) throw new Error('That invite code isn\'t valid or has been used up. Check the code and try again.')
             await auth.signUp(email.trim(), password, invite)
             go('verify')
-            setInfo(`We sent a 6-digit code to ${email.trim()}.`)
+            setInfo(`We sent a code to ${email.trim()}.`)
           })}
         >
           <input className={`${input} uppercase tracking-widest`} placeholder="Invite code" value={invite} onChange={(e) => setInvite(e.target.value)} required />
@@ -149,10 +169,10 @@ export function AuthScreens() {
 
   if (step === 'verify') {
     return (
-      <Shell title="Check your email" subtitle={info ?? `Enter the 6-digit code we sent to ${email}.`}>
+      <Shell title="Check your email" subtitle={info ?? `Enter the code we sent to ${email}.`}>
         <form className="flex flex-col gap-3" onSubmit={submit(() => auth.verifySignUpCode(email.trim(), code))}>
-          <input className={`${input} text-center text-2xl tracking-[0.5em]`} inputMode="numeric" autoComplete="one-time-code" maxLength={6} placeholder="••••••" value={code} onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))} required />
-          <button className={primary} disabled={busy || code.length !== 6}>
+          <input className={`${input} text-center text-2xl tracking-[0.3em]`} inputMode="numeric" autoComplete="one-time-code" maxLength={MAX_CODE} placeholder="Code from the email" value={code} onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))} required />
+          <button className={primary} disabled={busy || !codeLooksRight(code)}>
             {busy ? 'Checking…' : 'Confirm email'}
           </button>
         </form>
@@ -174,11 +194,11 @@ export function AuthScreens() {
 
   if (step === 'forgot') {
     return (
-      <Shell title="Reset your password" subtitle="We'll email you a 6-digit code.">
+      <Shell title="Reset your password" subtitle="We'll email you a code.">
         <form className="flex flex-col gap-3" onSubmit={submit(async () => {
           await auth.sendResetCode(email.trim())
           go('reset')
-          setInfo(`If an account exists for ${email.trim()}, we sent it a 6-digit code.`)
+          setInfo(`If an account exists for ${email.trim()}, we sent it a code.`)
         })}>
           <input className={input} type="email" autoComplete="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
           <button className={primary} disabled={busy}>
@@ -196,9 +216,9 @@ export function AuthScreens() {
   return (
     <Shell title="Choose a new password" subtitle={info ?? undefined}>
       <form className="flex flex-col gap-3" onSubmit={submit(() => auth.resetPassword(email.trim(), code, password))}>
-        <input className={`${input} text-center text-2xl tracking-[0.5em]`} inputMode="numeric" autoComplete="one-time-code" maxLength={6} placeholder="••••••" value={code} onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))} required />
+        <input className={`${input} text-center text-2xl tracking-[0.3em]`} inputMode="numeric" autoComplete="one-time-code" maxLength={MAX_CODE} placeholder="Code from the email" value={code} onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))} required />
         <input className={input} type="password" autoComplete="new-password" minLength={8} placeholder="New password (8+ characters)" value={password} onChange={(e) => setPassword(e.target.value)} required />
-        <button className={primary} disabled={busy || code.length !== 6}>
+        <button className={primary} disabled={busy || !codeLooksRight(code)}>
           {busy ? 'Saving…' : 'Save and sign in'}
         </button>
       </form>

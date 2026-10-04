@@ -16,7 +16,7 @@ Built and tested locally (switched off in the live app until the real backend is
 - [x] Privacy Policy + Terms drafts (`public/privacy.html`, `public/terms.html`) — **review; set up privacy@astrala.us or change the address**
 - [x] iPhone app project (Capacitor, `ios/`), app icon + launch screen; builds and runs in the iOS Simulator
 Waiting on:
-- [ ] ⛔ Authorize the Supabase connector (claude.ai → Settings → Connectors) → create project "thinksprout", apply migration, email templates, invite codes, connect the app
+- [x] Supabase project "thinksprout" (us-east-1): database + security rules, 5 one-use invite codes, email via Twilio SendGrid from no-reply@astrala.us, code-based email templates; parent account created and verified; accounts switched on in the live app
 - [ ] ⛔ Cloudflare API token → `gh secret set CLOUDFLARE_API_TOKEN` and `gh secret set CLOUDFLARE_ACCOUNT_ID` → deploy to thinksprout.astrala.us
 - [ ] Sign in on every existing device while still on github.io (uploads progress), then switch domain, then make the repo private
 - [ ] Apple Developer enrollment → TestFlight; install Android Studio → Android build + Play closed testing
