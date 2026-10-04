@@ -19,11 +19,11 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['icon.svg'],
       manifest: {
-        name: 'GT Practice',
-        short_name: 'GT Practice',
-        description: 'CogAT-style practice for GT assessment prep',
-        theme_color: '#4f46e5',
-        background_color: '#ffffff',
+        name: 'ThinkSprout',
+        short_name: 'ThinkSprout',
+        description: 'Gifted & Talented test practice for 1st and 2nd graders',
+        theme_color: '#2ea44f',
+        background_color: '#fffbf0',
         display: 'standalone',
         start_url: base,
         scope: base,
@@ -33,7 +33,7 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,ico}'],
+        globPatterns: ['**/*.{js,css,html,svg,ico,woff2}'],
         // Recordings are cached as they're fetched (the app pre-fetches them all
         // once). Range support matters: iPhones request audio in byte ranges and
         // won't play a full response served from the cache.

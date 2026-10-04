@@ -1,5 +1,7 @@
 import type { Choice, ContentSpec, Question } from '../content/types'
 import { ContentTile } from '../content/shapes/ContentTile'
+import { Mascot } from '../ui/Mascot'
+import { KidButton } from '../ui/KidButton'
 
 function isBare(cell: ContentSpec): boolean {
   return cell.kind === 'text' || cell.kind === 'blank'
@@ -18,7 +20,7 @@ function PromptCell({ cell }: { cell: ContentSpec }) {
     )
   }
   return (
-    <div className="flex min-h-20 min-w-20 items-center justify-center rounded-xl border border-slate-200 bg-white p-1.5">
+    <div className="flex min-h-20 min-w-20 items-center justify-center rounded-2xl border-2 border-sprout-100 bg-white p-1.5">
       <ContentTile content={cell} size="large" />
     </div>
   )
@@ -27,9 +29,9 @@ function PromptCell({ cell }: { cell: ContentSpec }) {
 function Prompt({ rows }: { rows: ContentSpec[][] }) {
   if (isMatrix(rows)) {
     return (
-      <div className="grid grid-cols-2 gap-2 rounded-2xl bg-slate-100 p-3">
+      <div className="grid grid-cols-2 gap-2.5">
         {rows.flat().map((cell, i) => (
-          <div key={i} className="flex h-24 w-24 items-center justify-center rounded-xl border border-slate-200 bg-white">
+          <div key={i} className="flex h-24 w-24 items-center justify-center rounded-2xl border-2 border-sprout-100 bg-white">
             <ContentTile content={cell} size="large" />
           </div>
         ))}
@@ -79,8 +81,10 @@ function SpeakButton({ speech }: { speech: SpeechControls }) {
     <button
       aria-label={speech.speaking ? 'Stop reading' : 'Read the question aloud'}
       onClick={speech.speaking ? speech.stop : speech.speak}
-      className={`flex shrink-0 items-center gap-1.5 rounded-full px-4 py-2.5 text-sm font-bold shadow-sm transition-colors ${
-        speech.speaking ? 'animate-pulse bg-indigo-700 text-white' : 'bg-indigo-600 text-white active:bg-indigo-800'
+      className={`flex shrink-0 items-center gap-1.5 rounded-2xl px-4 py-2.5 font-display text-base font-semibold transition-transform active:translate-y-0.5 ${
+        speech.speaking
+          ? 'animate-pulse bg-sky-600 text-white'
+          : 'bg-sky-400 text-white shadow-[0_4px_0_var(--color-sky-600)] active:shadow-none'
       }`}
     >
       {speech.speaking ? (
@@ -98,16 +102,16 @@ function SpeakButton({ speech }: { speech: SpeechControls }) {
 export function QuestionView({ question, selectedId, showFeedback, onSelect, speech }: Props) {
   return (
     <div className="mx-auto flex w-full max-w-md flex-col gap-4">
-      <div className="rounded-2xl bg-white p-4 shadow-sm">
-        <div className="flex items-start justify-between gap-2">
-          <p className="text-base text-slate-700">{question.promptAudioText}</p>
+      <div className="rounded-3xl bg-white p-4 shadow-sm">
+        <div className="flex items-start justify-between gap-3">
+          <p className="font-display text-lg leading-snug text-ink">{question.promptAudioText}</p>
           {speech && <SpeakButton speech={speech} />}
         </div>
-        {speech?.problem && <p className="mt-2 rounded-lg bg-amber-50 p-2 text-xs text-amber-800">{speech.problem}</p>}
+        {speech?.problem && <p className="mt-2 rounded-xl bg-sun-100 p-2 text-xs text-ink">{speech.problem}</p>}
       </div>
 
       {question.promptVisual && (
-        <div className="flex justify-center rounded-2xl bg-white p-4 shadow-sm">
+        <div className="flex justify-center rounded-3xl bg-sprout-50 p-4">
           <Prompt rows={question.promptVisual} />
         </div>
       )}
@@ -117,32 +121,32 @@ export function QuestionView({ question, selectedId, showFeedback, onSelect, spe
           const isSelected = choice.id === selectedId
           const stateClasses = showFeedback
             ? choice.isCorrect
-              ? 'border-green-500 bg-green-50'
+              ? 'border-sprout-500 bg-sprout-50'
               : isSelected
-                ? 'border-red-500 bg-red-50'
-                : 'border-slate-200 bg-white opacity-50'
+                ? 'border-red-400 bg-red-50'
+                : 'border-slate-200 bg-white opacity-45'
             : isSelected
-              ? 'border-indigo-500 bg-indigo-50'
-              : 'border-slate-200 bg-white active:bg-indigo-50'
+              ? 'border-sky-400 bg-sky-100'
+              : 'border-sprout-100 bg-white shadow-[0_4px_0_var(--color-sprout-100)] active:translate-y-1 active:shadow-none'
           // The picked answer always gets a label; the right answer is pointed out when he missed it.
           const label = !showFeedback
             ? null
             : isSelected
               ? choice.isCorrect
-                ? { text: '✓ Correct', cls: 'bg-green-600 text-white' }
-                : { text: '✗ Incorrect', cls: 'bg-red-600 text-white' }
+                ? { text: '✓ Correct', cls: 'bg-sprout-500 text-white' }
+                : { text: '✗ Incorrect', cls: 'bg-red-500 text-white' }
               : choice.isCorrect
-                ? { text: '✓ Correct answer', cls: 'bg-green-100 text-green-800' }
+                ? { text: '✓ Correct answer', cls: 'bg-sprout-100 text-sprout-800' }
                 : null
           return (
             <button
               key={choice.id}
               disabled={showFeedback}
               onClick={() => onSelect(choice)}
-              className={`relative flex min-h-24 flex-col items-center justify-center gap-1 rounded-2xl border-2 p-2 shadow-sm transition-colors ${stateClasses}`}
+              className={`relative flex min-h-24 flex-col items-center justify-center gap-1 rounded-3xl border-2 p-2 transition ${stateClasses}`}
             >
               <ContentTile content={choice.content} size="large" />
-              {label && <span className={`rounded-full px-2 py-0.5 text-xs font-bold ${label.cls}`}>{label.text}</span>}
+              {label && <span className={`rounded-full px-2.5 py-0.5 font-display text-xs font-semibold ${label.cls}`}>{label.text}</span>}
             </button>
           )
         })}
@@ -151,19 +155,24 @@ export function QuestionView({ question, selectedId, showFeedback, onSelect, spe
   )
 }
 
-/** Big Correct / Incorrect banner shown under an answered question. */
+/** Correct / Incorrect banner with Sprout's reaction, shown under an answered question. */
 export function AnswerFeedback({ isCorrect, explanation }: { isCorrect: boolean; explanation?: string }) {
   return (
     <div
-      className={`mx-auto mt-4 flex w-full max-w-md flex-col items-center gap-1 rounded-2xl border-2 p-4 text-center ${
-        isCorrect ? 'border-green-300 bg-green-50' : 'border-red-300 bg-red-50'
+      className={`mx-auto mt-4 flex w-full max-w-md animate-pop items-center gap-3 rounded-3xl border-2 p-3 ${
+        isCorrect ? 'border-sprout-300 bg-sprout-50' : 'border-red-200 bg-red-50'
       }`}
     >
-      <p className={`text-2xl font-bold ${isCorrect ? 'text-green-700' : 'text-red-700'}`}>
-        {isCorrect ? '✓ Correct!' : '✗ Incorrect'}
-      </p>
-      {!isCorrect && <p className="text-sm font-medium text-slate-700">The right answer is marked in green.</p>}
-      {explanation && <p className="text-sm text-slate-600">{explanation}</p>}
+      <div className="shrink-0">
+        <Mascot mood={isCorrect ? 'cheer' : 'oops'} size={64} />
+      </div>
+      <div>
+        <p className={`font-display text-2xl font-semibold ${isCorrect ? 'text-sprout-700' : 'text-red-600'}`}>
+          {isCorrect ? '✓ Correct!' : '✗ Incorrect'}
+        </p>
+        {!isCorrect && <p className="text-sm font-semibold text-ink">The right answer is marked in green.</p>}
+        {explanation && <p className="text-sm text-slate-600">{explanation}</p>}
+      </div>
     </div>
   )
 }
@@ -183,22 +192,13 @@ export function QuestionNav({
   nextEmphasis?: boolean
 }) {
   return (
-    <div className="mx-auto mt-4 grid w-full max-w-md grid-cols-2 gap-3">
-      <button
-        onClick={onPrevious}
-        disabled={!canGoBack}
-        className="rounded-full border-2 border-slate-300 py-3 text-base font-semibold text-slate-600 disabled:opacity-30"
-      >
+    <div className="mx-auto mt-5 grid w-full max-w-md grid-cols-2 gap-3">
+      <KidButton variant="white" onClick={onPrevious} disabled={!canGoBack}>
         ← Previous
-      </button>
-      <button
-        onClick={onNext}
-        className={`rounded-full py-3 text-base font-semibold ${
-          nextEmphasis ? 'bg-indigo-600 text-white shadow' : 'border-2 border-indigo-600 text-indigo-600'
-        }`}
-      >
+      </KidButton>
+      <KidButton variant={nextEmphasis ? 'primary' : 'sun'} onClick={onNext}>
         {nextLabel}
-      </button>
+      </KidButton>
     </div>
   )
 }

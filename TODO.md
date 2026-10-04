@@ -1,43 +1,43 @@
-# GT Practice — TODO
+# ThinkSprout — TODO
 
 Live app: https://erabhay02.github.io/gt-practice/ (auto-deploys on every push to `main`; tests must pass first)
 
 ## Needs a parent (can't be done from code)
-- [ ] Install on his device (iPhone/iPad: Safari → Share → Add to Home Screen; Android: Chrome → Install app).
-- [ ] Settings ⚙️: set the test date, then use "Test the voice" and pick the clearest voice/speed on his device.
-- [ ] Confirm with the school: CogAT **Level 8** (vs Level 9) and the test date.
+- [ ] Open the app once: existing progress moves into a profile called "My child" (2nd grade). Rename it in 🔒 Grown-ups → Children, set the test date there, then add the 1st grader.
+- [ ] Install on each child's device (iPhone/iPad: Safari → Share → Add to Home Screen; Android: Chrome → Install app).
+- [ ] Confirm with each school: CogAT level (Level 7 = 1st grade, Level 8 = 2nd grade) and test dates.
+- [ ] Phase 2 prep: start Apple Developer enrollment ($99/yr, approval can take 1–2 days), create the Google Play developer account ($25), pick the subdomain (e.g. `practice.yourdomain.com`), have the Supabase project ready.
+
+## Phase 2 — accounts + iPhone/Android apps + invite-only beta (next)
+- [ ] Move hosting off GitHub Pages to the subdomain; make the repo private
+- [ ] Supabase: parent accounts, children synced across devices (nickname + grade only — COPPA), invite codes
+- [ ] Capacitor iOS + Android builds; offline + recorded audio inside the app
+- [ ] Privacy policy, in-app account deletion; TestFlight + Google Play closed testing for invited families
+
+## Phase 3 — subscriptions
+- [ ] RevenueCat on Apple/Google in-app purchases; free tier vs full access; paywall behind the parental gate
+- [ ] Store listings (no "CogAT" in the name; trademark disclaimer), App Review
 
 ## Done
-### Foundation
-- [x] All 9 CogAT Level 8 subtests, matching the real test's formats:
-  - Verbal: Picture Analogies, Sentence Completion (read aloud), Picture Classification
-  - Quantitative: Number Analogies (pictures of amounts), Number Puzzles (missing number), Number Series (abacus)
-  - Nonverbal: Figure Matrices (2×2), Paper Folding (fold + punch/cut), Figure Classification
-- [x] Practice mode with read-aloud, adaptive difficulty, no repeats until a bank is used up, shuffled answer positions
-- [x] Works offline as an installable app; deployed to GitHub Pages with tests gating every deploy
+### Phase 1 (1st grade + profiles + redesign)
+- [x] 1st grade (CogAT Level 7) added alongside 2nd grade (Level 8, unchanged): easier rules in every part (picture-only Number Puzzles, amounts up to 8, one straight fold, one change at a time in Figure Matrices, simpler verbal items + 20 new 1st-grade Picture Analogies); Level 7 practice-test lengths (13/13/12, 13/11/13, 11/10/11)
+- [x] 2nd-grade content locked by a fingerprint test, so 1st-grade work can't change what a 2nd grader sees
+- [x] Child profiles: "Who's practicing?", per-child progress/streak/history/test date; existing progress migrated automatically
+- [x] "Today's practice": 12 questions across the weakest, least-practiced, and a rotating part; marks the day done
+- [x] Redesign as ThinkSprout: playful kid screens (Sprout mascot, rounded fonts bundled for offline, chunky buttons, confetti) and calm parent area behind a parental gate (Progress · Children · Worksheets · Settings)
+- [x] Practice tests untimed by default (K–2 CogAT is officially untimed); timer is a parent option
+- [x] Trademark disclaimer in parent Settings; new sprout app icon
+- [x] Verified in a phone-size browser: first run, two children, 1st-grade daily practice, gate, parent pages, upgrade from old saved data; 80 automated tests
 
-### This session
-- [x] Verbal banks doubled: Picture Analogies 60, Picture Classification 60, Sentence Completion 62 (+ integrity tests: 4 distinct choices, answer never in the prompt, no duplicates)
-- [x] Mock test: battery-length runs (Verbal / Quantitative / Nonverbal) or a quick mixed test; per-part timer; untimed example + spoken how-to tip before each part
-- [x] Figure variety: half-shaded shapes, inner marks (dot / line / ×), shapes nested inside shapes (medium/hard items)
-- [x] Paper folding: diagonal folds, square holes, triangle cut-outs whose mirror copy flips direction ("copied but not flipped" is a wrong answer). Easy = 1 straight fold + 1 round hole; medium = any fold, 2 holes; hard = 2 folds or a triangle cut-out
-- [x] Settings: test date (countdown on Home), read-aloud speed + voice picker + test button, mock timer on/off, reset progress
-- [x] Progress page: countdown / days practiced / questions answered, "Focus next", per-part recent % + trend + difficulty level, mock-test history separate from practice
-- [x] Printable worksheets: choose parts + 3/5/8 per part, A–D bubbles, Sentence Completion printed as "read aloud", answer key on the last page
-- [x] Clarity fixes found by actually looking at screens and printouts: nearly-identical rotated shapes now count as look-alikes; bolder stripe/dot patterns; easy items use unrotated, recognizable shapes; abacus beads grouped in fives; no overlapping or mirror-collapsing paper holes; stale state when switching directly between practice types
-- [x] GitHub Actions updated to Node 24 versions
-- [x] Every answer shows ✓ Correct / ✗ Incorrect right away (practice, mock test, and mock examples); a missed question highlights the right answer and explains the rule. First answer counts.
-- [x] Previous / Next on every question (Next becomes Skip if unanswered; mock-test Previous stays within the current timed part; summary shows skipped count)
-- [x] Questions are read aloud only when the 🔊 button is tapped (no automatic reading; reading stops when moving to another question)
-- [x] Read-aloud reliability: prefers a built-in device voice over Chrome's online Google voices (known to go silent on Macs), avoids Safari's cancel-then-speak bug, keeps Chrome from dropping speech mid-sentence; 🔊 shows "⏹ Reading…" (tap to stop) and a visible warning if no sound starts
-- [x] Big purple "Listen" button with a speaker icon; Settings → Speech check (speaks one sentence and reports what the browser did); app version shown in Settings; new versions now load automatically instead of waiting for a second reload
-- [x] Listen now plays pre-recorded audio (78 sentences, free public-domain-trained Piper LJSpeech voice): same sound on every device, works offline, doesn't depend on the browser's speech engine. Browser voice is only a backup. Test fails if a sentence lacks a recording.
-- [x] Verified on the live site in a phone-size browser: offline load + offline practice, a full quick mock test start to finish, progress page records the run, no JS errors. 42 automated tests.
+### Earlier
+- [x] All 9 CogAT Level 8 subtests matching the real formats; practice with ✓/✗ feedback, Previous/Next, adaptive difficulty, no repeats
+- [x] Mock tests by battery with untimed examples and how-to tips; progress page; printable worksheets
+- [x] Figure variety (half-shading, marks, nested shapes); paper folding with diagonal folds and cut-outs
+- [x] Pre-recorded read-aloud (78 sentences, Piper LJSpeech voice), works offline; sound check in Settings
+- [x] Installable offline app on GitHub Pages; tests gate every deploy
 
 ## Ideas for later
 - [ ] When questions change, re-record: `npx tsx scripts/collect-prompts.ts`, then `scripts/generate_audio.py` (setup steps are in that file). CI fails until this is done.
-- [ ] If the school says Level 9: add text-based verbal items (verbal analogies / classification / sentence completion with words).
-- [ ] Scores here are practice percentages, not CogAT scores (no age norms/percentiles); mock timing (~45 s/question) is an estimate.
-- [ ] Emoji look differs by device; very old Android phones may show blanks for newer emoji (🪹 🛞 🪶 🪵 🪚).
-- [ ] Optional: a short "how to take the test" walkthrough for him (pick one answer, don't rush, listen to the whole question).
-- [ ] Optional: small rewards/sounds for streaks if motivation dips.
+- [ ] If a school uses Level 9 (3rd grade): add text-based verbal items.
+- [ ] Scores are practice percentages, not CogAT scores (no age norms/percentiles).
+- [ ] Optional: a short "how to take the test" walkthrough; small rewards for streaks.

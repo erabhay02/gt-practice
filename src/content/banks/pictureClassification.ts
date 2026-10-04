@@ -1,4 +1,4 @@
-import type { ContentSpec, Question } from '../types'
+import type { ContentSpec, Grade, Question } from '../types'
 
 const emoji = (value: string): ContentSpec => ({ kind: 'emoji', value })
 
@@ -73,8 +73,14 @@ const RAW_ITEMS: RawItem[] = [
   { example: ['🎸', '🎻', '🪁'], correct: '🪀', distractors: ['🥁', '🎺', '⚽'], category: 'things with strings' },
 ]
 
-export function buildPictureClassificationBank(): Question[] {
-  return RAW_ITEMS.map((item, i) => ({
+// Categories too abstract (or with tricky traps) for a 1st grader.
+const GRADE2_ONLY_CATEGORIES = new Set([
+  'things that use electricity', 'made from milk', 'things with numbers on them', 'things that grow',
+  'animals with tails', 'things with doors', 'things with strings', 'things that hold liquids', 'plants',
+])
+
+export function buildPictureClassificationBank(grade: Grade = 2): Question[] {
+  return RAW_ITEMS.flatMap((item, i): Question[] => grade === 1 && GRADE2_ONLY_CATEGORIES.has(item.category) ? [] : [{
     id: `picture-classification-${i}`,
     domain: 'verbal',
     subType: 'picture-classification',
@@ -88,5 +94,5 @@ export function buildPictureClassificationBank(): Question[] {
     })),
     explanationAudioText: `They are all ${item.category}.`,
     source: 'authored',
-  }))
+  }])
 }

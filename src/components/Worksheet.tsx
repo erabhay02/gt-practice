@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { GRADES, LEVELS } from '../content/levels'
+import { useActiveProfile } from '../state/profilesStore'
 import { AVAILABLE_SUBTYPES, BATTERIES, getRampedQuestions } from '../content/contentLoader'
-import type { ContentSpec, Question, SubType } from '../content/types'
+import type { ContentSpec, Grade, Question, SubType } from '../content/types'
 import { ContentTile } from '../content/shapes/ContentTile'
 
 const LETTERS = ['A', 'B', 'C', 'D']
@@ -71,6 +72,8 @@ function PrintQuestion({ q, number }: { q: Question; number: number }) {
 }
 
 export function Worksheet() {
+  const profile = useActiveProfile()
+  const [grade, setGrade] = useState<Grade>(profile?.grade ?? 2)
   const [selected, setSelected] = useState<Set<SubType>>(() => new Set(AVAILABLE_SUBTYPES.map((s) => s.subType)))
   const [perPart, setPerPart] = useState(3)
   const [version, setVersion] = useState(0)
@@ -79,11 +82,11 @@ export function Worksheet() {
     () =>
       AVAILABLE_SUBTYPES.filter((s) => selected.has(s.subType)).map((info) => ({
         info,
-        questions: getRampedQuestions(info.subType, perPart),
+        questions: getRampedQuestions(info.subType, perPart, [], grade),
       })),
     // `version` forces a fresh set of questions.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [selected, perPart, version],
+    [selected, perPart, version, grade],
   )
 
   let n = 0
@@ -98,25 +101,33 @@ export function Worksheet() {
     })
 
   return (
-    <div className="min-h-screen bg-slate-50 p-6 print:bg-white print:p-0">
-      <div className="mx-auto max-w-2xl print:hidden">
-        <header className="mb-4 flex items-center gap-3">
-          <Link to="/" className="text-sm text-slate-500">
-            ← Home
-          </Link>
-          <h1 className="text-xl font-bold text-slate-800">Printable worksheet</h1>
-        </header>
+    <div className="print:bg-white">
+      <div className="print:hidden">
         <div className="mb-6 flex flex-col gap-4 rounded-2xl bg-white p-4 shadow-sm">
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-slate-600">Grade:</span>
+            {GRADES.map((g) => (
+              <button
+                key={g}
+                onClick={() => setGrade(g)}
+                className={`rounded-full border-2 px-3 py-1 text-sm ${
+                  grade === g ? 'border-sprout-500 bg-sprout-50 text-sprout-800' : 'border-slate-200 text-slate-500'
+                }`}
+              >
+                {LEVELS[g].label}
+              </button>
+            ))}
+          </div>
           {BATTERIES.map(({ domain, label }) => (
             <div key={domain}>
-              <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-indigo-500">{label}</p>
+              <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-500">{label}</p>
               <div className="flex flex-wrap gap-2">
                 {AVAILABLE_SUBTYPES.filter((s) => s.domain === domain).map((s) => (
                   <button
                     key={s.subType}
                     onClick={() => toggle(s.subType)}
                     className={`rounded-full border-2 px-3 py-1 text-sm ${
-                      selected.has(s.subType) ? 'border-indigo-500 bg-indigo-50 text-indigo-700' : 'border-slate-200 text-slate-500'
+                      selected.has(s.subType) ? 'border-sprout-500 bg-sprout-50 text-sprout-800' : 'border-slate-200 text-slate-500'
                     }`}
                   >
                     {s.label}
@@ -132,7 +143,7 @@ export function Worksheet() {
                 key={v}
                 onClick={() => setPerPart(v)}
                 className={`h-9 w-9 rounded-full border-2 text-sm font-medium ${
-                  perPart === v ? 'border-indigo-500 bg-indigo-50 text-indigo-700' : 'border-slate-200 text-slate-500'
+                  perPart === v ? 'border-sprout-500 bg-sprout-50 text-sprout-800' : 'border-slate-200 text-slate-500'
                 }`}
               >
                 {v}
@@ -140,13 +151,13 @@ export function Worksheet() {
             ))}
           </div>
           <div className="grid grid-cols-2 gap-2">
-            <button onClick={() => setVersion((v) => v + 1)} className="rounded-full border-2 border-indigo-600 py-2 font-semibold text-indigo-600">
+            <button onClick={() => setVersion((v) => v + 1)} className="rounded-full border-2 border-slate-800 py-2 font-semibold text-slate-800">
               New questions
             </button>
             <button
               onClick={() => window.print()}
               disabled={n === 0}
-              className="rounded-full bg-indigo-600 py-2 font-semibold text-white disabled:opacity-40"
+              className="rounded-full bg-slate-800 py-2 font-semibold text-white disabled:opacity-40"
             >
               🖨️ Print
             </button>
@@ -159,12 +170,12 @@ export function Worksheet() {
 
       <article className="mx-auto max-w-2xl rounded-2xl bg-white p-6 shadow-sm print:max-w-none print:rounded-none print:shadow-none">
         <div className="mb-2 flex justify-between border-b-2 border-slate-800 pb-2">
-          <h2 className="text-lg font-bold text-slate-800">GT Practice Worksheet</h2>
+          <h2 className="text-lg font-bold text-slate-800">ThinkSprout Worksheet · {LEVELS[grade].label}</h2>
           <span className="text-sm text-slate-500">Name: ____________ Date: ________</span>
         </div>
         {numbered.map(({ info, items }) => (
           <section key={info.subType}>
-            <h3 className="mt-4 break-after-avoid text-sm font-bold uppercase tracking-wide text-indigo-700">{info.label}</h3>
+            <h3 className="mt-4 break-after-avoid text-sm font-bold uppercase tracking-wide text-sprout-700">{info.label}</h3>
             {items.map(({ q, number }) => (
               <PrintQuestion key={q.id + number} q={q} number={number} />
             ))}

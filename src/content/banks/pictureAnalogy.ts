@@ -1,4 +1,4 @@
-import type { ContentSpec, Question } from '../types'
+import type { ContentSpec, Grade, Question } from '../types'
 
 const emoji = (value: string): ContentSpec => ({ kind: 'emoji', value })
 
@@ -10,7 +10,17 @@ interface RawItem {
   // way, or a copy of the top-right picture.
   distractors: [string, string, string]
   relation: string
+  // Defaults: 1st + 2nd grade if the relation is simple enough (below), else 2nd only.
+  grades?: Grade[]
 }
+
+// Connections a 1st grader can reason about; abstract ones (number of sides,
+// "needs to work", "made into"...) stay 2nd grade.
+const GRADE1_RELATIONS = new Set([
+  'eats', 'likes to eat', 'home it builds', 'gives us', 'worn on', 'protects from', 'lives in', 'grows into',
+  'big : small', 'travels on', 'part of', 'cooked into', 'eaten with', 'helps with', 'grows in', 'grows on',
+  'color', 'lives among',
+])
 
 const RAW_ITEMS: RawItem[] = [
   { pairA: ['🐯', '🥩'], pairCStart: '🐐', correct: '🌿', distractors: ['🥛', '🥩', '🐑'], relation: 'eats' },
@@ -73,10 +83,33 @@ const RAW_ITEMS: RawItem[] = [
   { pairA: ['🍿', '🎬'], pairCStart: '🎂', correct: '🎉', distractors: ['🕯️', '🎬', '🍰'], relation: 'enjoyed at' },
   { pairA: ['👀', '2️⃣'], pairCStart: '👃', correct: '1️⃣', distractors: ['2️⃣', '3️⃣', '4️⃣'], relation: 'how many you have' },
   { pairA: ['🍃', '🟢'], pairCStart: '☀️', correct: '🟡', distractors: ['🟢', '🟠', '🔴'], relation: 'color' },
+  // 1st grade only (CogAT Level 7): simple, concrete connections.
+  { pairA: ['🐶', '🦴'], pairCStart: '🐱', correct: '🐟', distractors: ['🦴', '🧶', '🥕'], relation: 'likes to eat', grades: [1] },
+  { pairA: ['🐦', '🪱'], pairCStart: '🐒', correct: '🍌', distractors: ['🪱', '🌴', '🎈'], relation: 'eats', grades: [1] },
+  { pairA: ['🐻', '🌲'], pairCStart: '🐧', correct: '🧊', distractors: ['🌲', '🐟', '☀️'], relation: 'lives in', grades: [1] },
+  { pairA: ['🍎', '🔴'], pairCStart: '🥦', correct: '🟢', distractors: ['🔴', '🟠', '🟣'], relation: 'color', grades: [1] },
+  { pairA: ['🍊', '🟠'], pairCStart: '🍆', correct: '🟣', distractors: ['🟠', '🟢', '🔴'], relation: 'color', grades: [1] },
+  { pairA: ['🌊', '🔵'], pairCStart: '🌻', correct: '🟡', distractors: ['🔵', '🟤', '🔴'], relation: 'color', grades: [1] },
+  { pairA: ['🌳', '🌱'], pairCStart: '🐓', correct: '🐣', distractors: ['🥚', '🌱', '🦆'], relation: 'big one : baby one', grades: [1] },
+  { pairA: ['🔥', '🧊'], pairCStart: '🍲', correct: '🍦', distractors: ['🔥', '🍕', '🥣'], relation: 'hot : cold', grades: [1] },
+  { pairA: ['❄️', '🧤'], pairCStart: '☀️', correct: '🕶️', distractors: ['🧤', '🧣', '☂️'], relation: 'what to wear', grades: [1] },
+  { pairA: ['👀', '👓'], pairCStart: '🦶', correct: '🧦', distractors: ['👓', '🧤', '🎩'], relation: 'worn on', grades: [1] },
+  { pairA: ['✈️', '☁️'], pairCStart: '🚢', correct: '🌊', distractors: ['☁️', '🚗', '⚓'], relation: 'travels in', grades: [1] },
+  { pairA: ['🔑', '🚪'], pairCStart: '🪥', correct: '🦷', distractors: ['🚪', '🧼', '🍬'], relation: 'used on', grades: [1] },
+  { pairA: ['⚽', '⚪'], pairCStart: '📦', correct: '🟫', distractors: ['⚪', '🔺', '⭐'], relation: 'shape', grades: [1] },
+  { pairA: ['🥄', '🥣'], pairCStart: '🍴', correct: '🍽️', distractors: ['🥣', '🍳', '🥤'], relation: 'used with', grades: [1] },
+  { pairA: ['⛄', '❄️'], pairCStart: '🏖️', correct: '☀️', distractors: ['❄️', '🍂', '☔'], relation: 'goes with', grades: [1] },
+  { pairA: ['🍪', '🥛'], pairCStart: '🍞', correct: '🧈', distractors: ['🥛', '🍳', '🍎'], relation: 'goes with', grades: [1] },
+  { pairA: ['🐔', '🌽'], pairCStart: '🐻', correct: '🍯', distractors: ['🌽', '🐝', '🌲'], relation: 'likes to eat', grades: [1] },
+  { pairA: ['🐿️', '🌳'], pairCStart: '🐟', correct: '🌊', distractors: ['🌳', '🎣', '🐚'], relation: 'lives in', grades: [1] },
+  { pairA: ['🐣', '🥚'], pairCStart: '🦋', correct: '🐛', distractors: ['🥚', '🌸', '🐝'], relation: 'came from', grades: [1] },
+  { pairA: ['⚽', '🦶'], pairCStart: '🏀', correct: '✋', distractors: ['🦶', '👂', '🥅'], relation: 'played with', grades: [1] },
 ]
 
-export function buildPictureAnalogyBank(): Question[] {
-  return RAW_ITEMS.map((item, i) => ({
+const gradesOf = (item: RawItem): Grade[] => item.grades ?? (GRADE1_RELATIONS.has(item.relation) ? [1, 2] : [2])
+
+export function buildPictureAnalogyBank(grade: Grade = 2): Question[] {
+  return RAW_ITEMS.flatMap((item, i): Question[] => gradesOf(item).includes(grade) ? [{
     id: `picture-analogy-${i}`,
     domain: 'verbal',
     subType: 'picture-analogy',
@@ -94,5 +127,5 @@ export function buildPictureAnalogyBank(): Question[] {
     })),
     explanationAudioText: `How they go together: ${item.relation}.`,
     source: 'authored',
-  }))
+  }] : [])
 }

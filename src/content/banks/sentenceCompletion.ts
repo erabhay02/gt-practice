@@ -1,4 +1,4 @@
-import type { ContentSpec, Question } from '../types'
+import type { ContentSpec, Grade, Question } from '../types'
 
 const emoji = (value: string): ContentSpec => ({ kind: 'emoji', value })
 
@@ -76,8 +76,24 @@ const RAW_ITEMS: RawItem[] = [
   { question: 'Which animal gives us wool?', correct: '🐑', distractors: ['🐄', '🐔', '🐖'] },
 ]
 
-export function buildSentenceCompletionBank(): Question[] {
-  return RAW_ITEMS.map((item, i) => ({
+// Two-condition questions ("but", "more than", "and also") and harder
+// knowledge items are kept for 2nd grade.
+const GRADE2_ONLY = new Set([
+  'Which one can fly, but is not a bird?',
+  'Which one has wheels, but no engine?',
+  'Which one lives in water and has no legs?',
+  'Which one has more legs than a dog?',
+  'Which one can you write with and also erase?',
+  'Which one is bigger than a cat but smaller than a horse?',
+  'Which one would you use to measure how long something is?',
+  'Which one would float on water?',
+  'Which animal can live both in water and on land?',
+  'Which one has the most legs?',
+  'Which one would a carpenter use?',
+])
+
+export function buildSentenceCompletionBank(grade: Grade = 2): Question[] {
+  return RAW_ITEMS.flatMap((item, i): Question[] => grade === 1 && GRADE2_ONLY.has(item.question) ? [] : [{
     id: `sentence-completion-${i}`,
     domain: 'verbal',
     subType: 'sentence-completion',
@@ -89,5 +105,5 @@ export function buildSentenceCompletionBank(): Question[] {
       isCorrect: ci === 0,
     })),
     source: 'authored',
-  }))
+  }])
 }

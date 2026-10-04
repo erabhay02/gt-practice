@@ -4,17 +4,20 @@ import { buildPictureClassificationBank } from './pictureClassification'
 import { buildSentenceCompletionBank } from './sentenceCompletion'
 import type { ContentSpec, Question } from '../types'
 
-const BANKS: [string, Question[]][] = [
-  ['picture-analogy', buildPictureAnalogyBank()],
-  ['picture-classification', buildPictureClassificationBank()],
-  ['sentence-completion', buildSentenceCompletionBank()],
+const BANKS: [string, Question[], number][] = [
+  ['picture-analogy (2nd grade)', buildPictureAnalogyBank(2), 60],
+  ['picture-classification (2nd grade)', buildPictureClassificationBank(2), 60],
+  ['sentence-completion (2nd grade)', buildSentenceCompletionBank(2), 60],
+  ['picture-analogy (1st grade)', buildPictureAnalogyBank(1), 40],
+  ['picture-classification (1st grade)', buildPictureClassificationBank(1), 40],
+  ['sentence-completion (1st grade)', buildSentenceCompletionBank(1), 40],
 ]
 
 const val = (c: ContentSpec) => (c.kind === 'emoji' ? c.value : JSON.stringify(c))
 
-describe.each(BANKS)('%s bank', (_name, bank) => {
-  it('has at least 60 questions with unique ids', () => {
-    expect(bank.length).toBeGreaterThanOrEqual(60)
+describe.each(BANKS)('%s bank', (_name, bank, minSize) => {
+  it(`has at least ${minSize} questions with unique ids`, () => {
+    expect(bank.length).toBeGreaterThanOrEqual(minSize)
     expect(new Set(bank.map((q) => q.id)).size).toBe(bank.length)
   })
 

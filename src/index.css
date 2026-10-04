@@ -1,7 +1,68 @@
+@import "@fontsource-variable/fredoka";
+@import "@fontsource-variable/nunito";
 @import "tailwindcss";
 
-html, body, #root {
-  height: 100%;
+/*
+ * ThinkSprout design tokens.
+ * Kid screens: sprout green + sunny accents, rounded display font.
+ * Parent screens: calm neutrals (slate), same body font.
+ */
+@theme {
+  --font-display: "Fredoka Variable", ui-rounded, system-ui, sans-serif;
+  --font-sans: "Nunito Variable", ui-rounded, system-ui, -apple-system, sans-serif;
+
+  --color-sprout-50: #effbf1;
+  --color-sprout-100: #d8f5dd;
+  --color-sprout-200: #b2eabd;
+  --color-sprout-300: #7fd894;
+  --color-sprout-400: #4cc06a;
+  --color-sprout-500: #2ea44f;
+  --color-sprout-600: #22863f;
+  --color-sprout-700: #1d6b35;
+  --color-sprout-800: #1b552e;
+  --color-sprout-900: #173f25;
+
+  --color-sun-100: #fff4cc;
+  --color-sun-300: #ffd95a;
+  --color-sun-400: #ffc93c;
+  --color-sun-600: #d99a00;
+
+  --color-sky-100: #dff4fd;
+  --color-sky-400: #4cc9f0;
+  --color-sky-600: #1690b8;
+
+  --color-berry-100: #fde4f1;
+  --color-berry-400: #f15bb5;
+  --color-berry-600: #c22d86;
+
+  --color-cream: #fffbf0;
+  --color-ink: #1f2a37;
+
+  --animate-pop: pop 0.35s ease-out;
+  --animate-float: float 3s ease-in-out infinite;
+}
+
+@keyframes pop {
+  0% { transform: scale(0.85); opacity: 0; }
+  70% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes confetti-fall {
+  0% { transform: translateY(-20vh) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(105vh) rotate(720deg); opacity: 0.9; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }
 
 @media print {
@@ -11,7 +72,13 @@ html, body, #root {
   }
 }
 
+html, body, #root {
+  height: 100%;
+}
+
 body {
+  font-family: var(--font-sans);
+  color: var(--color-ink);
   -webkit-tap-highlight-color: transparent;
   overscroll-behavior-y: none;
 }

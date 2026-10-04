@@ -1,9 +1,7 @@
 import { useState, type ReactNode } from 'react'
-import { Link } from 'react-router-dom'
 import { clipUrl, useEnglishVoices, useSpeech } from '../hooks/useSpeech'
 import { SOUND_CHECK_TEXT } from '../audio/promptCatalog'
-import { useProgressStore } from '../state/progressStore'
-import { daysUntil, useSettingsStore, type SpeechRate } from '../state/settingsStore'
+import { useSettingsStore, type SpeechRate } from '../state/settingsStore'
 
 const RATES: { value: SpeechRate; label: string }[] = [
   { value: 0.75, label: 'Slow' },
@@ -58,37 +56,13 @@ function runSoundCheck(): Promise<CheckResult> {
 
 export function Settings() {
   const settings = useSettingsStore()
-  const resetProgress = useProgressStore((s) => s.resetProgress)
-  const sessionCount = useProgressStore((s) => s.sessions.length)
   const voices = useEnglishVoices()
   const { speak, isSupported } = useSpeech()
-  const [confirmReset, setConfirmReset] = useState(false)
   const [check, setCheck] = useState<CheckResult | 'running' | null>(null)
-  const days = daysUntil(settings.testDate)
 
   return (
-    <div className="min-h-screen bg-slate-50 p-6">
-      <header className="mb-6 flex items-center gap-3">
-        <Link to="/" className="text-sm text-slate-500">
-          ← Home
-        </Link>
-        <h1 className="text-xl font-bold text-slate-800">Settings</h1>
-      </header>
-
-      <div className="mx-auto flex max-w-md flex-col gap-4">
-        <Section title="Test date">
-          <input
-            type="date"
-            value={settings.testDate ?? ''}
-            onChange={(e) => settings.setTestDate(e.target.value || null)}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-800"
-          />
-          {days !== null && (
-            <p className="mt-2 text-sm text-slate-500">
-              {days > 0 ? `${days} days to go` : days === 0 ? 'Test day! Good luck!' : 'This date has passed.'}
-            </p>
-          )}
-        </Section>
+    <div>
+      <div className="flex flex-col gap-4">
 
         <Section title="Read-aloud">
           {!isSupported && <p className="text-sm text-amber-600">This browser can't read questions aloud.</p>}
@@ -99,7 +73,7 @@ export function Settings() {
                 key={r.value}
                 onClick={() => settings.setSpeechRate(r.value)}
                 className={`rounded-lg border-2 py-2 text-sm font-medium ${
-                  settings.speechRate === r.value ? 'border-indigo-500 bg-indigo-50 text-indigo-700' : 'border-slate-200 text-slate-600'
+                  settings.speechRate === r.value ? 'border-sprout-500 bg-sprout-50 text-sprout-800' : 'border-slate-200 text-slate-600'
                 }`}
               >
                 {r.label}
@@ -127,7 +101,7 @@ export function Settings() {
           {isSupported && (
             <button
               onClick={() => speak('Which one can fly, but is not a bird?')}
-              className="w-full rounded-lg bg-indigo-100 py-2 text-sm font-medium text-indigo-700"
+              className="w-full rounded-lg bg-sprout-100 py-2 text-sm font-medium text-sprout-800"
             >
               🔊 Test the voice
             </button>
@@ -144,7 +118,7 @@ export function Settings() {
               setCheck(await runSoundCheck())
             }}
             disabled={check === 'running'}
-            className="w-full rounded-lg bg-indigo-600 py-2 text-sm font-semibold text-white disabled:opacity-50"
+            className="w-full rounded-lg bg-slate-800 py-2 text-sm font-semibold text-white disabled:opacity-50"
           >
             {check === 'running' ? 'Checking… (listen now)' : 'Run speech check'}
           </button>
@@ -158,53 +132,28 @@ export function Settings() {
           )}
         </Section>
 
-        <Section title="Mock test timer">
+        <Section title="Practice test timer">
           <label className="flex items-center justify-between gap-3">
             <span className="text-sm text-slate-600">
-              Time each part like the real test. Turn off for a relaxed run on a nervous day.
+              Time each practice-test part. The real test is untimed at these grades, so keep this off unless you want pace practice.
             </span>
             <input
               type="checkbox"
               checked={settings.timerEnabled}
               onChange={(e) => settings.setTimerEnabled(e.target.checked)}
-              className="h-6 w-6 shrink-0 accent-indigo-600"
+              className="h-6 w-6 shrink-0 accent-sprout-600"
             />
           </label>
         </Section>
 
-        <Section title="Progress">
-          {!confirmReset ? (
-            <button
-              onClick={() => setConfirmReset(true)}
-              disabled={sessionCount === 0}
-              className="w-full rounded-lg border-2 border-red-200 py-2 text-sm font-medium text-red-600 disabled:opacity-40"
-            >
-              Reset all progress
-            </button>
-          ) : (
-            <div className="flex flex-col gap-2">
-              <p className="text-sm text-slate-600">
-                This deletes all {sessionCount} saved sessions, the streak, and the question history. It can't be undone.
-              </p>
-              <div className="grid grid-cols-2 gap-2">
-                <button onClick={() => setConfirmReset(false)} className="rounded-lg border border-slate-300 py-2 text-sm">
-                  Cancel
-                </button>
-                <button
-                  onClick={() => {
-                    resetProgress()
-                    setConfirmReset(false)
-                  }}
-                  className="rounded-lg bg-red-600 py-2 text-sm font-medium text-white"
-                >
-                  Yes, reset
-                </button>
-              </div>
-            </div>
-          )}
+        <Section title="About">
+          <p className="text-xs text-slate-500">
+            ThinkSprout gives original practice questions in the style of cognitive abilities tests for young children. It is not
+            affiliated with, endorsed by, or sponsored by Riverside Insights. CogAT® is a registered trademark of Riverside
+            Assessments, LLC.
+          </p>
+          <p className="mt-2 text-xs text-slate-400">App version: {__BUILD_ID__}</p>
         </Section>
-
-        <p className="text-center text-xs text-slate-400">App version: {__BUILD_ID__}</p>
       </div>
     </div>
   )

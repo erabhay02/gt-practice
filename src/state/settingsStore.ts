@@ -8,6 +8,7 @@ interface SettingsState {
   // Name of the chosen SpeechSynthesis voice; null = browser default.
   voiceName: string | null
   timerEnabled: boolean
+  // Before child profiles; now read once to seed the first profile's test date.
   testDate: string | null // YYYY-MM-DD
   setSpeechRate: (rate: SpeechRate) => void
   setVoiceName: (name: string | null) => void
@@ -20,7 +21,8 @@ export const useSettingsStore = create<SettingsState>()(
     (set) => ({
       speechRate: 0.9,
       voiceName: null,
-      timerEnabled: true,
+      // K–2 CogAT levels are officially untimed.
+      timerEnabled: false,
       testDate: null,
       setSpeechRate: (speechRate) => set({ speechRate }),
       setVoiceName: (voiceName) => set({ voiceName }),

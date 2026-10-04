@@ -2,8 +2,9 @@ import { Link } from 'react-router-dom'
 import { AVAILABLE_SUBTYPES, BATTERIES } from '../content/contentLoader'
 import type { SubType } from '../content/types'
 import { FOCUS_THRESHOLD, focusAreas, mockRuns, statsBySubtype, summary } from '../state/progressStats'
-import { useProgressStore } from '../state/progressStore'
-import { daysUntil, useSettingsStore } from '../state/settingsStore'
+import type { ChildProfile } from '../state/profilesStore'
+import { difficultyForSubType, useProfileProgress } from '../state/progressStore'
+import { daysUntil } from '../state/settingsStore'
 
 const LEVEL_LABEL = { 1: 'Easy', 2: 'Medium', 3: 'Hard' } as const
 const MODE_LABEL: Record<string, string> = {
@@ -36,11 +37,11 @@ function Stat({ value, label }: { value: string | number; label: string }) {
   )
 }
 
-export function ProgressDashboard() {
-  const sessions = useProgressStore((s) => s.sessions)
-  const streak = useProgressStore((s) => s.streak)
-  const difficultyForSubType = useProgressStore((s) => s.difficultyForSubType)
-  const days = daysUntil(useSettingsStore((s) => s.testDate))
+/** One child's progress, shown in the parent area. */
+export function ProgressDashboard({ profile }: { profile: ChildProfile }) {
+  const progress = useProfileProgress(profile.id)
+  const { sessions, streak } = progress
+  const days = daysUntil(profile.testDate)
 
   const stats = statsBySubtype(sessions)
   const focus = focusAreas(
@@ -51,44 +52,31 @@ export function ProgressDashboard() {
   const totals = summary(sessions)
 
   return (
-    <div className="min-h-screen bg-slate-50 p-6">
-      <header className="mb-6 flex items-center gap-3">
-        <Link to="/" className="text-sm text-slate-500">
-          ← Home
-        </Link>
-        <h1 className="text-xl font-bold text-slate-800">Progress</h1>
-      </header>
-
-      <div className="mx-auto flex max-w-md flex-col gap-5">
+    <div>
+      <div className="flex flex-col gap-5">
         <div className="grid grid-cols-3 gap-2">
           <Stat value={days !== null && days >= 0 ? days : '—'} label="days to test" />
           <Stat value={totals.daysPracticed} label="days practiced" />
           <Stat value={totals.questionsAnswered} label="questions" />
         </div>
         {days === null && (
-          <Link to="/settings" className="-mt-3 text-center text-xs text-indigo-600 underline">
-            Set the test date in Settings for a countdown
+          <Link to="/parent/children" className="-mt-3 text-center text-xs text-sprout-700 underline">
+            Set {profile.name}'s test date for a countdown
           </Link>
         )}
         {streak > 1 && <p className="-mt-2 text-center text-sm font-medium text-amber-600">🔥 {streak} day streak</p>}
 
         {focus.length > 0 && (
-          <section className="rounded-2xl border-2 border-indigo-200 bg-indigo-50 p-4">
-            <h2 className="mb-2 text-sm font-semibold text-indigo-800">Focus next</h2>
+          <section className="rounded-2xl border border-sprout-200 bg-sprout-50 p-4">
+            <h2 className="mb-2 text-sm font-semibold text-sprout-800">Focus next</h2>
             <div className="flex flex-col gap-2">
               {focus.map((f) => {
                 const info = AVAILABLE_SUBTYPES.find((s) => s.subType === f.subType)!
                 return (
-                  <Link
-                    key={f.subType}
-                    to={`/practice/${info.domain}/${f.subType}`}
-                    className="flex items-center justify-between rounded-xl bg-white px-3 py-2 shadow-sm"
-                  >
+                  <div key={f.subType} className="flex items-center justify-between rounded-xl bg-white px-3 py-2 shadow-sm">
                     <span className="text-sm font-medium text-slate-800">{info.label}</span>
-                    <span className="text-xs text-slate-500">
-                      {f.reason === 'low' ? `recent ${f.pct}% · practice →` : 'not tried yet · start →'}
-                    </span>
-                  </Link>
+                    <span className="text-xs text-slate-500">{f.reason === 'low' ? `recent ${f.pct}%` : 'not tried yet'}</span>
+                  </div>
                 )
               })}
             </div>
@@ -97,7 +85,7 @@ export function ProgressDashboard() {
 
         {BATTERIES.map(({ domain, label }) => (
           <section key={domain}>
-            <h2 className="mb-2 px-1 text-xs font-semibold uppercase tracking-wide text-indigo-500">{label}</h2>
+            <h2 className="mb-2 px-1 text-xs font-semibold uppercase tracking-wide text-slate-500">{label}</h2>
             <div className="flex flex-col gap-2">
               {AVAILABLE_SUBTYPES.filter((s) => s.domain === domain).map(({ subType, label: subLabel }) => {
                 const st = stats[subType]
@@ -108,7 +96,7 @@ export function ProgressDashboard() {
                       {st ? (
                         <p className="text-xs text-slate-500">
                           {st.sessions} session{st.sessions === 1 ? '' : 's'} · all-time {Math.round((st.correct / st.total) * 100)}% ·
-                          level {LEVEL_LABEL[difficultyForSubType(subType)]}
+                          level {LEVEL_LABEL[difficultyForSubType(progress, subType)]}
                         </p>
                       ) : (
                         <p className="text-xs text-slate-400">Not tried yet</p>
@@ -128,14 +116,14 @@ export function ProgressDashboard() {
         ))}
 
         <section>
-          <h2 className="mb-2 px-1 text-xs font-semibold uppercase tracking-wide text-indigo-500">Mock tests</h2>
+          <h2 className="mb-2 px-1 text-xs font-semibold uppercase tracking-wide text-slate-500">Mock tests</h2>
           {runs.length === 0 ? (
             <p className="rounded-2xl bg-white p-4 text-sm text-slate-500 shadow-sm">
               No mock tests yet.{' '}
-              <Link to="/mock-test" className="text-indigo-600 underline">
+              <Link to="/mock-test" className="text-sprout-700 underline">
                 Try one
               </Link>{' '}
-              once he's comfortable with practice.
+              once {profile.name} is comfortable with practice.
             </p>
           ) : (
             <div className="flex flex-col gap-2">

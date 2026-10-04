@@ -1,6 +1,8 @@
 import { mulberry32, pickOne, randomSeed, shuffle, type RngFn } from './rng'
 import {
+  BASIC_FILLS,
   COLORS,
+  EASY_SHAPE_TYPES,
   FILLS,
   INNER_MARKS,
   NESTED_TYPES,
@@ -10,7 +12,7 @@ import {
   generateRandomShape,
   shapesLookAlike,
 } from './shapePalette'
-import type { ContentSpec, Difficulty, InnerMark, Question, ShapeRotation, ShapeSpec, ShapeType } from '../types'
+import type { ContentSpec, Difficulty, Grade, InnerMark, Question, ShapeFill, ShapeRotation, ShapeSpec, ShapeType } from '../types'
 
 type Attr = 'color' | 'fill' | 'size' | 'rotation' | 'count' | 'inner' | 'nested'
 
@@ -73,18 +75,24 @@ function pickAttrs(rng: RngFn, difficulty: Difficulty): Attr[] {
   }
 }
 
-function buildTransform(rng: RngFn, attr: Attr, a: ShapeSpec): Transform {
+function buildTransform(
+  rng: RngFn,
+  attr: Attr,
+  a: ShapeSpec,
+  fills: ShapeFill[] = FILLS,
+  rotationDeltas: number[] = ROTATION_DELTAS,
+): Transform {
   switch (attr) {
     case 'color':
       return { attr, to: pickOne(rng, COLORS.filter((c) => c !== a.color)) }
     case 'fill':
-      return { attr, to: pickOne(rng, FILLS.filter((f) => f !== a.fill)) }
+      return { attr, to: pickOne(rng, fills.filter((f) => f !== a.fill)) }
     case 'size':
       return { attr, to: pickOne(rng, SIZES.filter((s) => s !== a.size)) }
     case 'count':
       return { attr, to: pickOne(rng, [2, 3] as const) }
     case 'rotation':
-      return { attr, delta: pickOne(rng, ROTATION_DELTAS) }
+      return { attr, delta: pickOne(rng, rotationDeltas) }
     case 'inner':
       return { attr, to: pickOne(rng, INNER_MARKS.filter((m) => m !== (a.inner ?? 'none'))) }
     case 'nested':
@@ -93,12 +101,12 @@ function buildTransform(rng: RngFn, attr: Attr, a: ShapeSpec): Transform {
 }
 
 // A plausible-but-wrong version of a single transform.
-function wrongVersion(rng: RngFn, t: Transform, from: ShapeSpec): Transform {
+function wrongVersion(rng: RngFn, t: Transform, from: ShapeSpec, fills: ShapeFill[] = FILLS): Transform {
   switch (t.attr) {
     case 'color':
       return { attr: 'color', to: pickOne(rng, COLORS.filter((c) => c !== t.to && c !== from.color)) }
     case 'fill':
-      return { attr: 'fill', to: pickOne(rng, FILLS.filter((f) => f !== t.to && f !== from.fill)) }
+      return { attr: 'fill', to: pickOne(rng, fills.filter((f) => f !== t.to && f !== from.fill)) }
     case 'size':
       return { attr: 'size', to: SIZES.find((s) => s !== t.to && s !== from.size) ?? t.to }
     case 'count':
@@ -142,11 +150,35 @@ function buildItem(rng: RngFn, difficulty: Difficulty) {
 
   const b = apply(a, transforms)
   const d = apply(c, transforms)
-  return { a, b, c, d, transforms, typePool }
+  return { a, b, c, d, transforms, typePool, fills: FILLS }
+}
+
+// 1st grade (Level 7): one change (two on the hardest items), familiar
+// unrotated shapes, no marks/nested shapes/half-shading, and only clear
+// quarter or half turns on shapes where a turn is obvious.
+function buildItemGrade1(rng: RngFn, difficulty: Difficulty) {
+  let attrs: Attr[]
+  do {
+    attrs = shuffle(rng, ['color', 'fill', 'size', 'rotation', 'count'] as Attr[]).slice(0, difficulty === 3 ? 2 : 1)
+  } while (attrs.includes('size') && attrs.includes('count'))
+  const typePool: ShapeType[] = attrs.includes('rotation') ? ['arrow', 'triangle'] : EASY_SHAPE_TYPES
+  const a: ShapeSpec = {
+    type: pickOne(rng, typePool),
+    color: pickOne(rng, COLORS),
+    size: attrs.includes('count') ? 'medium' : pickOne(rng, ['medium', 'large'] as const),
+    rotation: 0,
+    fill: pickOne(rng, BASIC_FILLS),
+    count: 1,
+    inner: 'none',
+    nested: null,
+  }
+  const transforms = attrs.map((attr) => buildTransform(rng, attr, a, BASIC_FILLS, [90, 180]))
+  const c: ShapeSpec = { ...a, type: pickOne(rng, typePool.filter((t) => t !== a.type)) }
+  return { a, b: apply(a, transforms), c, d: apply(c, transforms), transforms, typePool, fills: BASIC_FILLS }
 }
 
 function buildDistractors(rng: RngFn, item: ReturnType<typeof buildItem>): ShapeSpec[] {
-  const { b, c, d, transforms, typePool } = item
+  const { b, c, d, transforms, typePool, fills } = item
   const candidates: ShapeSpec[] = []
 
   if (transforms.length > 1) {
@@ -157,12 +189,12 @@ function buildDistractors(rng: RngFn, item: ReturnType<typeof buildItem>): Shape
   }
 
   const wrongIdx = Math.floor(rng() * transforms.length)
-  candidates.push(apply(c, transforms.map((t, i) => (i === wrongIdx ? wrongVersion(rng, t, c) : t))))
+  candidates.push(apply(c, transforms.map((t, i) => (i === wrongIdx ? wrongVersion(rng, t, c, fills) : t))))
 
   candidates.push(b)
   candidates.push({ ...d, type: pickOne(rng, typePool.filter((t) => t !== d.type && t !== b.type)) })
   candidates.push(c)
-  candidates.push(apply(c, transforms.map((t) => wrongVersion(rng, t, c))))
+  candidates.push(apply(c, transforms.map((t) => wrongVersion(rng, t, c, fills))))
 
   const result: ShapeSpec[] = []
   for (const cand of candidates) {
@@ -174,10 +206,11 @@ function buildDistractors(rng: RngFn, item: ReturnType<typeof buildItem>): Shape
   return result
 }
 
-export function generateMatrixQuestion(difficulty: Difficulty, seed: number = randomSeed()): Question {
+export function generateMatrixQuestion(difficulty: Difficulty, seed: number = randomSeed(), grade: Grade = 2): Question {
   const rng = mulberry32(seed)
+  const build = () => (grade === 1 ? buildItemGrade1(rng, difficulty) : buildItem(rng, difficulty))
 
-  let item = buildItem(rng, difficulty)
+  let item = build()
   let distractors = buildDistractors(rng, item)
   // Re-roll the rare item where a change is invisible or distractors collapse.
   while (
@@ -185,7 +218,7 @@ export function generateMatrixQuestion(difficulty: Difficulty, seed: number = ra
     shapesLookAlike(item.c, item.d) ||
     distractors.length < 3
   ) {
-    item = buildItem(rng, difficulty)
+    item = build()
     distractors = buildDistractors(rng, item)
   }
 
@@ -196,7 +229,7 @@ export function generateMatrixQuestion(difficulty: Difficulty, seed: number = ra
   ])
 
   return {
-    id: `figure-matrix-${difficulty}-${seed}`,
+    id: grade === 1 ? `figure-matrix-g1-${difficulty}-${seed}` : `figure-matrix-${difficulty}-${seed}`,
     domain: 'nonverbal',
     subType: 'figure-matrix',
     difficulty,

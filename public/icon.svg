@@ -1,5 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="96" fill="#4f46e5"/>
-  <text x="50%" y="58%" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif"
-        font-size="260" font-weight="700" fill="#ffffff">★</text>
+  <rect width="512" height="512" rx="112" fill="#ffd95a"/>
+  <path d="M256 196 V128" stroke="#22863f" stroke-width="22" stroke-linecap="round"/>
+  <ellipse cx="196" cy="118" rx="66" ry="36" transform="rotate(-25 196 118)" fill="#2ea44f"/>
+  <ellipse cx="316" cy="118" rx="66" ry="36" transform="rotate(25 316 118)" fill="#4cc06a"/>
+  <ellipse cx="256" cy="304" rx="150" ry="140" fill="#7fd894" stroke="#22863f" stroke-width="16"/>
+  <circle cx="204" cy="284" r="22" fill="#1f2a37"/>
+  <circle cx="308" cy="284" r="22" fill="#1f2a37"/>
+  <circle cx="212" cy="276" r="7" fill="#fff"/>
+  <circle cx="316" cy="276" r="7" fill="#fff"/>
+  <circle cx="168" cy="330" r="20" fill="#ffb3c7" opacity="0.8"/>
+  <circle cx="344" cy="330" r="20" fill="#ffb3c7" opacity="0.8"/>
+  <path d="M212 338 Q256 384 300 338" fill="none" stroke="#1f2a37" stroke-width="16" stroke-linecap="round"/>
 </svg>

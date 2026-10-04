@@ -1,5 +1,5 @@
 import { mulberry32, pickOne, randomSeed, shuffle, type RngFn } from './rng'
-import type { ContentSpec, Difficulty, FoldLine, Hole, PaperRegion, Point, Question } from '../types'
+import type { ContentSpec, Difficulty, FoldLine, Grade, Hole, PaperRegion, Point, Question } from '../types'
 
 interface Fold {
   axis: FoldLine
@@ -146,9 +146,11 @@ function randomHole(rng: RngFn, shape: PaperShape, folds: Fold[], taken: Point[]
 
 type Variant = { folds: Fold[]; holeCount: number; cut: Hole['cut'] }
 
-function chooseVariant(rng: RngFn, difficulty: Difficulty): Variant {
+function chooseVariant(rng: RngFn, difficulty: Difficulty, grade: Grade): Variant {
   const straight = (): FoldLine => pickOne(rng, ['vertical', 'horizontal'] as FoldLine[])
   const keep = () => pickOne(rng, ['first', 'second'] as const)
+  // 1st grade: always one straight fold and round holes.
+  if (grade === 1) return { folds: [{ axis: straight(), keep: keep() }], holeCount: difficulty === 3 ? 2 : 1, cut: 'circle' }
   if (difficulty === 1) return { folds: [{ axis: straight(), keep: keep() }], holeCount: 1, cut: 'circle' }
   if (difficulty === 2) {
     const axis = pickOne(rng, ['vertical', 'horizontal', 'diagonal', 'anti-diagonal'] as FoldLine[])
@@ -177,9 +179,13 @@ const OTHER_AXIS: Record<FoldLine, FoldLine> = {
   'anti-diagonal': 'diagonal',
 }
 
-export function generatePaperFoldingQuestion(difficulty: Difficulty, seed: number = randomSeed()): Question {
+export function generatePaperFoldingQuestion(
+  difficulty: Difficulty,
+  seed: number = randomSeed(),
+  grade: Grade = 2,
+): Question {
   const rng = mulberry32(seed)
-  const { folds, holeCount, cut } = chooseVariant(rng, difficulty)
+  const { folds, holeCount, cut } = chooseVariant(rng, difficulty, grade)
 
   const shapes: PaperShape[] = [{ region: FULL }]
   for (const f of folds) shapes.push(foldShape(shapes[shapes.length - 1], f))
@@ -253,7 +259,7 @@ export function generatePaperFoldingQuestion(difficulty: Difficulty, seed: numbe
   const foldText = folds.length === 2 ? 'folded two times' : 'folded along the dotted line'
 
   return {
-    id: `paper-folding-${difficulty}-${seed}`,
+    id: grade === 1 ? `paper-folding-g1-${difficulty}-${seed}` : `paper-folding-${difficulty}-${seed}`,
     domain: 'nonverbal',
     subType: 'paper-folding',
     difficulty,

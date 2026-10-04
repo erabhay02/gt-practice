@@ -1,5 +1,5 @@
 import { mulberry32, pickOne, randomSeed, shuffle, type RngFn } from './rng'
-import type { ContentSpec, Difficulty, Question } from '../types'
+import type { ContentSpec, Difficulty, Grade, Question } from '../types'
 
 const OBJECTS = ['🍎', '⭐', '🐟', '🌸', '⚽', '🍪', '🐞', '🎈', '🍓', '🦆', '🍃', '🚗']
 
@@ -33,8 +33,19 @@ function toChoices<T>(rng: RngFn, correct: T, wrong: T[], render: (v: T) => Cont
 
 type Rule = { apply: (n: number) => number; inverse: (n: number) => number }
 
-function analogyRule(rng: RngFn, difficulty: Difficulty): Rule {
+// 1st grade counts stay small enough to count at a glance.
+const GRADE1_MAX = 8
+
+function analogyRule(rng: RngFn, difficulty: Difficulty, grade: Grade = 2): Rule {
   const options: Rule[] = []
+  if (grade === 1) {
+    // Only "add or take away 1-3"; no doubling or halving.
+    for (let k = 1; k <= difficulty; k++) {
+      options.push({ apply: (n) => n + k, inverse: (n) => n - k })
+      options.push({ apply: (n) => n - k, inverse: (n) => n + k })
+    }
+    return pickOne(rng, options)
+  }
   const maxK = difficulty === 1 ? 2 : difficulty === 2 ? 3 : 4
   for (let k = 1; k <= maxK; k++) {
     options.push({ apply: (n) => n + k, inverse: (n) => n - k })
@@ -49,27 +60,32 @@ function analogyRule(rng: RngFn, difficulty: Difficulty): Rule {
   return pickOne(rng, options)
 }
 
-export function generateNumberAnalogyQuestion(difficulty: Difficulty, seed: number = randomSeed()): Question {
+export function generateNumberAnalogyQuestion(
+  difficulty: Difficulty,
+  seed: number = randomSeed(),
+  grade: Grade = 2,
+): Question {
   const rng = mulberry32(seed)
   const [objTop, objBottom] = shuffle(rng, OBJECTS).slice(0, 2)
-  const ok = (n: number) => Number.isInteger(n) && n >= 1 && n <= 10
+  const max = grade === 1 ? GRADE1_MAX : 10
+  const ok = (n: number) => Number.isInteger(n) && n >= 1 && n <= max
 
-  let rule = analogyRule(rng, difficulty)
+  let rule = analogyRule(rng, difficulty, grade)
   let a = 0, b = 0, c = 0, d = 0
   for (let i = 0; i < 500; i++) {
-    rule = analogyRule(rng, difficulty)
-    a = between(rng, 1, 9)
-    c = between(rng, 1, 9)
+    rule = analogyRule(rng, difficulty, grade)
+    a = between(rng, 1, max - 1)
+    c = between(rng, 1, max - 1)
     b = rule.apply(a)
     d = rule.apply(c)
     if (ok(b) && ok(d) && a !== c && b !== d && a !== b) break
   }
 
   // Typical slips: no change, copying the top-right count, changing the wrong way.
-  const wrong = pickWrongValues(rng, d, [c, b, rule.inverse(c)], 1, 10)
+  const wrong = pickWrongValues(rng, d, [c, b, rule.inverse(c)], 1, max)
 
   return {
-    id: `number-analogy-${difficulty}-${seed}`,
+    id: grade === 1 ? `number-analogy-g1-${difficulty}-${seed}` : `number-analogy-${difficulty}-${seed}`,
     domain: 'quantitative',
     subType: 'number-analogy',
     difficulty,
@@ -139,22 +155,51 @@ function seriesPattern(rng: RngFn, difficulty: Difficulty): number[] {
   return []
 }
 
-export function generateNumberSeriesQuestion(difficulty: Difficulty, seed: number = randomSeed()): Question {
+// 1st grade: count up/down by 1 (or 2 on harder items), simple repeats.
+function seriesPatternGrade1(rng: RngFn, difficulty: Difficulty): number[] {
+  const kind = pickOne(rng, difficulty === 1 ? ['step', 'repeat2'] : difficulty === 2 ? ['step', 'repeat2', 'repeat3'] : ['step', 'repeat3', 'doubles'])
+  switch (kind) {
+    case 'step': {
+      const step = pickOne(rng, difficulty === 1 ? [1, -1] : [1, -1, 2])
+      const start = between(rng, 0, GRADE1_MAX)
+      return Array.from({ length: SERIES_LENGTH }, (_, i) => start + step * i)
+    }
+    case 'repeat2': {
+      const [x, y] = shuffle(rng, [1, 2, 3, 4, 5, 6]).slice(0, 2)
+      return Array.from({ length: SERIES_LENGTH }, (_, i) => (i % 2 === 0 ? x : y))
+    }
+    case 'repeat3': {
+      const vals = shuffle(rng, [1, 2, 3, 4, 5, 6]).slice(0, 3)
+      return Array.from({ length: SERIES_LENGTH }, (_, i) => vals[i % 3])
+    }
+    default: {
+      const start = between(rng, 1, 4)
+      return Array.from({ length: SERIES_LENGTH }, (_, i) => start + Math.floor(i / 2))
+    }
+  }
+}
+
+export function generateNumberSeriesQuestion(
+  difficulty: Difficulty,
+  seed: number = randomSeed(),
+  grade: Grade = 2,
+): Question {
   const rng = mulberry32(seed)
+  const max = grade === 1 ? GRADE1_MAX : ABACUS_MAX
   let series: number[] = []
   for (let i = 0; i < 500; i++) {
-    series = seriesPattern(rng, difficulty)
-    if (series.length === SERIES_LENGTH && series.every((v) => v >= 0 && v <= ABACUS_MAX)) break
+    series = grade === 1 ? seriesPatternGrade1(rng, difficulty) : seriesPattern(rng, difficulty)
+    if (series.length === SERIES_LENGTH && series.every((v) => v >= 0 && v <= max)) break
   }
 
   const shown = series.slice(0, -1)
   const answer = series[series.length - 1]
   const last = shown[shown.length - 1]
   const prevStep = last - shown[shown.length - 2]
-  const wrong = pickWrongValues(rng, answer, [last, last + prevStep], 0, ABACUS_MAX)
+  const wrong = pickWrongValues(rng, answer, [last, last + prevStep], 0, max)
 
   return {
-    id: `number-series-${difficulty}-${seed}`,
+    id: grade === 1 ? `number-series-g1-${difficulty}-${seed}` : `number-series-${difficulty}-${seed}`,
     domain: 'quantitative',
     subType: 'number-series',
     difficulty,
@@ -169,20 +214,22 @@ export function generateNumberSeriesQuestion(difficulty: Difficulty, seed: numbe
 
 // ---------- Number Puzzles (missing number) ----------
 
-function pictureEquation(rng: RngFn, difficulty: Difficulty, seed: number): Question {
+function pictureEquation(rng: RngFn, difficulty: Difficulty, seed: number, grade: Grade = 2): Question {
   const obj = pickOne(rng, OBJECTS)
-  const subtract = rng() < 0.4
-  const a = between(rng, 1, 5)
-  const b = between(rng, 1, 5)
+  // 1st grade: adding only on the easiest items, and totals of at most 8.
+  const subtract = rng() < 0.4 && !(grade === 1 && difficulty === 1)
+  const part = grade === 1 ? GRADE1_MAX / 2 : 5
+  const a = between(rng, 1, part)
+  const b = between(rng, 1, part)
   const total = a + b
 
   const visual = subtract
     ? [group(obj, total), text('−'), blank, text('='), group(obj, a)]
     : [group(obj, a), text('+'), blank, text('='), group(obj, total)]
-  const wrong = pickWrongValues(rng, b, [total, a], 1, 10)
+  const wrong = pickWrongValues(rng, b, [total, a], 1, grade === 1 ? GRADE1_MAX : 10)
 
   return {
-    id: `number-puzzle-${difficulty}-${seed}`,
+    id: grade === 1 ? `number-puzzle-g1-${difficulty}-${seed}` : `number-puzzle-${difficulty}-${seed}`,
     domain: 'quantitative',
     subType: 'number-puzzle',
     difficulty,
@@ -266,7 +313,13 @@ function numberEquation(rng: RngFn, difficulty: Difficulty, seed: number): Quest
   }
 }
 
-export function generateNumberPuzzleQuestion(difficulty: Difficulty, seed: number = randomSeed()): Question {
+export function generateNumberPuzzleQuestion(
+  difficulty: Difficulty,
+  seed: number = randomSeed(),
+  grade: Grade = 2,
+): Question {
   const rng = mulberry32(seed)
+  // 1st grade (Level 7) number puzzles are picture-based throughout.
+  if (grade === 1) return pictureEquation(rng, difficulty, seed, 1)
   return difficulty === 1 ? pictureEquation(rng, difficulty, seed) : numberEquation(rng, difficulty, seed)
 }

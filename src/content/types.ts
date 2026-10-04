@@ -13,6 +13,9 @@ export type SubType =
 
 export type Difficulty = 1 | 2 | 3
 
+// 1 = CogAT Level 7, 2 = CogAT Level 8.
+export type Grade = 1 | 2
+
 export type ShapeType = 'circle' | 'square' | 'triangle' | 'star' | 'pentagon' | 'hexagon' | 'arrow' | 'cross'
 export type ShapeFill = 'solid' | 'striped' | 'dotted' | 'outline' | 'half'
 export type ShapeSize = 'small' | 'medium' | 'large'

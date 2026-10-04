@@ -12,7 +12,7 @@ import {
   canHoldInner,
   shapesLookAlike,
 } from './shapePalette'
-import type { ContentSpec, Difficulty, Question, ShapeSpec } from '../types'
+import type { ContentSpec, Difficulty, Grade, Question, ShapeSpec } from '../types'
 
 export type Feature = 'type' | 'color' | 'fill' | 'size' | 'count' | 'inner' | 'nested'
 type Value = string | number | null
@@ -24,29 +24,37 @@ export function featureValue(shape: ShapeSpec, f: Feature): Value {
   return shape[f]
 }
 
-function sharedChoices(difficulty: Difficulty): Feature[] {
+function sharedChoices(difficulty: Difficulty, grade: Grade): Feature[] {
+  // 1st grade: one obvious shared feature; size only on the hardest items.
+  if (grade === 1) return difficulty === 1 ? ['type', 'color'] : difficulty === 2 ? ['type', 'color', 'fill'] : ['type', 'color', 'fill', 'size']
   if (difficulty === 1) return ['type', 'color', 'fill']
   if (difficulty === 2) return ['type', 'color', 'fill', 'size', 'count', 'inner']
   return ['type', 'color', 'fill', 'size', 'count', 'inner', 'nested']
 }
 
 // Easier items vary fewer "noise" features, so the shared feature stands out.
-function varyingFeatures(shared: Feature, difficulty: Difficulty): Feature[] {
+function varyingFeatures(shared: Feature, difficulty: Difficulty, grade: Grade): Feature[] {
   const others = (['type', 'color', 'fill', 'size'] as Feature[]).filter((f) => f !== shared)
+  if (grade === 1) return others.slice(0, difficulty === 3 ? 2 : 1)
   if (difficulty === 1) return others.slice(0, 1)
   if (difficulty === 2) return others.slice(0, 2)
   return others
 }
 
-export function generateFigureClassificationQuestion(difficulty: Difficulty, seed: number = randomSeed()): Question {
+export function generateFigureClassificationQuestion(
+  difficulty: Difficulty,
+  seed: number = randomSeed(),
+  grade: Grade = 2,
+): Question {
   const rng = mulberry32(seed)
-  const shared = pickOne(rng, sharedChoices(difficulty))
+  const shared = pickOne(rng, sharedChoices(difficulty, grade))
   const inside = shared === 'inner' || shared === 'nested'
+  const easy = grade === 1 || difficulty === 1
 
   const pools: Record<Feature, readonly Value[]> = {
-    type: inside ? SHAPE_TYPES.filter(canHoldInner) : difficulty === 1 ? EASY_SHAPE_TYPES : SHAPE_TYPES,
+    type: inside ? SHAPE_TYPES.filter(canHoldInner) : easy ? EASY_SHAPE_TYPES : SHAPE_TYPES,
     color: COLORS,
-    fill: difficulty === 1 ? FILLS.filter((f) => f !== 'half') : FILLS,
+    fill: easy ? FILLS.filter((f) => f !== 'half') : FILLS,
     size: inside ? SIZES.filter((s) => s !== 'small') : SIZES,
     count: COUNTS,
     inner: INNER_MARKS,
@@ -56,7 +64,7 @@ export function generateFigureClassificationQuestion(difficulty: Difficulty, see
     rng,
     shared === 'count' ? [2, 3] : shared === 'inner' ? ['dot', 'line', 'x'] : shared === 'nested' ? NESTED_TYPES : pools[shared],
   )
-  const varying = varyingFeatures(shared, difficulty)
+  const varying = varyingFeatures(shared, difficulty, grade)
 
   // Everything starts from one base; only the `varying` features change across
   // examples, so they're the noise the child must learn to ignore.
@@ -74,7 +82,7 @@ export function generateFigureClassificationQuestion(difficulty: Difficulty, see
   if (shared === 'count' && base.size === 'large') base.size = 'medium'
 
   const makeMember = (): ShapeSpec => {
-    let s: ShapeSpec = { ...base, rotation: difficulty === 1 ? 0 : pickOne(rng, ROTATIONS) }
+    let s: ShapeSpec = { ...base, rotation: easy ? 0 : pickOne(rng, ROTATIONS) }
     for (const f of varying) s = { ...s, [f]: pickOne(rng, pools[f]) } as ShapeSpec
     return s
   }
@@ -113,7 +121,7 @@ export function generateFigureClassificationQuestion(difficulty: Difficulty, see
   ])
 
   return {
-    id: `figure-classification-${difficulty}-${seed}`,
+    id: grade === 1 ? `figure-classification-g1-${difficulty}-${seed}` : `figure-classification-${difficulty}-${seed}`,
     domain: 'nonverbal',
     subType: 'figure-classification',
     difficulty,
