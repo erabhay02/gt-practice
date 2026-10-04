@@ -8,11 +8,19 @@ Live app: https://erabhay02.github.io/gt-practice/ (auto-deploys on every push t
 - [ ] Confirm with each school: CogAT level (Level 7 = 1st grade, Level 8 = 2nd grade) and test dates.
 - [ ] Phase 2 prep: start Apple Developer enrollment ($99/yr, approval can take 1–2 days), create the Google Play developer account ($25), pick the subdomain (e.g. `practice.yourdomain.com`), have the Supabase project ready.
 
-## Phase 2 — accounts + iPhone/Android apps + invite-only beta (next)
-- [ ] Move hosting off GitHub Pages to the subdomain; make the repo private
-- [ ] Supabase: parent accounts, children synced across devices (nickname + grade only — COPPA), invite codes
-- [ ] Capacitor iOS + Android builds; offline + recorded audio inside the app
-- [ ] Privacy policy, in-app account deletion; TestFlight + Google Play closed testing for invited families
+## Phase 2 — accounts + iPhone/Android apps + invite-only beta (in progress)
+Built and tested locally (switched off in the live app until the real backend is connected):
+- [x] Database: parents, children, sessions, invite codes; row-level security; sign-up trigger redeems invites; account deletion (`supabase/migrations/0001_init.sql`) — 23 backend checks pass on a local Supabase
+- [x] Sign-in / create account with invite / 6-digit email codes / password reset / "waiting for invite"; parent Account tab (sync now, sign out, delete account)
+- [x] Local-first sync: works offline, merges two devices (sessions never lost or doubled, newest edit wins, removals reach every device) — 12 two-device UI checks pass
+- [x] Privacy Policy + Terms drafts (`public/privacy.html`, `public/terms.html`) — **review; set up privacy@astrala.us or change the address**
+- [x] iPhone app project (Capacitor, `ios/`), app icon + launch screen; builds and runs in the iOS Simulator
+Waiting on:
+- [ ] ⛔ Authorize the Supabase connector (claude.ai → Settings → Connectors) → create project "thinksprout", apply migration, email templates, invite codes, connect the app
+- [ ] ⛔ Cloudflare API token → `gh secret set CLOUDFLARE_API_TOKEN` and `gh secret set CLOUDFLARE_ACCOUNT_ID` → deploy to thinksprout.astrala.us
+- [ ] Sign in on every existing device while still on github.io (uploads progress), then switch domain, then make the repo private
+- [ ] Apple Developer enrollment → TestFlight; install Android Studio → Android build + Play closed testing
+- [ ] Email sending (e.g. Resend) before inviting many families (Supabase's built-in email is rate-limited)
 
 ## Phase 3 — subscriptions
 - [ ] RevenueCat on Apple/Google in-app purchases; free tier vs full access; paywall behind the parental gate

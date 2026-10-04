@@ -3,7 +3,7 @@ import { AVAILABLE_SUBTYPES, BATTERIES } from '../content/contentLoader'
 import type { SubType } from '../content/types'
 import { FOCUS_THRESHOLD, focusAreas, mockRuns, statsBySubtype, summary } from '../state/progressStats'
 import type { ChildProfile } from '../state/profilesStore'
-import { difficultyForSubType, useProfileProgress } from '../state/progressStore'
+import { currentStreak, difficultyForSubType, useProfileProgress } from '../state/progressStore'
 import { daysUntil } from '../state/settingsStore'
 
 const LEVEL_LABEL = { 1: 'Easy', 2: 'Medium', 3: 'Hard' } as const
@@ -40,7 +40,8 @@ function Stat({ value, label }: { value: string | number; label: string }) {
 /** One child's progress, shown in the parent area. */
 export function ProgressDashboard({ profile }: { profile: ChildProfile }) {
   const progress = useProfileProgress(profile.id)
-  const { sessions, streak } = progress
+  const { sessions } = progress
+  const streak = currentStreak(progress)
   const days = daysUntil(profile.testDate)
 
   const stats = statsBySubtype(sessions)

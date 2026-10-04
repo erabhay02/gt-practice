@@ -4,14 +4,18 @@ import { LEVELS } from '../content/levels'
 import { useProfilesStore, type ChildProfile } from '../state/profilesStore'
 import { useProgressStore } from '../state/progressStore'
 import { daysUntil } from '../state/settingsStore'
+import { cloudEnabled } from '../cloud/supabase'
+import { friendlyError, useAuthStore } from '../cloud/authStore'
+import { resetChildEverywhere } from '../cloud/sync'
 import { ChildForm } from './ChildForm'
 import { ProgressDashboard } from './ProgressDashboard'
 
 const TABS = [
   { to: '/parent/progress', label: 'Progress' },
   { to: '/parent/children', label: 'Children' },
-  { to: '/parent/worksheet', label: 'Worksheets' },
+  { to: '/parent/worksheet', label: 'Print' },
   { to: '/parent/settings', label: 'Settings' },
+  ...(cloudEnabled ? [{ to: '/parent/account', label: 'Account' }] : []),
 ]
 
 /** Calm "grown-ups" shell around parent screens (behind the parental gate). */
@@ -33,7 +37,7 @@ export function ParentLayout() {
               key={t.to}
               to={t.to}
               className={({ isActive }) =>
-                `whitespace-nowrap border-b-2 px-3 pb-2 text-sm font-semibold ${
+                `whitespace-nowrap border-b-2 px-2.5 pb-2 text-sm font-semibold ${
                   isActive ? 'border-sprout-500 text-slate-800' : 'border-transparent text-slate-500'
                 }`
               }
@@ -95,6 +99,8 @@ function ChildCard({ child }: { child: ChildProfile }) {
   const sessions = useProgressStore((s) => s.byProfile[child.id]?.sessions.length ?? 0)
   const [editing, setEditing] = useState(false)
   const [confirm, setConfirm] = useState<'reset' | 'remove' | null>(null)
+  const [resetError, setResetError] = useState<string | null>(null)
+  const signedIn = useAuthStore((s) => s.status === 'signedIn')
   const days = daysUntil(child.testDate)
 
   if (editing) {
@@ -156,8 +162,18 @@ function ChildCard({ child }: { child: ChildProfile }) {
               Cancel
             </button>
             <button
-              onClick={() => {
-                resetProfile(child.id)
+              onClick={async () => {
+                setResetError(null)
+                if (confirm === 'reset' && signedIn) {
+                  try {
+                    await resetChildEverywhere(child.id)
+                  } catch (e) {
+                    setResetError(friendlyError(e))
+                    return
+                  }
+                } else {
+                  resetProfile(child.id)
+                }
                 if (confirm === 'remove') removeProfile(child.id)
                 setConfirm(null)
               }}
@@ -168,7 +184,8 @@ function ChildCard({ child }: { child: ChildProfile }) {
           </div>
         </div>
       ) : (
-        <div className="mt-4 flex gap-4 text-sm">
+        <div className="mt-4 flex flex-wrap gap-4 text-sm">
+          {resetError && <p className="w-full rounded-lg bg-red-50 p-2 text-red-700">{resetError}</p>}
           <button onClick={() => setConfirm('reset')} disabled={sessions === 0} className="text-red-600 underline disabled:opacity-40">
             Reset progress
           </button>

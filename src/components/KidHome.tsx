@@ -4,7 +4,7 @@ import { LEVELS } from '../content/levels'
 import type { Domain } from '../content/types'
 import { DAILY_PARTS, DAILY_QUESTIONS_PER_PART } from '../state/dailyPlan'
 import { LEGACY_PROFILE_ID, useActiveProfile, useProfilesStore } from '../state/profilesStore'
-import { todayStr, useProfileProgress } from '../state/progressStore'
+import { currentStreak, todayStr, useProfileProgress } from '../state/progressStore'
 import { daysUntil } from '../state/settingsStore'
 import { kidLinkClass } from '../ui/KidButton'
 import { MascotSays } from '../ui/Mascot'
@@ -79,7 +79,7 @@ export function KidHome() {
         </section>
 
         <div className="grid grid-cols-3 gap-3">
-          <Stat icon="🔥" value={progress.streak} label="day streak" />
+          <Stat icon="🔥" value={currentStreak(progress)} label="day streak" />
           <Stat icon="⭐" value={stars} label="stars" />
           <Stat icon="📅" value={days !== null && days >= 0 ? days : '—'} label="days to test" />
         </div>

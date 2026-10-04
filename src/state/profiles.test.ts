@@ -2,9 +2,11 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { AVAILABLE_SUBTYPES } from '../content/contentLoader'
 import { chooseDailyParts, buildDailyQuestions, DAILY_PARTS, DAILY_QUESTIONS_PER_PART } from './dailyPlan'
 import { LEGACY_PROFILE_ID } from './profilesStore'
-import { EMPTY_PROGRESS, migrateProgress, todayStr, useProgressStore, type ProfileProgress, type SessionResult } from './progressStore'
+import { currentStreak, EMPTY_PROGRESS, migrateProgress, todayStr, useProgressStore, type ProfileProgress, type SessionResult } from './progressStore'
 
+let n = 0
 const session = (subType: SessionResult['subType'], correct: number, total = 8): SessionResult => ({
+  id: `s${++n}`,
   subType,
   correct,
   total,
@@ -25,14 +27,20 @@ describe('migration from before child profiles', () => {
     expect(Object.keys(migrated.byProfile)).toEqual([LEGACY_PROFILE_ID])
     const p = migrated.byProfile[LEGACY_PROFILE_ID]
     expect(p.sessions).toEqual(old.sessions)
-    expect(p.streak).toBe(4)
     expect(p.shownQuestionIds).toEqual(old.shownQuestionIds)
   })
 
   it('a fresh device gets no profiles; already-migrated data passes through', () => {
     expect(migrateProgress(undefined, 0)).toEqual({ byProfile: {} })
     const current = { byProfile: { a: EMPTY_PROGRESS } }
-    expect(migrateProgress(current, 2)).toEqual(current)
+    expect(migrateProgress(current, 3)).toEqual(current)
+  })
+
+  it('gives sessions saved without ids a permanent id (once)', () => {
+    const v2 = { byProfile: { a: { sessions: [{ subType: 'figure-matrix', correct: 1, total: 8, completedAt: '2026-10-01T10:00:00Z' }], shownQuestionIds: {}, dailyPlanDates: [], streak: 3, lastPracticeDate: '2026-10-01' } } }
+    const out = migrateProgress(v2, 2).byProfile.a
+    expect(out.sessions[0].id).toMatch(/.+/)
+    expect(Object.keys(out).sort()).toEqual(['dailyPlanDates', 'sessions', 'shownQuestionIds'])
   })
 })
 
@@ -58,6 +66,20 @@ describe('per-child progress', () => {
     recordDailyPlanDone('ana')
     recordDailyPlanDone('ana')
     expect(useProgressStore.getState().byProfile.ana.dailyPlanDates).toEqual([todayStr()])
+  })
+})
+
+describe('streak (derived from practice days)', () => {
+  const at = (day: string) => ({ ...session('figure-matrix', 5), completedAt: new Date(`${day}T15:00:00`).toISOString() })
+  it('counts consecutive days ending today or yesterday', () => {
+    const p = { ...EMPTY_PROGRESS, sessions: [at('2026-10-01'), at('2026-10-02'), at('2026-10-03')] }
+    expect(currentStreak(p, '2026-10-03')).toBe(3)
+    expect(currentStreak(p, '2026-10-04')).toBe(3) // not broken until a full day is missed
+    expect(currentStreak(p, '2026-10-05')).toBe(0)
+  })
+  it('daily-plan days count too, and duplicates from two devices do not double count', () => {
+    const p = { ...EMPTY_PROGRESS, sessions: [at('2026-10-02'), at('2026-10-02')], dailyPlanDates: ['2026-10-03'] }
+    expect(currentStreak(p, '2026-10-03')).toBe(2)
   })
 })
 

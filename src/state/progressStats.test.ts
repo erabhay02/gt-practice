@@ -2,7 +2,9 @@ import { describe, expect, it } from 'vitest'
 import { focusAreas, mockRuns, statsBySubtype, summary } from './progressStats'
 import type { SessionResult } from './progressStore'
 
+let k = 0
 const s = (subType: SessionResult['subType'], correct: number, total: number, day: string, extra: Partial<SessionResult> = {}): SessionResult => ({
+  id: `x${++k}`,
   subType,
   correct,
   total,

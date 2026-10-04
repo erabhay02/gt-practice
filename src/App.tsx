@@ -3,6 +3,8 @@ import { DailyPractice } from './components/DailyPractice'
 import { KidHome } from './components/KidHome'
 import { MockTest, MockTestChooser } from './components/MockTest'
 import { ParentChildren, ParentLayout, ParentProgress } from './components/ParentArea'
+import { AuthGate } from './components/auth/AuthScreens'
+import { ParentAccount } from './components/auth/ParentAccount'
 import { PracticeSession } from './components/PracticeSession'
 import { ProfilePicker } from './components/ProfilePicker'
 import { Settings } from './components/Settings'
@@ -32,6 +34,7 @@ function KeyedDaily() {
 export default function App() {
   return (
     <HashRouter>
+      <AuthGate>
       <Routes>
         <Route path="/" element={<KidHome />} />
         <Route path="/who" element={<ProfilePicker />} />
@@ -52,6 +55,7 @@ export default function App() {
           <Route path="children" element={<ParentChildren />} />
           <Route path="worksheet" element={<Worksheet />} />
           <Route path="settings" element={<Settings />} />
+          <Route path="account" element={<ParentAccount />} />
         </Route>
         {/* Old links from before the parent area existed. */}
         <Route path="/progress" element={<Navigate to="/parent/progress" replace />} />
@@ -59,6 +63,7 @@ export default function App() {
         <Route path="/worksheet" element={<Navigate to="/parent/worksheet" replace />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      </AuthGate>
     </HashRouter>
   )
 }
