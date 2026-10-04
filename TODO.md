@@ -19,7 +19,9 @@ Waiting on:
 - [x] Supabase project "thinksprout" (us-east-1): database + security rules, 5 one-use invite codes, email via Twilio SendGrid from no-reply@astrala.us, code-based email templates; parent account created and verified; accounts switched on in the live app
 - [x] Cloudflare Pages project "thinksprout": every push deploys to https://thinksprout.pages.dev (alongside github.io)
 - [ ] Attach custom domain thinksprout.astrala.us (Cloudflare → Workers & Pages → thinksprout → Custom domains)
-- [ ] Apple Developer membership (erabhay02@gmail.com) pending approval → then TestFlight
+- [x] Apple Developer membership active (team PFMBH72U95); App Store Connect app "ThinkSprout"; build 1.0 (1) uploaded 2026-10-04
+  - Next upload: bump CURRENT_PROJECT_VERSION in `ios/App/App.xcodeproj/project.pbxproj`. Archive unsigned (`CODE_SIGNING_ALLOWED=NO`), then `xcodebuild -exportArchive` with method app-store-connect, destination upload, `-allowProvisioningUpdates` (no registered device needed)
+- [ ] TestFlight internal testers (family), then external testers for invited families (needs a short Beta App Review)
 - [ ] Sign in on every existing device while still on github.io (uploads progress), then switch domain, then make the repo private
 - [x] Android app project (Capacitor, `android/`): icon, launch screen, portrait; runs in the emulator. Build with JDK 21 (`~/.jdks/jdk-21.*`); Android Studio's bundled Java 25 is too new for Gradle 8.14
 - [ ] Google Play developer account: verify identity + phone; verify a real Android device in the Play Console app (borrow one) → upload key, then closed testing (12 testers × 14 days before production)
