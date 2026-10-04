@@ -17,7 +17,9 @@ Built and tested locally (switched off in the live app until the real backend is
 - [x] iPhone app project (Capacitor, `ios/`), app icon + launch screen; builds and runs in the iOS Simulator
 Waiting on:
 - [x] Supabase project "thinksprout" (us-east-1): database + security rules, 5 one-use invite codes, email via Twilio SendGrid from no-reply@astrala.us, code-based email templates; parent account created and verified; accounts switched on in the live app
-- [ ] ⛔ Cloudflare API token → `gh secret set CLOUDFLARE_API_TOKEN` and `gh secret set CLOUDFLARE_ACCOUNT_ID` → deploy to thinksprout.astrala.us
+- [x] Cloudflare Pages project "thinksprout": every push deploys to https://thinksprout.pages.dev (alongside github.io)
+- [ ] Attach custom domain thinksprout.astrala.us (Cloudflare → Workers & Pages → thinksprout → Custom domains)
+- [ ] Apple Developer membership (erabhay02@gmail.com) pending approval → then TestFlight
 - [ ] Sign in on every existing device while still on github.io (uploads progress), then switch domain, then make the repo private
 - [ ] Apple Developer enrollment → TestFlight; install Android Studio → Android build + Play closed testing
 - [ ] Email sending (e.g. Resend) before inviting many families (Supabase's built-in email is rate-limited)
