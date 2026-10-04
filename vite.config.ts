@@ -35,7 +35,7 @@ export default defineConfig({
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,ico,woff2}'],
         // The SPA fallback must not swallow the standalone policy pages.
-        navigateFallbackDenylist: [/privacy\.html$/, /terms\.html$/],
+        navigateFallbackDenylist: [/\/(privacy|terms)(\.html)?$/],
         // Recordings are cached as they're fetched (the app pre-fetches them all
         // once). Range support matters: iPhones request audio in byte ranges and
         // won't play a full response served from the cache.
