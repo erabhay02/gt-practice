@@ -21,7 +21,8 @@ Waiting on:
 - [ ] Attach custom domain thinksprout.astrala.us (Cloudflare → Workers & Pages → thinksprout → Custom domains)
 - [ ] Apple Developer membership (erabhay02@gmail.com) pending approval → then TestFlight
 - [ ] Sign in on every existing device while still on github.io (uploads progress), then switch domain, then make the repo private
-- [ ] Apple Developer enrollment → TestFlight; install Android Studio → Android build + Play closed testing
+- [x] Android app project (Capacitor, `android/`): icon, launch screen, portrait; runs in the emulator. Build with JDK 21 (`~/.jdks/jdk-21.*`); Android Studio's bundled Java 25 is too new for Gradle 8.14
+- [ ] Google Play developer account: verify identity + phone; verify a real Android device in the Play Console app (borrow one) → upload key, then closed testing (12 testers × 14 days before production)
 - [ ] Email sending (e.g. Resend) before inviting many families (Supabase's built-in email is rate-limited)
 
 ## Phase 3 — subscriptions
