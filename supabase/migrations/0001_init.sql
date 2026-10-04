@@ -196,6 +196,12 @@ revoke all on function public.check_invite(text) from public;
 revoke all on function public.redeem_invite(text) from public;
 revoke all on function public.delete_my_account() from public;
 revoke all on function public.handle_new_user() from public;
+-- Supabase grants new functions to anon/authenticated by default; only the
+-- intended callers keep access.
+revoke execute on function public.has_access() from anon;
+revoke execute on function public.redeem_invite(text) from anon;
+revoke execute on function public.delete_my_account() from anon;
+revoke execute on function public.handle_new_user() from anon, authenticated;
 grant execute on function public.has_access() to authenticated;
 grant execute on function public.check_invite(text) to anon, authenticated;
 grant execute on function public.redeem_invite(text) to authenticated;
