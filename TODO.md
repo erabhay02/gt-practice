@@ -22,8 +22,8 @@ Live app: https://thinksprout.pages.dev and https://erabhay02.github.io/gt-pract
 - [x] 3rd and 4th grade (Levels 9 and 10): reading-based verbal parts (Verbal Analogies, Sentence Completion with a written sentence, Verbal Classification), written-number quantitative parts (number-pair rules, number series, equations incl. ×/÷ and shape symbols), 2nd-grade figure rules one step harder; Level 9/10 test lengths (22/20/20, 18/16/18, 22/16/22) and the official 10 minutes per part when the timer is on
 - [x] 1st- and 2nd-grade content locked by fingerprint tests (unchanged); database accepts grades 0–4 (`supabase/migrations/0002_grades_k_to_4.sql`, applied)
 - [x] Privacy Policy rewritten (all grades, apps, SendGrid/Cloudflare/GitHub, COPPA rights, security, changes); removed-child records on the server keep no name/details
-- [ ] ⚠️ iPhone/Android build 1 only know grades 1–2: don't add a K/3rd/4th-grade child on an account that also uses build 1 until build 2 is installed (it would crash on that child)
-- [ ] Next store builds (when asked): iPhone build 2 (also has the iPad landscape fix), Android versionCode 2
+- [x] iPhone build 1.0 (2) uploaded to TestFlight 2026-10-05 (grades K–4 + iPad landscape fix); Android versionCode 2 built and signed (`~/Desktop/ThinkSprout-1.0-build2.aab`) for the parent to upload to Internal testing
+- [ ] ⚠️ Build 1 only knows grades 1–2: update every device to build 2 before adding a K/3rd/4th-grade child
 - [ ] Have a teacher/parent skim the new 3rd/4th-grade word items; K/1st practice-test lengths are approximate
 
 ## Phase 2 — done
