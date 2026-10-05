@@ -7,7 +7,6 @@ Live app: https://thinksprout.pages.dev and https://erabhay02.github.io/gt-pract
 - [ ] Sign in on every device the kids already use **at the github.io link** (uploads their local progress) before switching addresses
 - [ ] Supabase: delete test user `thinksprout-pwcheck@example.com` (Authentication → Users); set minimum password length to 8 (Authentication → Sign In / Providers → Email)
 - [ ] Review the Privacy Policy + Terms (`public/privacy.html`, `public/terms.html`); set up privacy@astrala.us (Cloudflare Email Routing → Gmail) or change the address
-- [ ] Google Play: finish identity + phone verification; verify a real Android device in the Play Console app (a borrowed phone is fine)
 - [ ] If not done yet: rename "My child" and set the test date (🔒 Grown-ups → Children), then add the 1st grader
 - [ ] Confirm with each school: CogAT level (Level 7 = 1st grade, Level 8 = 2nd grade) and test dates
 
@@ -15,7 +14,7 @@ Live app: https://thinksprout.pages.dev and https://erabhay02.github.io/gt-pract
 - [ ] iPhone build 2 (iPad landscape fix is committed, not uploaded — upload only when asked)
 - [ ] Make the repo private once thinksprout.astrala.us is live (this ends the github.io site)
 - [ ] TestFlight external testers for invited families: needs the privacy URL on the new domain, a beta description, a contact email, then a ~1-day Beta App Review
-- [ ] Android: create the upload signing key with the parent (kept on the Mac, never in the repo), build a release bundle, Play closed testing (12 testers × 14 days before production)
+- [ ] Android closed testing: at least 12 testers opted in for 14 days in a row before Google allows production (personal accounts). Needs store listing basics + app content forms first
 - [ ] Optional: stop the local Supabase Docker stack (`npx supabase stop`)
 
 ## Phase 2 — done
@@ -27,6 +26,9 @@ Live app: https://thinksprout.pages.dev and https://erabhay02.github.io/gt-pract
 - [x] Apple Developer membership (individual, erabhay02@gmail.com, team PFMBH72U95); App Store Connect app "ThinkSprout"; build 1.0 (1) on TestFlight — parent tested sign-in, password reset, practice, read-aloud
   - Next upload: bump CURRENT_PROJECT_VERSION in `ios/App/App.xcodeproj/project.pbxproj`; archive unsigned (`CODE_SIGNING_ALLOWED=NO`), then `xcodebuild -exportArchive` (method app-store-connect, destination upload, `-allowProvisioningUpdates`) — no registered device needed
 - [x] iPad: all orientations allowed (iPadOS 26 ignores UIRequiresFullScreen and letterboxes portrait-only apps); iPhone stays portrait
+- [x] Google Play developer account verified (identity, phone, device); Play Console app "ThinkSprout" (`us.astrala.thinksprout`); build 1.0 (1) on Internal testing, 2026-10-05
+  - Upload key: `~/.thinksprout/` (outside the repo, created by `scripts/create-android-upload-key.sh`; parent has the password). Google manages the app signing key
+  - Next upload: bump `versionCode` in `android/app/build.gradle`; `npm run build && npx cap sync android`; `JAVA_HOME=~/.jdks/jdk-21.*/Contents/Home ./gradlew bundleRelease` in `android/`; upload `app/build/outputs/bundle/release/app-release.aab` in Play Console
 - [x] Android app project (Capacitor, `android/`): adaptive icon, launch screen, portrait; runs in the emulator. Build with JDK 21 (`~/.jdks/jdk-21.*`) — Android Studio's bundled Java 25 is too new for Gradle 8.14
 
 ## Phase 3 — subscriptions
