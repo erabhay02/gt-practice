@@ -1,35 +1,38 @@
 # ThinkSprout — TODO
 
-Live app: https://erabhay02.github.io/gt-practice/ (auto-deploys on every push to `main`; tests must pass first)
+Live app: https://thinksprout.pages.dev and https://erabhay02.github.io/gt-practice/ (both auto-deploy on every push to `main`; tests must pass first). iPhone/iPad: TestFlight.
 
-## Needs a parent (can't be done from code)
-- [ ] Open the app once: existing progress moves into a profile called "My child" (2nd grade). Rename it in 🔒 Grown-ups → Children, set the test date there, then add the 1st grader.
-- [ ] Install on each child's device (iPhone/iPad: Safari → Share → Add to Home Screen; Android: Chrome → Install app).
-- [ ] Confirm with each school: CogAT level (Level 7 = 1st grade, Level 8 = 2nd grade) and test dates.
-- [ ] Phase 2 prep: start Apple Developer enrollment ($99/yr, approval can take 1–2 days), create the Google Play developer account ($25), pick the subdomain (e.g. `practice.yourdomain.com`), have the Supabase project ready.
+## Next up — needs a parent
+- [ ] Custom domain **thinksprout.astrala.us**: wait until the Astrala site / Nexus AI move is done (handled in a separate project), then Cloudflare → Workers & Pages → thinksprout → Custom domains → add it
+- [ ] Sign in on every device the kids already use **at the github.io link** (uploads their local progress) before switching addresses
+- [ ] Supabase: delete test user `thinksprout-pwcheck@example.com` (Authentication → Users); set minimum password length to 8 (Authentication → Sign In / Providers → Email)
+- [ ] Review the Privacy Policy + Terms (`public/privacy.html`, `public/terms.html`); set up privacy@astrala.us (Cloudflare Email Routing → Gmail) or change the address
+- [ ] Google Play: finish identity + phone verification; verify a real Android device in the Play Console app (a borrowed phone is fine)
+- [ ] If not done yet: rename "My child" and set the test date (🔒 Grown-ups → Children), then add the 1st grader
+- [ ] Confirm with each school: CogAT level (Level 7 = 1st grade, Level 8 = 2nd grade) and test dates
 
-## Phase 2 — accounts + iPhone/Android apps + invite-only beta (in progress)
-Built and tested locally (switched off in the live app until the real backend is connected):
-- [x] Database: parents, children, sessions, invite codes; row-level security; sign-up trigger redeems invites; account deletion (`supabase/migrations/0001_init.sql`) — 23 backend checks pass on a local Supabase
-- [x] Sign-in / create account with invite / 6-digit email codes / password reset / "waiting for invite"; parent Account tab (sync now, sign out, delete account)
-- [x] Local-first sync: works offline, merges two devices (sessions never lost or doubled, newest edit wins, removals reach every device) — 12 two-device UI checks pass
-- [x] Privacy Policy + Terms drafts (`public/privacy.html`, `public/terms.html`) — **review; set up privacy@astrala.us or change the address**
-- [x] iPhone app project (Capacitor, `ios/`), app icon + launch screen; builds and runs in the iOS Simulator
-Waiting on:
-- [x] Supabase project "thinksprout" (us-east-1): database + security rules, 5 one-use invite codes, email via Twilio SendGrid from no-reply@astrala.us, code-based email templates; parent account created and verified; accounts switched on in the live app
-- [x] Cloudflare Pages project "thinksprout": every push deploys to https://thinksprout.pages.dev (alongside github.io)
-- [ ] Attach custom domain thinksprout.astrala.us (Cloudflare → Workers & Pages → thinksprout → Custom domains)
-- [x] Apple Developer membership active (team PFMBH72U95); App Store Connect app "ThinkSprout"; build 1.0 (1) uploaded 2026-10-04
-  - Next upload: bump CURRENT_PROJECT_VERSION in `ios/App/App.xcodeproj/project.pbxproj`. Archive unsigned (`CODE_SIGNING_ALLOWED=NO`), then `xcodebuild -exportArchive` with method app-store-connect, destination upload, `-allowProvisioningUpdates` (no registered device needed)
-- [ ] TestFlight internal testers (family), then external testers for invited families (needs a short Beta App Review)
-- [ ] Sign in on every existing device while still on github.io (uploads progress), then switch domain, then make the repo private
-- [x] Android app project (Capacitor, `android/`): icon, launch screen, portrait; runs in the emulator. Build with JDK 21 (`~/.jdks/jdk-21.*`); Android Studio's bundled Java 25 is too new for Gradle 8.14
-- [ ] Google Play developer account: verify identity + phone; verify a real Android device in the Play Console app (borrow one) → upload key, then closed testing (12 testers × 14 days before production)
-- [ ] Email sending (e.g. Resend) before inviting many families (Supabase's built-in email is rate-limited)
+## Next up — Claude (after the items above)
+- [ ] iPhone build 2 (iPad landscape fix is committed, not uploaded — upload only when asked)
+- [ ] Make the repo private once thinksprout.astrala.us is live (this ends the github.io site)
+- [ ] TestFlight external testers for invited families: needs the privacy URL on the new domain, a beta description, a contact email, then a ~1-day Beta App Review
+- [ ] Android: create the upload signing key with the parent (kept on the Mac, never in the repo), build a release bundle, Play closed testing (12 testers × 14 days before production)
+- [ ] Optional: stop the local Supabase Docker stack (`npx supabase stop`)
+
+## Phase 2 — done
+- [x] Database: parents, children, sessions, invite codes; row-level security; sign-up trigger redeems invites; account deletion (`supabase/migrations/0001_init.sql`)
+- [x] Sign-in / create account with invite / emailed codes (6–10 digits) / password reset / "waiting for invite"; parent Account tab (sync now, sign out, delete account)
+- [x] Local-first sync: works offline, merges devices (sessions never lost or doubled, newest edit wins, removals reach every device)
+- [x] Supabase project "thinksprout" (us-east-1): 5 one-use invite codes; email via Twilio SendGrid from no-reply@astrala.us with code-based templates
+- [x] Cloudflare Pages project "thinksprout" deployed by GitHub Actions (secrets `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`)
+- [x] Apple Developer membership (individual, erabhay02@gmail.com, team PFMBH72U95); App Store Connect app "ThinkSprout"; build 1.0 (1) on TestFlight — parent tested sign-in, password reset, practice, read-aloud
+  - Next upload: bump CURRENT_PROJECT_VERSION in `ios/App/App.xcodeproj/project.pbxproj`; archive unsigned (`CODE_SIGNING_ALLOWED=NO`), then `xcodebuild -exportArchive` (method app-store-connect, destination upload, `-allowProvisioningUpdates`) — no registered device needed
+- [x] iPad: all orientations allowed (iPadOS 26 ignores UIRequiresFullScreen and letterboxes portrait-only apps); iPhone stays portrait
+- [x] Android app project (Capacitor, `android/`): adaptive icon, launch screen, portrait; runs in the emulator. Build with JDK 21 (`~/.jdks/jdk-21.*`) — Android Studio's bundled Java 25 is too new for Gradle 8.14
 
 ## Phase 3 — subscriptions
 - [ ] RevenueCat on Apple/Google in-app purchases; free tier vs full access; paywall behind the parental gate
-- [ ] Store listings (no "CogAT" in the name; trademark disclaimer), App Review
+- [ ] Store listings (no "CogAT" in the name; trademark disclaimer), age rating, App Store privacy questionnaire, App Review
+- [ ] App Store Connect: Paid Apps agreement, banking and tax forms (needed before subscriptions)
 
 ## Done
 ### Phase 1 (1st grade + profiles + redesign)
