@@ -20,6 +20,14 @@
     "text": "A piece of paper is folded two times. Then a hole is punched through it. When the paper is opened up, what will it look like?"
   },
   {
+    "id": "086dc2f8",
+    "text": "Each pair of numbers follows the same rule. Which number goes where the question mark is?"
+  },
+  {
+    "id": "758a3bf2",
+    "text": "Each shape stands for a number. What number goes where the question mark is?"
+  },
+  {
     "id": "3a43aa62",
     "text": "How many should go where the question mark is to make both sides the same?"
   },
@@ -36,6 +44,10 @@
     "text": "Look at the top row. The pictures change in some way. The bottom row should change the same way. Which picture goes where the question mark is?"
   },
   {
+    "id": "419e3f73",
+    "text": "Read the sentence. Which word fits best in the blank?"
+  },
+  {
     "id": "a433d39c",
     "text": "Some were taken away. How many should go where the question mark is to make both sides the same?"
   },
@@ -44,12 +56,24 @@
     "text": "The beads on this abacus follow a pattern. How many beads should go on the last rod, where the question mark is?"
   },
   {
+    "id": "70552224",
+    "text": "The first two words go together in some way. Which word goes with the third word in the same way?"
+  },
+  {
+    "id": "b3905221",
+    "text": "The numbers follow a pattern. Which number comes next?"
+  },
+  {
     "id": "32c74a4f",
     "text": "The three pictures in the top row are alike in some way. Which picture below goes with them?"
   },
   {
     "id": "dda52535",
     "text": "The three shapes in the top row are alike in some way. Which shape below goes with them?"
+  },
+  {
+    "id": "3a75ffd9",
+    "text": "The three words in the top row are alike in some way. Which word below goes with them?"
   },
   {
     "id": "3e94d5bf",
@@ -88,8 +112,16 @@
     "text": "Which animal has a very long neck?"
   },
   {
+    "id": "140ea9f3",
+    "text": "Which animal says meow?"
+  },
+  {
     "id": "38c6f68e",
     "text": "Which animal says quack?"
+  },
+  {
+    "id": "05b81b02",
+    "text": "Which animal says woof?"
   },
   {
     "id": "6ad75062",
@@ -98,6 +130,10 @@
   {
     "id": "f5d7ac85",
     "text": "Which one can you NOT eat?"
+  },
+  {
+    "id": "e1a86fbc",
+    "text": "Which one can you ride?"
   },
   {
     "id": "d7ca53c7",
@@ -116,12 +152,32 @@
     "text": "Which one do bees make?"
   },
   {
+    "id": "cecb680c",
+    "text": "Which one do you eat soup with?"
+  },
+  {
     "id": "43611068",
     "text": "Which one do you need to build a snowman?"
   },
   {
+    "id": "90e4219b",
+    "text": "Which one do you sleep in?"
+  },
+  {
+    "id": "4e161ac2",
+    "text": "Which one do you use to brush your teeth?"
+  },
+  {
+    "id": "f7c7a57c",
+    "text": "Which one do you use to draw a picture?"
+  },
+  {
     "id": "03b6bd42",
     "text": "Which one do you use to pay at a store?"
+  },
+  {
+    "id": "8c9b5f12",
+    "text": "Which one do you wear on your feet?"
   },
   {
     "id": "3f1fd409",
@@ -152,6 +208,10 @@
     "text": "Which one has wheels, but no engine?"
   },
   {
+    "id": "eb265e97",
+    "text": "Which one has wings?"
+  },
+  {
     "id": "e87fbd87",
     "text": "Which one helps you see in the dark?"
   },
@@ -172,6 +232,10 @@
     "text": "Which one is a baby animal?"
   },
   {
+    "id": "54f2ec2c",
+    "text": "Which one is a fruit?"
+  },
+  {
     "id": "d4253933",
     "text": "Which one is a vegetable?"
   },
@@ -182,6 +246,10 @@
   {
     "id": "832f5aeb",
     "text": "Which one is bigger than a cat but smaller than a horse?"
+  },
+  {
+    "id": "974cfce6",
+    "text": "Which one is hot?"
   },
   {
     "id": "b6a5466f",
@@ -214,6 +282,10 @@
   {
     "id": "4c532cc2",
     "text": "Which one lays eggs?"
+  },
+  {
+    "id": "0aabdba1",
+    "text": "Which one lives in the water?"
   },
   {
     "id": "d46c3aeb",

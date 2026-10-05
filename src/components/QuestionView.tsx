@@ -11,16 +11,26 @@ function isMatrix(rows: ContentSpec[][]): boolean {
   return rows.length === 2 && rows.every((r) => r.length === 2)
 }
 
-function PromptCell({ cell }: { cell: ContentSpec }) {
-  if (isBare(cell)) {
+// A long row of numbers (grades 3–4 Number Series) must fit one phone-width line.
+const LONG_ROW = 8
+
+function PromptCell({ cell, compact = false }: { cell: ContentSpec; compact?: boolean }) {
+  if (cell.kind === 'sentence') {
     return (
-      <div className="flex min-h-20 items-center justify-center px-0.5">
+      <div className="w-full rounded-2xl border-2 border-sprout-100 bg-white px-4 py-3">
         <ContentTile content={cell} size="large" />
       </div>
     )
   }
+  if (isBare(cell)) {
+    return (
+      <div className={`flex items-center justify-center px-0.5 ${compact ? 'min-h-14' : 'min-h-20'}`}>
+        <ContentTile content={cell} size={compact ? 'small' : 'large'} />
+      </div>
+    )
+  }
   return (
-    <div className="flex min-h-20 min-w-20 items-center justify-center rounded-2xl border-2 border-sprout-100 bg-white p-1.5">
+    <div className={`flex min-h-20 min-w-20 items-center justify-center rounded-2xl border-2 border-sprout-100 bg-white ${cell.kind === 'word' ? 'px-3 py-1.5' : 'p-1.5'}`}>
       <ContentTile content={cell} size="large" />
     </div>
   )
@@ -41,9 +51,9 @@ function Prompt({ rows }: { rows: ContentSpec[][] }) {
   return (
     <div className="flex flex-col items-center gap-3">
       {rows.map((row, r) => (
-        <div key={r} className="flex flex-wrap items-center justify-center gap-2">
+        <div key={r} className={`flex flex-wrap items-center justify-center ${row.length >= LONG_ROW ? 'gap-1.5' : 'gap-2'}`}>
           {row.map((cell, c) => (
-            <PromptCell key={c} cell={cell} />
+            <PromptCell key={c} cell={cell} compact={row.length >= LONG_ROW} />
           ))}
         </div>
       ))}

@@ -1,4 +1,4 @@
-import { mulberry32, pickOne, randomSeed, shuffle, type RngFn } from './rng'
+import { generatedId, mulberry32, pickOne, randomSeed, shuffle, upperGradeDifficulty, type RngFn } from './rng'
 import type { ContentSpec, Difficulty, FoldLine, Grade, Hole, PaperRegion, Point, Question } from '../types'
 
 interface Fold {
@@ -146,9 +146,13 @@ function randomHole(rng: RngFn, shape: PaperShape, folds: Fold[], taken: Point[]
 
 type Variant = { folds: Fold[]; holeCount: number; cut: Hole['cut'] }
 
-function chooseVariant(rng: RngFn, difficulty: Difficulty, grade: Grade): Variant {
+function chooseVariant(rng: RngFn, requested: Difficulty, grade: Grade): Variant {
   const straight = (): FoldLine => pickOne(rng, ['vertical', 'horizontal'] as FoldLine[])
   const keep = () => pickOne(rng, ['first', 'second'] as const)
+  // Kindergarten: one straight fold, one round hole.
+  if (grade === 0) return { folds: [{ axis: straight(), keep: keep() }], holeCount: 1, cut: 'circle' }
+  // Grades 3–4 use the 2nd-grade folds, one step harder.
+  const difficulty = grade >= 3 ? upperGradeDifficulty(requested, grade) : requested
   // 1st grade: always one straight fold and round holes.
   if (grade === 1) return { folds: [{ axis: straight(), keep: keep() }], holeCount: difficulty === 3 ? 2 : 1, cut: 'circle' }
   if (difficulty === 1) return { folds: [{ axis: straight(), keep: keep() }], holeCount: 1, cut: 'circle' }
@@ -259,7 +263,7 @@ export function generatePaperFoldingQuestion(
   const foldText = folds.length === 2 ? 'folded two times' : 'folded along the dotted line'
 
   return {
-    id: grade === 1 ? `paper-folding-g1-${difficulty}-${seed}` : `paper-folding-${difficulty}-${seed}`,
+    id: generatedId('paper-folding', grade, difficulty, seed),
     domain: 'nonverbal',
     subType: 'paper-folding',
     difficulty,

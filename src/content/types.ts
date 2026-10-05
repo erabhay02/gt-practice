@@ -4,6 +4,9 @@ export type SubType =
   | 'picture-analogy'
   | 'picture-classification'
   | 'sentence-completion'
+  // Grades 3–4 (CogAT Levels 9–10): the verbal battery is read, not pictured.
+  | 'verbal-analogy'
+  | 'verbal-classification'
   | 'number-analogy'
   | 'number-puzzle'
   | 'number-series'
@@ -13,8 +16,8 @@ export type SubType =
 
 export type Difficulty = 1 | 2 | 3
 
-// 1 = CogAT Level 7, 2 = CogAT Level 8.
-export type Grade = 1 | 2
+// 0 = Kindergarten (CogAT Level 5/6), 1 = Level 7, 2 = Level 8, 3 = Level 9, 4 = Level 10.
+export type Grade = 0 | 1 | 2 | 3 | 4
 
 export type ShapeType = 'circle' | 'square' | 'triangle' | 'star' | 'pentagon' | 'hexagon' | 'arrow' | 'cross'
 export type ShapeFill = 'solid' | 'striped' | 'dotted' | 'outline' | 'half'
@@ -61,6 +64,10 @@ export type ContentSpec =
   | { kind: 'emoji'; value: string }
   | { kind: 'shape'; spec: ShapeSpec }
   | { kind: 'text'; value: string }
+  // A word or short phrase a 3rd/4th grader reads (verbal items).
+  | { kind: 'word'; value: string }
+  // A sentence to read; "___" marks the missing word.
+  | { kind: 'sentence'; value: string }
   | { kind: 'blank' }
   | { kind: 'group'; emoji: string; count: number }
   | { kind: 'abacus'; counts: (number | null)[] }

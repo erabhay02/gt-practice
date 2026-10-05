@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { LEVELS } from '../content/levels'
+import { GRADES, LEVELS } from '../content/levels'
 import type { Grade } from '../content/types'
 import { AVATARS } from '../state/profilesStore'
 import { KidButton } from '../ui/KidButton'
@@ -47,21 +47,23 @@ export function ChildForm({
 
       <div className="flex flex-col gap-1.5">
         <span className="font-display text-lg font-medium">Grade</span>
-        <div className="grid grid-cols-2 gap-3">
-          {([1, 2] as Grade[]).map((g) => (
+        <div className="grid grid-cols-5 gap-2">
+          {GRADES.map((g) => (
             <button
               type="button"
               key={g}
               onClick={() => setGrade(g)}
               aria-pressed={grade === g}
-              className={`rounded-2xl border-2 py-4 font-display text-xl font-semibold transition ${
+              aria-label={LEVELS[g].label}
+              className={`rounded-2xl border-2 py-3 font-display text-lg font-semibold transition ${
                 grade === g ? 'border-sprout-500 bg-sprout-100 text-sprout-800' : 'border-sprout-100 bg-white text-ink'
               }`}
             >
-              {LEVELS[g].label}
+              {LEVELS[g].shortLabel}
             </button>
           ))}
         </div>
+        <span className="min-h-5 px-1 text-sm text-slate-500">{grade !== null ? LEVELS[grade].label : 'Pick the grade your child is in now.'}</span>
       </div>
 
       <div className="flex flex-col gap-1.5">

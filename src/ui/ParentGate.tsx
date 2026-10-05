@@ -21,9 +21,10 @@ function markUnlocked() {
   }
 }
 
-// Multiplication a 1st/2nd grader can't do but an adult does instantly.
+// Two-digit multiplication: past the times tables a 3rd/4th grader knows by
+// heart, but quick for an adult.
 function newQuestion() {
-  const a = 6 + Math.floor(Math.random() * 4)
+  const a = 13 + Math.floor(Math.random() * 7)
   const b = 6 + Math.floor(Math.random() * 4)
   return { a, b, answer: a * b }
 }

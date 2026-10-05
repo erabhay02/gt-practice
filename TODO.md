@@ -17,6 +17,15 @@ Live app: https://thinksprout.pages.dev and https://erabhay02.github.io/gt-pract
 - [ ] Android closed testing: at least 12 testers opted in for 14 days in a row before Google allows production (personal accounts). Needs store listing basics + app content forms first
 - [ ] Optional: stop the local Supabase Docker stack (`npx supabase stop`)
 
+## Grades K–4 (2026-10-05) — on the web; not yet in the store builds
+- [x] Kindergarten (CogAT Level 5/6): picture format like 1st grade, easier (amounts up to 5, one change at a time, one fold/one hole), K-only picture items, no NOT questions
+- [x] 3rd and 4th grade (Levels 9 and 10): reading-based verbal parts (Verbal Analogies, Sentence Completion with a written sentence, Verbal Classification), written-number quantitative parts (number-pair rules, number series, equations incl. ×/÷ and shape symbols), 2nd-grade figure rules one step harder; Level 9/10 test lengths (22/20/20, 18/16/18, 22/16/22) and the official 10 minutes per part when the timer is on
+- [x] 1st- and 2nd-grade content locked by fingerprint tests (unchanged); database accepts grades 0–4 (`supabase/migrations/0002_grades_k_to_4.sql`, applied)
+- [x] Privacy Policy rewritten (all grades, apps, SendGrid/Cloudflare/GitHub, COPPA rights, security, changes); removed-child records on the server keep no name/details
+- [ ] ⚠️ iPhone/Android build 1 only know grades 1–2: don't add a K/3rd/4th-grade child on an account that also uses build 1 until build 2 is installed (it would crash on that child)
+- [ ] Next store builds (when asked): iPhone build 2 (also has the iPad landscape fix), Android versionCode 2
+- [ ] Have a teacher/parent skim the new 3rd/4th-grade word items; K/1st practice-test lengths are approximate
+
 ## Phase 2 — done
 - [x] Database: parents, children, sessions, invite codes; row-level security; sign-up trigger redeems invites; account deletion (`supabase/migrations/0001_init.sql`)
 - [x] Sign-in / create account with invite / emailed codes (6–10 digits) / password reset / "waiting for invite"; parent Account tab (sync now, sign out, delete account)

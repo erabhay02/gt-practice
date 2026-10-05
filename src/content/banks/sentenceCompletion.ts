@@ -6,6 +6,7 @@ interface RawItem {
   question: string
   correct: string
   distractors: [string, string, string]
+  kindergartenOnly?: boolean
 }
 
 // Mirrors the real Sentence Completion format: the question is read aloud and
@@ -74,6 +75,19 @@ const RAW_ITEMS: RawItem[] = [
   { question: 'Which one is bigger than a car?', correct: '🚌', distractors: ['🚲', '🐕', '🛴'] },
   { question: 'Which one would you NOT find in a kitchen?', correct: '🛏️', distractors: ['🍳', '🥄', '🍴'] },
   { question: 'Which animal gives us wool?', correct: '🐑', distractors: ['🐄', '🐔', '🐖'] },
+  // Kindergarten only (CogAT Level 5/6).
+  { question: 'Which animal says meow?', correct: '🐈', distractors: ['🐕', '🐄', '🐑'], kindergartenOnly: true },
+  { question: 'Which one do you sleep in?', correct: '🛏️', distractors: ['🪑', '🛁', '🚗'], kindergartenOnly: true },
+  { question: 'Which one do you wear on your feet?', correct: '👟', distractors: ['🧢', '🧤', '👕'], kindergartenOnly: true },
+  { question: 'Which one is a fruit?', correct: '🍌', distractors: ['🥕', '🍞', '🧀'], kindergartenOnly: true },
+  { question: 'Which one lives in the water?', correct: '🐟', distractors: ['🐕', '🐦', '🐄'], kindergartenOnly: true },
+  { question: 'Which one do you use to brush your teeth?', correct: '🪥', distractors: ['🧹', '🖌️', '🧽'], kindergartenOnly: true },
+  { question: 'Which one is hot?', correct: '🔥', distractors: ['🧊', '⛄', '🍦'], kindergartenOnly: true },
+  { question: 'Which one has wings?', correct: '🐦', distractors: ['🐕', '🐟', '🐍'], kindergartenOnly: true },
+  { question: 'Which one do you eat soup with?', correct: '🥄', distractors: ['🔪', '🖍️', '🔑'], kindergartenOnly: true },
+  { question: 'Which one can you ride?', correct: '🚲', distractors: ['🛏️', '📚', '🧸'], kindergartenOnly: true },
+  { question: 'Which animal says woof?', correct: '🐕', distractors: ['🐈', '🐄', '🐑'], kindergartenOnly: true },
+  { question: 'Which one do you use to draw a picture?', correct: '🖍️', distractors: ['🥄', '🔑', '🧦'], kindergartenOnly: true },
 ]
 
 // Two-condition questions ("but", "more than", "and also") and harder
@@ -92,8 +106,35 @@ const GRADE2_ONLY = new Set([
   'Which one would a carpenter use?',
 ])
 
+// Kindergarten skips the 2nd-grade items, every NOT question, and ones that
+// need knowledge a 5-year-old may not have yet.
+const NOT_FOR_K = new Set([
+  'Which one is the heaviest?',
+  'Which one tells you what time it is?',
+  'Which one melts when it gets warm?',
+  'Which one do you use to pay at a store?',
+  'Which one comes before a butterfly?',
+  'Which one would a firefighter use?',
+  'Which one would a doctor use?',
+  'Which one opens a door?',
+  'Which one is used to cut wood?',
+  'Which one would you use to see something very far away?',
+  'Which one comes inside a shell?',
+  'Which one lays eggs?',
+  'Which one is the lightest?',
+  'Which one moves the slowest?',
+  'When you plant a seed, which one comes up first?',
+  'Which one would you use to talk to a friend who is far away?',
+])
+
+function inGrade(item: RawItem, grade: Grade): boolean {
+  if (grade === 0) return item.kindergartenOnly === true || (!GRADE2_ONLY.has(item.question) && !NOT_FOR_K.has(item.question) && !item.question.includes('NOT'))
+  if (item.kindergartenOnly) return false
+  return !(grade === 1 && GRADE2_ONLY.has(item.question))
+}
+
 export function buildSentenceCompletionBank(grade: Grade = 2): Question[] {
-  return RAW_ITEMS.flatMap((item, i): Question[] => grade === 1 && GRADE2_ONLY.has(item.question) ? [] : [{
+  return RAW_ITEMS.flatMap((item, i): Question[] => !inGrade(item, grade) ? [] : [{
     id: `sentence-completion-${i}`,
     domain: 'verbal',
     subType: 'sentence-completion',

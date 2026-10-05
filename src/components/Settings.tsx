@@ -135,7 +135,8 @@ export function Settings() {
         <Section title="Practice test timer">
           <label className="flex items-center justify-between gap-3">
             <span className="text-sm text-slate-600">
-              Time each practice-test part. The real test is untimed at these grades, so keep this off unless you want pace practice.
+              Time each practice-test part. Kindergarten–2nd grade: the real test is untimed, so keep this off unless you want pace
+              practice. 3rd–4th grade: the real test gives each part 10 minutes, and the timer uses that.
             </span>
             <input
               type="checkbox"

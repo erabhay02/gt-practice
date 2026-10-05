@@ -1,4 +1,4 @@
-import { mulberry32, pickOne, randomSeed, shuffle } from './rng'
+import { generatedId, mulberry32, pickOne, randomSeed, shuffle, upperGradeDifficulty } from './rng'
 import {
   COLORS,
   COUNTS,
@@ -46,10 +46,14 @@ export function generateFigureClassificationQuestion(
   seed: number = randomSeed(),
   grade: Grade = 2,
 ): Question {
+  // Kindergarten uses the easiest 1st-grade items; grades 3–4 the 2nd-grade
+  // rules, one step harder.
+  const level: Grade = grade === 0 ? 1 : grade >= 3 ? 2 : grade
+  const d: Difficulty = grade === 0 ? 1 : grade >= 3 ? upperGradeDifficulty(difficulty, grade) : difficulty
   const rng = mulberry32(seed)
-  const shared = pickOne(rng, sharedChoices(difficulty, grade))
+  const shared = pickOne(rng, sharedChoices(d, level))
   const inside = shared === 'inner' || shared === 'nested'
-  const easy = grade === 1 || difficulty === 1
+  const easy = level === 1 || d === 1
 
   const pools: Record<Feature, readonly Value[]> = {
     type: inside ? SHAPE_TYPES.filter(canHoldInner) : easy ? EASY_SHAPE_TYPES : SHAPE_TYPES,
@@ -64,7 +68,7 @@ export function generateFigureClassificationQuestion(
     rng,
     shared === 'count' ? [2, 3] : shared === 'inner' ? ['dot', 'line', 'x'] : shared === 'nested' ? NESTED_TYPES : pools[shared],
   )
-  const varying = varyingFeatures(shared, difficulty, grade)
+  const varying = varyingFeatures(shared, d, level)
 
   // Everything starts from one base; only the `varying` features change across
   // examples, so they're the noise the child must learn to ignore.
@@ -121,7 +125,7 @@ export function generateFigureClassificationQuestion(
   ])
 
   return {
-    id: grade === 1 ? `figure-classification-g1-${difficulty}-${seed}` : `figure-classification-${difficulty}-${seed}`,
+    id: generatedId('figure-classification', grade, difficulty, seed),
     domain: 'nonverbal',
     subType: 'figure-classification',
     difficulty,

@@ -11,6 +11,7 @@ interface RawItem {
   distractors: [string, string, string]
   relation: string
   // Defaults: 1st + 2nd grade if the relation is simple enough (below), else 2nd only.
+  // Kindergarten: see inGrade.
   grades?: Grade[]
 }
 
@@ -104,12 +105,29 @@ const RAW_ITEMS: RawItem[] = [
   { pairA: ['🐿️', '🌳'], pairCStart: '🐟', correct: '🌊', distractors: ['🌳', '🎣', '🐚'], relation: 'lives in', grades: [1] },
   { pairA: ['🐣', '🥚'], pairCStart: '🦋', correct: '🐛', distractors: ['🥚', '🌸', '🐝'], relation: 'came from', grades: [1] },
   { pairA: ['⚽', '🦶'], pairCStart: '🏀', correct: '✋', distractors: ['🦶', '👂', '🥅'], relation: 'played with', grades: [1] },
+  // Kindergarten only (CogAT Level 5/6): everyday things, one obvious connection.
+  { pairA: ['🐶', '🦴'], pairCStart: '🐰', correct: '🥕', distractors: ['🦴', '🧀', '🐶'], relation: 'likes to eat', grades: [0] },
+  { pairA: ['🐟', '🌊'], pairCStart: '🐦', correct: '🪹', distractors: ['🌊', '🐟', '🍎'], relation: 'lives in', grades: [0] },
+  { pairA: ['🍌', '🟡'], pairCStart: '🍓', correct: '🔴', distractors: ['🟡', '🔵', '🟢'], relation: 'color', grades: [0] },
+  { pairA: ['🧦', '🦶'], pairCStart: '🧤', correct: '✋', distractors: ['🦶', '👂', '👀'], relation: 'worn on', grades: [0] },
+  { pairA: ['🚗', '🛣️'], pairCStart: '🚂', correct: '🛤️', distractors: ['🛣️', '✈️', '🚌'], relation: 'travels on', grades: [0] },
+  { pairA: ['🌧️', '☂️'], pairCStart: '☀️', correct: '🕶️', distractors: ['☂️', '🧤', '🧣'], relation: 'goes with', grades: [0] },
+  { pairA: ['🐵', '🍌'], pairCStart: '🐼', correct: '🎋', distractors: ['🍌', '🐻', '🌳'], relation: 'eats', grades: [0] },
+  { pairA: ['🍪', '🥛'], pairCStart: '🥣', correct: '🥄', distractors: ['🥛', '🍳', '🍌'], relation: 'goes with', grades: [0] },
+  { pairA: ['🔑', '🔒'], pairCStart: '🪥', correct: '🦷', distractors: ['🔒', '🧼', '🍭'], relation: 'used with', grades: [0] },
+  { pairA: ['🐝', '🌸'], pairCStart: '🐛', correct: '🍃', distractors: ['🌸', '🦋', '🐞'], relation: 'eats', grades: [0] },
+  { pairA: ['🐄', '🌾'], pairCStart: '🐱', correct: '🐟', distractors: ['🌾', '🐶', '🧶'], relation: 'eats', grades: [0] },
 ]
 
 const gradesOf = (item: RawItem): Grade[] => item.grades ?? (GRADE1_RELATIONS.has(item.relation) ? [1, 2] : [2])
 
+// Kindergarten also gets the 1st-grade items with the most concrete connections.
+const K_RELATIONS = new Set(['likes to eat', 'eats', 'lives in', 'color', 'worn on', 'goes with', 'hot : cold', 'big one : baby one'])
+const inGrade = (item: RawItem, grade: Grade): boolean =>
+  grade === 0 ? gradesOf(item).includes(0) || (gradesOf(item).includes(1) && K_RELATIONS.has(item.relation)) : gradesOf(item).includes(grade)
+
 export function buildPictureAnalogyBank(grade: Grade = 2): Question[] {
-  return RAW_ITEMS.flatMap((item, i): Question[] => gradesOf(item).includes(grade) ? [{
+  return RAW_ITEMS.flatMap((item, i): Question[] => inGrade(item, grade) ? [{
     id: `picture-analogy-${i}`,
     domain: 'verbal',
     subType: 'picture-analogy',

@@ -1,5 +1,5 @@
 import { Link, Navigate } from 'react-router-dom'
-import { AVAILABLE_SUBTYPES, BATTERIES } from '../content/contentLoader'
+import { BATTERIES, subtypesForGrade } from '../content/contentLoader'
 import { LEVELS } from '../content/levels'
 import type { Domain } from '../content/types'
 import { DAILY_PARTS, DAILY_QUESTIONS_PER_PART } from '../state/dailyPlan'
@@ -90,7 +90,7 @@ export function KidHome() {
               {icon} {kidLabel}
             </h2>
             <div className="grid grid-cols-3 gap-3">
-              {AVAILABLE_SUBTYPES.filter((s) => s.domain === domain).map((s) => (
+              {subtypesForGrade(profile.grade).filter((s) => s.domain === domain).map((s) => (
                 <Link
                   key={s.subType}
                   to={`/practice/${domain}/${s.subType}`}

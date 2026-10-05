@@ -120,6 +120,25 @@ function PaperTile({
   )
 }
 
+/** A sentence with its "___" drawn as a fill-in line. */
+function SentenceText({ text }: { text: string }) {
+  const parts = text.split('___')
+  return (
+    <p className="text-left font-display text-xl leading-relaxed text-ink">
+      {parts.map((part, i) => (
+        <span key={i}>
+          {part}
+          {i < parts.length - 1 && (
+            <span className="mx-1 inline-block w-16 border-b-[3px] border-ink align-baseline" aria-label="blank">
+              &nbsp;
+            </span>
+          )}
+        </span>
+      ))}
+    </p>
+  )
+}
+
 export function ContentTile({ content, size = 'medium' }: { content: ContentSpec; size?: TileSize }) {
   const emojiSizeClass = size === 'large' ? 'text-5xl' : size === 'small' ? 'text-2xl' : 'text-4xl'
 
@@ -138,10 +157,22 @@ export function ContentTile({ content, size = 'medium' }: { content: ContentSpec
       )
     }
     case 'text':
-      return <span className="text-2xl font-bold text-slate-800">{content.value}</span>
+      return <span className={`${size === 'small' ? 'text-xl' : 'text-2xl'} font-bold text-slate-800`}>{content.value}</span>
+    case 'word':
+      return (
+        <span className={`break-words text-center font-display font-semibold leading-tight text-ink ${size === 'small' ? 'text-base' : 'text-xl'}`}>
+          {content.value}
+        </span>
+      )
+    case 'sentence':
+      return <SentenceText text={content.value} />
     case 'blank':
       return (
-        <div className="flex h-12 w-12 items-center justify-center rounded-lg border-2 border-dashed border-slate-300 text-2xl text-slate-400">
+        <div
+          className={`flex items-center justify-center rounded-lg border-2 border-dashed border-slate-300 text-slate-400 ${
+            size === 'small' ? 'h-10 w-10 text-xl' : 'h-12 w-12 text-2xl'
+          }`}
+        >
           ?
         </div>
       )

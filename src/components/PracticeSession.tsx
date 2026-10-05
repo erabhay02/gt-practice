@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
-import { AVAILABLE_SUBTYPES, getQuestionPool } from '../content/contentLoader'
+import { getQuestionPool, subtypesForGrade } from '../content/contentLoader'
 import type { Question, SubType } from '../content/types'
 import { useActiveProfile } from '../state/profilesStore'
 import { difficultyForSubType, recentlyShownIds, useProgressStore } from '../state/progressStore'
@@ -13,7 +13,7 @@ export function PracticeSession() {
   const profile = useActiveProfile()
   const recordSession = useProgressStore((s) => s.recordSession)
   const recordShownQuestions = useProgressStore((s) => s.recordShownQuestions)
-  const info = AVAILABLE_SUBTYPES.find((s) => s.subType === subtype)
+  const info = profile ? subtypesForGrade(profile.grade).find((s) => s.subType === subtype) : undefined
 
   const questions = useMemo<Question[]>(() => {
     if (!info || !profile) return []

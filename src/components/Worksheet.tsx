@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { GRADES, LEVELS } from '../content/levels'
 import { useActiveProfile } from '../state/profilesStore'
-import { AVAILABLE_SUBTYPES, BATTERIES, getRampedQuestions } from '../content/contentLoader'
+import { AVAILABLE_SUBTYPES, BATTERIES, READING_LEVEL_SUBTYPES, getRampedQuestions, subtypesForGrade } from '../content/contentLoader'
 import type { ContentSpec, Grade, Question, SubType } from '../content/types'
 import { ContentTile } from '../content/shapes/ContentTile'
 
@@ -49,7 +49,7 @@ function PrintQuestion({ q, number }: { q: Question; number: number }) {
       <div className="mb-2 flex gap-2">
         <span className="font-bold text-slate-800">{number}.</span>
         <span className="text-sm text-slate-600">
-          {q.subType === 'sentence-completion' ? <strong>Read aloud: “{q.promptAudioText}”</strong> : q.promptAudioText}
+          {q.subType === 'sentence-completion' && q.promptVisual === undefined ? <strong>Read aloud: “{q.promptAudioText}”</strong> : q.promptAudioText}
         </span>
       </div>
       <div className="flex flex-wrap items-center gap-6 pl-6">
@@ -74,13 +74,15 @@ function PrintQuestion({ q, number }: { q: Question; number: number }) {
 export function Worksheet() {
   const profile = useActiveProfile()
   const [grade, setGrade] = useState<Grade>(profile?.grade ?? 2)
-  const [selected, setSelected] = useState<Set<SubType>>(() => new Set(AVAILABLE_SUBTYPES.map((s) => s.subType)))
+  const [selected, setSelected] = useState<Set<SubType>>(
+    () => new Set([...AVAILABLE_SUBTYPES, ...READING_LEVEL_SUBTYPES].map((s) => s.subType)),
+  )
   const [perPart, setPerPart] = useState(3)
   const [version, setVersion] = useState(0)
 
   const parts = useMemo(
     () =>
-      AVAILABLE_SUBTYPES.filter((s) => selected.has(s.subType)).map((info) => ({
+      subtypesForGrade(grade).filter((s) => selected.has(s.subType)).map((info) => ({
         info,
         questions: getRampedQuestions(info.subType, perPart, [], grade),
       })),
@@ -104,7 +106,7 @@ export function Worksheet() {
     <div className="print:bg-white">
       <div className="print:hidden">
         <div className="mb-6 flex flex-col gap-4 rounded-2xl bg-white p-4 shadow-sm">
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <span className="text-sm text-slate-600">Grade:</span>
             {GRADES.map((g) => (
               <button
@@ -114,7 +116,7 @@ export function Worksheet() {
                   grade === g ? 'border-sprout-500 bg-sprout-50 text-sprout-800' : 'border-slate-200 text-slate-500'
                 }`}
               >
-                {LEVELS[g].label}
+                {LEVELS[g].shortLabel}
               </button>
             ))}
           </div>
@@ -122,7 +124,7 @@ export function Worksheet() {
             <div key={domain}>
               <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-500">{label}</p>
               <div className="flex flex-wrap gap-2">
-                {AVAILABLE_SUBTYPES.filter((s) => s.domain === domain).map((s) => (
+                {subtypesForGrade(grade).filter((s) => s.domain === domain).map((s) => (
                   <button
                     key={s.subType}
                     onClick={() => toggle(s.subType)}

@@ -1,6 +1,9 @@
 import { buildPictureAnalogyBank } from '../content/banks/pictureAnalogy'
 import { buildPictureClassificationBank } from '../content/banks/pictureClassification'
 import { buildSentenceCompletionBank } from '../content/banks/sentenceCompletion'
+import { buildSentenceReadingBank } from '../content/banks/sentenceReading'
+import { buildVerbalAnalogyBank } from '../content/banks/verbalAnalogy'
+import { buildVerbalClassificationBank } from '../content/banks/verbalClassification'
 import { generateFigureClassificationQuestion } from '../content/generators/classificationGenerator'
 import { generateMatrixQuestion } from '../content/generators/matrixGenerator'
 import {
@@ -9,6 +12,7 @@ import {
   generateNumberSeriesQuestion,
 } from '../content/generators/numberGenerators'
 import { generatePaperFoldingQuestion } from '../content/generators/paperFoldingGenerator'
+import { GRADES, isReadingLevel } from '../content/levels'
 import type { Difficulty, Grade, Question } from '../content/types'
 import { normalizeSpokenText } from './clipId'
 
@@ -30,8 +34,11 @@ const SEEDS_PER_DIFFICULTY = 1500
 /** Every sentence the app can read aloud. */
 export function allSpokenTexts(): string[] {
   const texts = new Set<string>([SOUND_CHECK_TEXT])
-  for (const grade of [1, 2] as const) {
-    for (const bank of [buildPictureAnalogyBank(grade), buildPictureClassificationBank(grade), buildSentenceCompletionBank(grade)]) {
+  for (const grade of GRADES) {
+    const banks = isReadingLevel(grade)
+      ? [buildVerbalAnalogyBank(grade), buildVerbalClassificationBank(grade), buildSentenceReadingBank(grade)]
+      : [buildPictureAnalogyBank(grade), buildPictureClassificationBank(grade), buildSentenceCompletionBank(grade)]
+    for (const bank of banks) {
       for (const q of bank) texts.add(q.promptAudioText)
     }
     for (const generate of GENERATORS) {

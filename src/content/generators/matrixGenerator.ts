@@ -1,4 +1,4 @@
-import { mulberry32, pickOne, randomSeed, shuffle, type RngFn } from './rng'
+import { generatedId, mulberry32, pickOne, randomSeed, shuffle, upperGradeDifficulty, type RngFn } from './rng'
 import {
   BASIC_FILLS,
   COLORS,
@@ -177,6 +177,27 @@ function buildItemGrade1(rng: RngFn, difficulty: Difficulty) {
   return { a, b: apply(a, transforms), c, d: apply(c, transforms), transforms, typePool, fills: BASIC_FILLS }
 }
 
+// Kindergarten (Level 5/6): a single change in color, size or pattern, on
+// familiar unrotated shapes with plain fills.
+function buildItemK(rng: RngFn) {
+  const attrs: Attr[] = [pickOne(rng, ['color', 'size', 'fill'] as Attr[])]
+  const fills: ShapeFill[] = ['solid', 'outline', 'striped']
+  const typePool: ShapeType[] = ['circle', 'square', 'triangle', 'star']
+  const a: ShapeSpec = {
+    type: pickOne(rng, typePool),
+    color: pickOne(rng, COLORS),
+    size: pickOne(rng, ['medium', 'large'] as const),
+    rotation: 0,
+    fill: pickOne(rng, fills),
+    count: 1,
+    inner: 'none',
+    nested: null,
+  }
+  const transforms = attrs.map((attr) => buildTransform(rng, attr, a, fills))
+  const c: ShapeSpec = { ...a, type: pickOne(rng, typePool.filter((t) => t !== a.type)) }
+  return { a, b: apply(a, transforms), c, d: apply(c, transforms), transforms, typePool, fills }
+}
+
 function buildDistractors(rng: RngFn, item: ReturnType<typeof buildItem>): ShapeSpec[] {
   const { b, c, d, transforms, typePool, fills } = item
   const candidates: ShapeSpec[] = []
@@ -208,7 +229,12 @@ function buildDistractors(rng: RngFn, item: ReturnType<typeof buildItem>): Shape
 
 export function generateMatrixQuestion(difficulty: Difficulty, seed: number = randomSeed(), grade: Grade = 2): Question {
   const rng = mulberry32(seed)
-  const build = () => (grade === 1 ? buildItemGrade1(rng, difficulty) : buildItem(rng, difficulty))
+  const build = () =>
+    grade === 0
+      ? buildItemK(rng)
+      : grade === 1
+        ? buildItemGrade1(rng, difficulty)
+        : buildItem(rng, grade >= 3 ? upperGradeDifficulty(difficulty, grade) : difficulty)
 
   let item = build()
   let distractors = buildDistractors(rng, item)
@@ -229,7 +255,7 @@ export function generateMatrixQuestion(difficulty: Difficulty, seed: number = ra
   ])
 
   return {
-    id: grade === 1 ? `figure-matrix-g1-${difficulty}-${seed}` : `figure-matrix-${difficulty}-${seed}`,
+    id: generatedId('figure-matrix', grade, difficulty, seed),
     domain: 'nonverbal',
     subType: 'figure-matrix',
     difficulty,

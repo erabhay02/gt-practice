@@ -38,3 +38,19 @@ export function shuffle<T>(rng: RngFn, items: readonly T[]): T[] {
   }
   return arr
 }
+
+/**
+ * Id for a generated item. 2nd grade (the original level) has no grade tag, so
+ * its ids never change; other grades get their own so shown-question history
+ * never mixes levels.
+ */
+export function generatedId(subType: string, grade: number, difficulty: number, seed: number): string {
+  const tag = grade === 2 ? '' : grade === 0 ? '-gk' : `-g${grade}`
+  return `${subType}${tag}-${difficulty}-${seed}`
+}
+
+/** Grades 3–4 reuse the 2nd-grade figure rules, starting one step harder. */
+export function upperGradeDifficulty(difficulty: 1 | 2 | 3, grade: number): 1 | 2 | 3 {
+  if (grade === 3) return difficulty === 1 ? 2 : difficulty === 2 ? 2 : 3
+  return difficulty === 1 ? 2 : 3
+}

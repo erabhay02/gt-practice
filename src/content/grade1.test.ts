@@ -5,7 +5,7 @@ import { generateMatrixQuestion } from './generators/matrixGenerator'
 import { generateNumberAnalogyQuestion, generateNumberPuzzleQuestion, generateNumberSeriesQuestion } from './generators/numberGenerators'
 import { generatePaperFoldingQuestion } from './generators/paperFoldingGenerator'
 import { shapesLookAlike } from './generators/shapePalette'
-import { LEVELS } from './levels'
+import { mockLengthFor } from './levels'
 import type { ContentSpec, Question, ShapeSpec } from './types'
 
 const seeds = Array.from({ length: 300 }, (_, i) => i * 97 + 13)
@@ -84,7 +84,7 @@ describe('1st grade (CogAT Level 7) stays within 1st-grade features', () => {
   it('every part serves 1st-grade questions and full-length Level 7 practice tests', () => {
     for (const { subType } of AVAILABLE_SUBTYPES) {
       expect(getQuestionPool(subType, 2, 8, [], 1)).toHaveLength(8)
-      expect(getRampedQuestions(subType, LEVELS[1].mockLength[subType], [], 1)).toHaveLength(LEVELS[1].mockLength[subType])
+      expect(getRampedQuestions(subType, mockLengthFor(1, subType), [], 1)).toHaveLength(mockLengthFor(1, subType))
     }
   })
 

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
-import { AVAILABLE_SUBTYPES, BATTERIES } from '../content/contentLoader'
-import type { SubType } from '../content/types'
+import { BATTERIES, subtypeInfo, subtypesForGrade } from '../content/contentLoader'
+import type { Grade, SubType } from '../content/types'
 import { FOCUS_THRESHOLD, focusAreas, mockRuns, statsBySubtype, summary } from '../state/progressStats'
 import type { ChildProfile } from '../state/profilesStore'
 import { currentStreak, difficultyForSubType, useProfileProgress } from '../state/progressStore'
@@ -14,7 +14,7 @@ const MODE_LABEL: Record<string, string> = {
   quick: 'Quick mixed test',
 }
 
-const labelOf = (subType: SubType) => AVAILABLE_SUBTYPES.find((s) => s.subType === subType)?.label ?? subType
+const labelOf = (subType: SubType, grade: Grade) => subtypeInfo(subType, grade)?.label ?? subType
 const scoreColor = (p: number) => (p >= FOCUS_THRESHOLD ? 'text-green-600' : p >= 60 ? 'text-amber-600' : 'text-red-600')
 const barColor = (p: number) => (p >= FOCUS_THRESHOLD ? 'bg-green-500' : p >= 60 ? 'bg-amber-500' : 'bg-red-400')
 
@@ -45,9 +45,10 @@ export function ProgressDashboard({ profile }: { profile: ChildProfile }) {
   const days = daysUntil(profile.testDate)
 
   const stats = statsBySubtype(sessions)
+  const parts = subtypesForGrade(profile.grade)
   const focus = focusAreas(
     stats,
-    AVAILABLE_SUBTYPES.map((s) => s.subType),
+    parts.map((s) => s.subType),
   )
   const runs = mockRuns(sessions)
   const totals = summary(sessions)
@@ -72,7 +73,7 @@ export function ProgressDashboard({ profile }: { profile: ChildProfile }) {
             <h2 className="mb-2 text-sm font-semibold text-sprout-800">Focus next</h2>
             <div className="flex flex-col gap-2">
               {focus.map((f) => {
-                const info = AVAILABLE_SUBTYPES.find((s) => s.subType === f.subType)!
+                const info = subtypeInfo(f.subType, profile.grade)!
                 return (
                   <div key={f.subType} className="flex items-center justify-between rounded-xl bg-white px-3 py-2 shadow-sm">
                     <span className="text-sm font-medium text-slate-800">{info.label}</span>
@@ -88,7 +89,7 @@ export function ProgressDashboard({ profile }: { profile: ChildProfile }) {
           <section key={domain}>
             <h2 className="mb-2 px-1 text-xs font-semibold uppercase tracking-wide text-slate-500">{label}</h2>
             <div className="flex flex-col gap-2">
-              {AVAILABLE_SUBTYPES.filter((s) => s.domain === domain).map(({ subType, label: subLabel }) => {
+              {parts.filter((s) => s.domain === domain).map(({ subType, label: subLabel }) => {
                 const st = stats[subType]
                 return (
                   <div key={subType} className="flex items-center justify-between gap-3 rounded-2xl bg-white p-4 shadow-sm">
@@ -144,7 +145,7 @@ export function ProgressDashboard({ profile }: { profile: ChildProfile }) {
                   <div className="mt-3 border-t border-slate-100 pt-2">
                     {run.parts.map((p) => (
                       <div key={p.subType} className="flex justify-between py-1 text-sm">
-                        <span className="text-slate-600">{labelOf(p.subType)}</span>
+                        <span className="text-slate-600">{labelOf(p.subType, profile.grade)}</span>
                         <span className="text-slate-500">
                           {p.correct}/{p.total}
                         </span>

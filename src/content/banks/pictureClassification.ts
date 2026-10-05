@@ -8,6 +8,7 @@ interface RawItem {
   // At least one trap per item is "close but not quite" (related, but fails the rule).
   distractors: [string, string, string]
   category: string
+  kindergartenOnly?: boolean
 }
 
 const RAW_ITEMS: RawItem[] = [
@@ -71,6 +72,13 @@ const RAW_ITEMS: RawItem[] = [
   { example: ['🐶', '🐟', '🐒'], correct: '🦊', distractors: ['🐸', '🐌', '🦋'], category: 'animals with tails' },
   { example: ['🏠', '🚗', '🚌'], correct: '🚂', distractors: ['🛶', '🚲', '🛹'], category: 'things with doors' },
   { example: ['🎸', '🎻', '🪁'], correct: '🪀', distractors: ['🥁', '🎺', '⚽'], category: 'things with strings' },
+  // Kindergarten only (CogAT Level 5/6).
+  { example: ['🚗', '🚕', '🚙'], correct: '🚓', distractors: ['🚂', '⛵', '✈️'], category: 'cars', kindergartenOnly: true },
+  { example: ['🧦', '👕', '👖'], correct: '👗', distractors: ['🍎', '🚗', '🧸'], category: 'clothes', kindergartenOnly: true },
+  { example: ['🐟', '🐠', '🐡'], correct: '🦈', distractors: ['🐈', '🐦', '🐄'], category: 'fish', kindergartenOnly: true },
+  { example: ['🧸', '🪀', '🪁'], correct: '🎈', distractors: ['🍞', '🥄', '🛏️'], category: 'toys', kindergartenOnly: true },
+  { example: ['🍞', '🧀', '🥚'], correct: '🍗', distractors: ['🧸', '👟', '🪑'], category: 'food', kindergartenOnly: true },
+  { example: ['✋', '🦶', '👂'], correct: '👃', distractors: ['🧤', '🧦', '🎧'], category: 'body parts', kindergartenOnly: true },
 ]
 
 // Categories too abstract (or with tricky traps) for a 1st grader.
@@ -79,8 +87,21 @@ const GRADE2_ONLY_CATEGORIES = new Set([
   'animals with tails', 'things with doors', 'things with strings', 'things that hold liquids', 'plants',
 ])
 
+// Kindergarten: concrete groups a 5-year-old knows by sight.
+const K_CATEGORIES = new Set([
+  'farm animals', 'fruits', 'vegetables', 'things that fly', 'sea animals', 'musical instruments', 'birds', 'round things',
+  'sweets', 'parts of the face', 'balls', 'flowers', 'boats', 'shoes', 'pets', 'yellow things', 'red things',
+  'green things', 'drinks', 'big animals', 'small animals', 'circles',
+])
+
+function inGrade(item: RawItem, grade: Grade): boolean {
+  if (grade === 0) return item.kindergartenOnly === true || K_CATEGORIES.has(item.category)
+  if (item.kindergartenOnly) return false
+  return !(grade === 1 && GRADE2_ONLY_CATEGORIES.has(item.category))
+}
+
 export function buildPictureClassificationBank(grade: Grade = 2): Question[] {
-  return RAW_ITEMS.flatMap((item, i): Question[] => grade === 1 && GRADE2_ONLY_CATEGORIES.has(item.category) ? [] : [{
+  return RAW_ITEMS.flatMap((item, i): Question[] => !inGrade(item, grade) ? [] : [{
     id: `picture-classification-${i}`,
     domain: 'verbal',
     subType: 'picture-classification',

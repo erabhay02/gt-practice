@@ -108,6 +108,17 @@ const toRow = (p: ChildProfile, progress: ProfileProgress, deletedAt: string | n
   deleted_at: deletedAt,
 })
 
+export const tombstone = (r: ChildRow, now: string): ChildRow => ({
+  ...r,
+  name: 'Removed',
+  avatar: '',
+  test_date: null,
+  shown_question_ids: {},
+  daily_plan_dates: [],
+  deleted_at: now,
+  updated_at: now,
+})
+
 /**
  * Combines this device's children/progress with the server's.
  * - A child's name/grade/avatar/test date: the most recently edited copy wins.
@@ -154,10 +165,11 @@ export function mergeAll(local: LocalState, remote: { children: ChildRow[]; sess
     push.sessions.push(...progress.sessions.filter((s) => !remoteSessionIds.has(s.id)).map((s) => sessionToRow(id, s)))
   }
 
-  // Removed on this device: tell the server (only if it knows the child).
+  // Removed on this device: tell the server (only if it knows the child). The
+  // tombstone keeps only the id, so the child's details leave the server too.
   for (const id of local.deletedIds) {
     const r = remoteById.get(id)
-    if (r && !r.deleted_at) push.children.push({ ...r, deleted_at: now, updated_at: now })
+    if (r && !r.deleted_at) push.children.push(tombstone(r, now))
   }
 
   // Removals that reached the server don't need local tombstones anymore.

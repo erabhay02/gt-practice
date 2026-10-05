@@ -1,12 +1,10 @@
-import { AVAILABLE_SUBTYPES, getQuestionPool } from '../content/contentLoader'
+import { getQuestionPool, subtypesForGrade } from '../content/contentLoader'
 import type { Grade, Question, SubType } from '../content/types'
 import { focusAreas, statsBySubtype } from './progressStats'
 import { difficultyForSubType, recentlyShownIds, type ProfileProgress } from './progressStore'
 
 export const DAILY_PARTS = 3
 export const DAILY_QUESTIONS_PER_PART = 4
-
-const ALL = AVAILABLE_SUBTYPES.map((s) => s.subType)
 
 function dayNumber(date: string): number {
   return Math.floor(new Date(`${date}T00:00:00Z`).getTime() / 86_400_000)
@@ -16,7 +14,8 @@ function dayNumber(date: string): number {
  * Today's three parts: the weakest recent part, the least-practiced part, and
  * one that rotates by date, so every part comes up regularly.
  */
-export function chooseDailyParts(progress: ProfileProgress, date: string): SubType[] {
+export function chooseDailyParts(progress: ProfileProgress, date: string, grade: Grade = 2): SubType[] {
+  const ALL = subtypesForGrade(grade).map((s) => s.subType)
   const stats = statsBySubtype(progress.sessions)
   const picked: SubType[] = []
   const add = (s: SubType | undefined) => {
@@ -31,7 +30,7 @@ export function chooseDailyParts(progress: ProfileProgress, date: string): SubTy
 }
 
 export function buildDailyQuestions(progress: ProfileProgress, grade: Grade, date: string): Question[] {
-  return chooseDailyParts(progress, date).flatMap((subType) =>
+  return chooseDailyParts(progress, date, grade).flatMap((subType) =>
     getQuestionPool(
       subType,
       difficultyForSubType(progress, subType),

@@ -1,13 +1,10 @@
 import { useMemo } from 'react'
 import { Navigate } from 'react-router-dom'
-import { AVAILABLE_SUBTYPES } from '../content/contentLoader'
-import type { SubType } from '../content/types'
+import { subtypeInfo } from '../content/contentLoader'
 import { buildDailyQuestions } from '../state/dailyPlan'
 import { useActiveProfile } from '../state/profilesStore'
 import { EMPTY_PROGRESS, todayStr, useProgressStore } from '../state/progressStore'
 import { QuizRunner } from './QuizRunner'
-
-const tipFor = (subType: SubType) => AVAILABLE_SUBTYPES.find((s) => s.subType === subType)?.tip
 
 /** "Today's practice": a short mix weighted toward the child's weakest parts. */
 export function DailyPractice() {
@@ -33,7 +30,7 @@ export function DailyPractice() {
     <QuizRunner
       title="Today's practice"
       questions={questions}
-      explanationFor={(q) => q.explanationAudioText ?? tipFor(q.subType)}
+      explanationFor={(q) => q.explanationAudioText ?? subtypeInfo(q.subType, profile.grade)?.tip}
       finishedMessage="Today's practice is done!"
       onFinish={(answers) => {
         const now = new Date().toISOString()

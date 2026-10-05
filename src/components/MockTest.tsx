@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 import {
-  AVAILABLE_SUBTYPES,
   BATTERIES,
   getQuestionPool,
   getRampedQuestions,
+  subtypesForGrade,
   type SubtestInfo,
 } from '../content/contentLoader'
-import { LEVELS } from '../content/levels'
+import { LEVELS, mockLengthFor } from '../content/levels'
 import type { Choice, Grade, Question, SubType } from '../content/types'
 import { useSpeech } from '../hooks/useSpeech'
 import { useActiveProfile } from '../state/profilesStore'
@@ -20,7 +20,8 @@ import { AnswerFeedback, QuestionNav, QuestionView } from './QuestionView'
 import { QuizHeader } from './QuizRunner'
 
 // Not an official figure (K–2 levels are officially untimed): a generous
-// per-item budget used only when a parent turns the timer on.
+// per-item budget used only when a parent turns the timer on. Grades 3–4 use
+// the real per-part limit from LEVELS instead.
 const SECONDS_PER_ITEM = 45
 const QUICK_ITEMS_PER_SUBTEST = 3
 
@@ -43,7 +44,12 @@ interface BlockResult {
 const minutes = (seconds: number) => `${Math.round(seconds / 60)} min`
 
 function partLength(subType: SubType, mode: Mode, grade: Grade): number {
-  return mode === 'quick' ? QUICK_ITEMS_PER_SUBTEST : LEVELS[grade].mockLength[subType]
+  return mode === 'quick' ? QUICK_ITEMS_PER_SUBTEST : mockLengthFor(grade, subType)
+}
+
+function partSeconds(count: number, mode: Mode, grade: Grade): number {
+  const official = LEVELS[grade].minutesPerPart
+  return official && mode !== 'quick' ? official * 60 : count * SECONDS_PER_ITEM
 }
 
 export function MockTestChooser() {
@@ -61,11 +67,16 @@ export function MockTestChooser() {
         <MascotSays mood="think">Practice tests are just like test day. Take your time and do your best!</MascotSays>
         <p className="px-1 text-sm text-slate-600">
           Questions start easy and get harder. Each part begins with an example.{' '}
-          {timed ? 'Each part is timed.' : 'No timer (like the real test at this age).'}
+          {timed
+            ? 'Each part is timed.'
+            : LEVELS[grade].minutesPerPart
+              ? `No timer today. On the real test, each part has ${LEVELS[grade].minutesPerPart} minutes.`
+              : 'No timer (like the real test at this age).'}
         </p>
         {BATTERIES.map(({ domain, kidLabel, label, icon }) => {
-          const subtests = AVAILABLE_SUBTYPES.filter((s) => s.domain === domain)
+          const subtests = subtypesForGrade(grade).filter((s) => s.domain === domain)
           const items = subtests.reduce((n, s) => n + partLength(s.subType, domain as Mode, grade), 0)
+          const seconds = subtests.reduce((n, s) => n + partSeconds(partLength(s.subType, domain as Mode, grade), domain as Mode, grade), 0)
           return (
             <Link
               key={domain}
@@ -77,7 +88,7 @@ export function MockTestChooser() {
               </p>
               <p className="text-sm text-slate-500">{subtests.map((s) => s.label).join(' · ')}</p>
               <p className="mt-1 text-sm font-semibold text-sprout-700">
-                {items} questions{timed ? ` · about ${minutes(items * SECONDS_PER_ITEM)}` : ''}
+                {items} questions{timed ? ` · about ${minutes(seconds)}` : ''}
               </p>
             </Link>
           )
@@ -107,14 +118,15 @@ export function MockTest() {
   const blocks = useMemo<Block[]>(() => {
     if (!profile) return []
     const progress = useProgressStore.getState().byProfile[profile.id]
-    const infos = mode === 'quick' ? AVAILABLE_SUBTYPES : AVAILABLE_SUBTYPES.filter((s) => s.domain === mode)
+    const parts = subtypesForGrade(profile.grade)
+    const infos = mode === 'quick' ? parts : parts.filter((s) => s.domain === mode)
     return infos.map((info) => {
       const count = partLength(info.subType, mode, profile.grade)
       const recent = progress ? recentlyShownIds(progress, info.subType) : []
       const questions = getRampedQuestions(info.subType, count, recent, profile.grade)
       const [sample] = getQuestionPool(info.subType, 1, 1, [...recent, ...questions.map((q) => q.id)], profile.grade)
       recordShownQuestions(profile.id, info.subType, [sample, ...questions].map((q) => q.id))
-      return { info, questions, sample, seconds: count * SECONDS_PER_ITEM }
+      return { info, questions, sample, seconds: partSeconds(count, mode, profile.grade) }
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode, profile?.id])

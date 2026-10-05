@@ -108,6 +108,8 @@ describe('mergeAll', () => {
     const removedHere = mergeAll(local({ deletedIds: ['k1'] }), { children: [row('k1', 'Mia', NOW)], sessions: [] }, NOW)
     expect(removedHere.profiles).toEqual([])
     expect(removedHere.push.children).toEqual([expect.objectContaining({ id: 'k1', deleted_at: NOW })])
+    // The record left behind so other devices learn of the removal holds no personal details.
+    expect(removedHere.push.children[0]).toEqual(expect.objectContaining({ name: 'Removed', avatar: '', test_date: null, shown_question_ids: {}, daily_plan_dates: [] }))
 
     const removedElsewhere = mergeAll(
       local({ profiles: [child('k1', 'Mia', NOW)], byProfile: { k1: { ...EMPTY_PROGRESS, sessions: [s('a')] } } }),
