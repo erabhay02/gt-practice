@@ -16,8 +16,28 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    // Google Play upload key. It lives outside the repo (~/.thinksprout/upload.properties
+    // points at the keystore and holds its password); without it, release builds are unsigned.
+    def uploadProps = new Properties()
+    def uploadPropsFile = new File(System.getProperty("user.home"), ".thinksprout/upload.properties")
+    if (uploadPropsFile.exists()) {
+        uploadPropsFile.withInputStream { uploadProps.load(it) }
+    }
+    signingConfigs {
+        if (uploadPropsFile.exists()) {
+            upload {
+                storeFile file(uploadProps['storeFile'])
+                storePassword uploadProps['password']
+                keyAlias uploadProps['keyAlias']
+                keyPassword uploadProps['password']
+            }
+        }
+    }
     buildTypes {
         release {
+            if (uploadPropsFile.exists()) {
+                signingConfig signingConfigs.upload
+            }
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
