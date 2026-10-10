@@ -26,7 +26,10 @@ const EXPECTED: Partial<Record<Grade, Record<string, string>>> = {
     generateNumberAnalogyQuestion: '70ae83bf0890f84e',
     generateNumberPuzzleQuestion: '5c598799ffa873ae',
     generateNumberSeriesQuestion: '7230180a1c65041c',
-    buildPictureAnalogyBank: 'a16c629518005f87',
+    // buildPictureAnalogyBank updated 2026-10-10: 6 new items appended at the end of
+    // RAW_ITEMS (3 color items auto-apply to grades 0/1/2, 1 opposite + 2 number-of-
+    // legs items apply to grade 2 only) — see pictureAnalogy.ts's "New batch" comment.
+    buildPictureAnalogyBank: '5fdb3afa8c954400',
     buildPictureClassificationBank: 'c7a3d0057f03bc2d',
     buildSentenceCompletionBank: 'bfb4bf5ad8869b1e',
   },
@@ -38,7 +41,9 @@ const EXPECTED: Partial<Record<Grade, Record<string, string>>> = {
     generateNumberAnalogyQuestion: 'e4e81929466332a6',
     generateNumberPuzzleQuestion: 'dcafafff381f5ec8',
     generateNumberSeriesQuestion: 'bc9b85538b9e829e',
-    buildPictureAnalogyBank: 'a53860713631ee66',
+    // See the grade-1 comment above — same 2026-10-10 addition, 6 new items total
+    // apply at grade 2 (all 6; grade 1 only gets the 3 color ones).
+    buildPictureAnalogyBank: '661b8b1d0a935e72',
     buildPictureClassificationBank: '6ac87d47a7342a87',
     buildSentenceCompletionBank: '9562f2f454f9209c',
   },

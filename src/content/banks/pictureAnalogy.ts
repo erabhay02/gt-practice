@@ -117,6 +117,18 @@ const RAW_ITEMS: RawItem[] = [
   { pairA: ['🔑', '🔒'], pairCStart: '🪥', correct: '🦷', distractors: ['🔒', '🧼', '🍭'], relation: 'used with', grades: [0] },
   { pairA: ['🐝', '🌸'], pairCStart: '🐛', correct: '🍃', distractors: ['🌸', '🦋', '🐞'], relation: 'eats', grades: [0] },
   { pairA: ['🐄', '🌾'], pairCStart: '🐱', correct: '🐟', distractors: ['🌾', '🐶', '🧶'], relation: 'eats', grades: [0] },
+  // New batch (2026-10-10) — appended at the true end of the array (not interleaved
+  // into the sections above) so every existing item keeps its index-based id; real
+  // kids' "already seen" history depends on those ids staying stable across a
+  // content update. 'color' is in GRADE1_RELATIONS and K_RELATIONS, so these three
+  // automatically surface at grades 0, 1, and 2 without an explicit `grades` tag,
+  // same as the other untagged color items above.
+  { pairA: ['🫐', '🔵'], pairCStart: '🍆', correct: '🟣', distractors: ['🔵', '🟢', '🔴'], relation: 'color' },
+  { pairA: ['🥝', '🟢'], pairCStart: '🍋', correct: '🟡', distractors: ['🟢', '🔴', '🟠'], relation: 'color' },
+  { pairA: ['🥦', '🟢'], pairCStart: '🍅', correct: '🔴', distractors: ['🟢', '🟠', '🟣'], relation: 'color' },
+  { pairA: ['⬅️', '➡️'], pairCStart: '⬆️', correct: '⬇️', distractors: ['➡️', '↗️', '↘️'], relation: 'opposite' },
+  { pairA: ['🐴', '4️⃣'], pairCStart: '🕷️', correct: '8️⃣', distractors: ['4️⃣', '6️⃣', '2️⃣'], relation: 'number of legs' },
+  { pairA: ['🦆', '2️⃣'], pairCStart: '🐜', correct: '6️⃣', distractors: ['2️⃣', '8️⃣', '4️⃣'], relation: 'number of legs' },
 ]
 
 const gradesOf = (item: RawItem): Grade[] => item.grades ?? (GRADE1_RELATIONS.has(item.relation) ? [1, 2] : [2])
