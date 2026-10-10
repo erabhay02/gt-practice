@@ -104,6 +104,12 @@ const RAW_ITEMS: RawItem[] = [
   { question: 'Which one can you blow up and tie at the end?', correct: '🎈', distractors: ['⚽', '🎁', '🧸'] },
   { question: 'Which one would you use to see tiny things better?', correct: '🔍', distractors: ['🔭', '📷', '🕶️'] },
   { question: 'Which one has a hump on its back?', correct: '🐫', distractors: ['🐘', '🦒', '🐴'] },
+  // Third new batch (2026-10-10, Phase 1 continued) — same append-only rule as above.
+  { question: 'Which one would you use to dry your hands?', correct: '🧻', distractors: ['🧼', '🪥', '🧴'] },
+  { question: 'Which one makes you sneeze?', correct: '🌸', distractors: ['🍎', '⚽', '📚'] },
+  { question: 'Which one keeps your drink cold?', correct: '🧊', distractors: ['🔥', '☀️', '🍞'] },
+  { question: 'Which one has feathers?', correct: '🦆', distractors: ['🐕', '🐈', '🐟'] },
+  { question: 'Which one would you use to say goodbye?', correct: '👋', distractors: ['👂', '👃', '👄'] },
 ]
 
 // Two-condition questions ("but", "more than", "and also") and harder

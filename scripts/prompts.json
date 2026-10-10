@@ -212,6 +212,10 @@
     "text": "Which one has a shell on its back?"
   },
   {
+    "id": "dce7995b",
+    "text": "Which one has feathers?"
+  },
+  {
     "id": "cbd60bdb",
     "text": "Which one has four wheels?"
   },
@@ -308,6 +312,10 @@
     "text": "Which one is used to cut wood?"
   },
   {
+    "id": "cebeefde",
+    "text": "Which one keeps your drink cold?"
+  },
+  {
     "id": "4b1593a7",
     "text": "Which one keeps your hands warm in winter?"
   },
@@ -330,6 +338,10 @@
   {
     "id": "64fe4359",
     "text": "Which one makes a loud noise?"
+  },
+  {
+    "id": "98efd01d",
+    "text": "Which one makes you sneeze?"
   },
   {
     "id": "0d49bd3f",
@@ -408,8 +420,16 @@
     "text": "Which one would you use to cut paper?"
   },
   {
+    "id": "59174d57",
+    "text": "Which one would you use to dry your hands?"
+  },
+  {
     "id": "a98c6179",
     "text": "Which one would you use to measure how long something is?"
+  },
+  {
+    "id": "7586c60d",
+    "text": "Which one would you use to say goodbye?"
   },
   {
     "id": "1fb4076b",

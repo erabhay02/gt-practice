@@ -89,6 +89,14 @@ const RAW_ITEMS: RawItem[] = [
   // 4th grade only: finer distinctions, matching this file's existing grades:[4] bar.
   { example: ['metaphor', 'simile', 'hyperbole'], correct: 'personification', distractors: ['noun', 'paragraph', 'sentence'], category: 'figurative language', grades: [4] },
   { example: ['biology', 'chemistry', 'physics'], correct: 'astronomy', distractors: ['math', 'history', 'art'], category: 'branches of science', grades: [4] },
+  // Third new batch (2026-10-10, Phase 1 continued) — same append-only rule as above.
+  { example: ['canoe', 'kayak', 'sailboat'], correct: 'yacht', distractors: ['car', 'bicycle', 'train'], category: 'types of boats' },
+  { example: ['bagel', 'baguette', 'pretzel'], correct: 'roll', distractors: ['cake', 'pie', 'cookie'], category: 'kinds of bread' },
+  { example: ['poker', 'solitaire', 'Uno'], correct: 'Rummy', distractors: ['chess', 'soccer', 'tag'], category: 'card games' },
+  { example: ['wheat', 'corn', 'soybeans'], correct: 'rice', distractors: ['rose', 'oak', 'cactus'], category: 'farm crops' },
+  // 4th grade only: finer distinctions, matching this file's existing grades:[4] bar.
+  { example: ['democracy', 'monarchy', 'dictatorship'], correct: 'republic', distractors: ['country', 'president', 'law'], category: 'types of government', grades: [4] },
+  { example: ['rotation', 'reflection', 'translation'], correct: 'dilation', distractors: ['angle', 'line', 'point'], category: 'geometric transformations', grades: [4] },
 ]
 
 const gradesOf = (item: RawItem): Grade[] => item.grades ?? [3, 4]

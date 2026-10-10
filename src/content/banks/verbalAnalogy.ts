@@ -114,6 +114,16 @@ const RAW_ITEMS: RawItem[] = [
   { pair: ['fragile', 'break'], start: 'durable', correct: 'last', distractors: ['break', 'bend', 'shatter'], relation: 'trait : what happens', grades: [4] },
   { pair: ['predator', 'hunts'], start: 'prey', correct: 'flees', distractors: ['hunts', 'hides', 'sleeps'], relation: 'role : what it does', grades: [4] },
   { pair: ['vast', 'huge'], start: 'minuscule', correct: 'tiny', distractors: ['huge', 'large', 'tall'], relation: 'same meaning', grades: [4] },
+  // Third new batch (2026-10-10, Phase 1 continued) — same append-only rule as above.
+  { pair: ['scissors', 'cut'], start: 'spoon', correct: 'stir', distractors: ['bowl', 'soup', 'cut'], relation: 'tool : what it does' },
+  { pair: ['apple', 'red'], start: 'banana', correct: 'yellow', distractors: ['green', 'peel', 'red'], relation: 'fruit : color' },
+  { pair: ['warm', 'hot'], start: 'cool', correct: 'cold', distractors: ['mild', 'freezing', 'hot'], relation: 'a word : a stronger word' },
+  { pair: ['spring', 'flowers'], start: 'fall', correct: 'leaves', distractors: ['snow', 'sun', 'flowers'], relation: 'season : what you see' },
+  { pair: ['teacher', 'students'], start: 'shepherd', correct: 'sheep', distractors: ['wolf', 'farm', 'students'], relation: 'leader : group they lead' },
+  { pair: ['curious', 'ask'], start: 'scared', correct: 'hide', distractors: ['laugh', 'sleep', 'ask'], relation: 'feeling : what you do' },
+  // 4th grade only: less familiar words, matching this file's existing grades:[4] bar.
+  { pair: ['bland', 'spicy'], start: 'dim', correct: 'bright', distractors: ['dark', 'light', 'spicy'], relation: 'opposites', grades: [4] },
+  { pair: ['migrate', 'travel'], start: 'hibernate', correct: 'sleep', distractors: ['travel', 'eat', 'build'], relation: 'animal behavior : simple meaning', grades: [4] },
 ]
 
 const gradesOf = (item: RawItem): Grade[] => item.grades ?? [3, 4]

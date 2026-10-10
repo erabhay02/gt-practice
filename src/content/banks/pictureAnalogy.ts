@@ -143,6 +143,15 @@ const RAW_ITEMS: RawItem[] = [
   { pairA: ['🎨', '🖌️'], pairCStart: '🎵', correct: '🎹', distractors: ['🖌️', '🎤', '🎧'], relation: 'made with' },
   { pairA: ['⛈️', '☔'], pairCStart: '❄️', correct: '🧣', distractors: ['☔', '🕶️', '🩴'], relation: 'protects from / goes with' },
   { pairA: ['🦶', '🏃'], pairCStart: '✋', correct: '👋', distractors: ['🏃', '👀', '🦻'], relation: 'used to' },
+  // Third new batch (2026-10-10, Phase 1 continued) — same append-only rule as above.
+  { pairA: ['⌚', '✋'], pairCStart: '👢', correct: '🦵', distractors: ['✋', '🧦', '👟'], relation: 'worn on' },
+  { pairA: ['🧥', '❄️'], pairCStart: '🧴', correct: '☀️', distractors: ['❄️', '🌧️', '🦟'], relation: 'protects from' },
+  { pairA: ['⛷️', '⛰️'], pairCStart: '🏄', correct: '🌊', distractors: ['⛰️', '🏖️', '🛹'], relation: 'travels on' },
+  { pairA: ['🌳', '🍃'], pairCStart: '🌹', correct: '🌸', distractors: ['🍃', '🌿', '🪴'], relation: 'part of' },
+  { pairA: ['🥗', '🍴'], pairCStart: '🍜', correct: '🥢', distractors: ['🍴', '🥄', '🔪'], relation: 'eaten with' },
+  { pairA: ['☔', '🌧️'], pairCStart: '🧯', correct: '🔥', distractors: ['🌧️', '🏠', '💧'], relation: 'helps with' },
+  { pairA: ['🔦', '🔋'], pairCStart: '📺', correct: '🔌', distractors: ['🔋', '📻', '💡'], relation: 'needs to work' },
+  { pairA: ['🥔', '🍟'], pairCStart: '🥜', correct: '🧈', distractors: ['🍟', '🌰', '🍪'], relation: 'made into' },
 ]
 
 const gradesOf = (item: RawItem): Grade[] => item.grades ?? (GRADE1_RELATIONS.has(item.relation) ? [1, 2] : [2])
