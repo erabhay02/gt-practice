@@ -99,6 +99,9 @@ const RAW_ITEMS: RawItem[] = [
   { example: ['📎', '✂️', '📏'], correct: '🗂️', distractors: ['🍎', '⚽', '🐶'], category: 'office supplies' },
   { example: ['🦁', '🦒', '🐘'], correct: '🦓', distractors: ['🐻', '🐧', '🦌'], category: 'African animals' },
   { example: ['📰', '🥫', '📦'], correct: '🧃', distractors: ['🍔', '🧸', '👟'], category: 'things you can recycle' },
+  // Fourth new batch (2026-10-10, Phase 1 continued) — same append-only rule as above.
+  { example: ['🐚', '🦀', '🐢'], correct: '🦞', distractors: ['🐙', '🐬', '🐟'], category: 'sea creatures with shells' },
+  { example: ['🎪', '🤹', '🎭'], correct: '🦁', distractors: ['🏠', '📚', '🚗'], category: 'things you find at a circus' },
 ]
 
 // Categories too abstract (or with tricky traps) for a 1st grader.

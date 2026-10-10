@@ -97,6 +97,14 @@ const RAW_ITEMS: RawItem[] = [
   // 4th grade only: finer distinctions, matching this file's existing grades:[4] bar.
   { example: ['democracy', 'monarchy', 'dictatorship'], correct: 'republic', distractors: ['country', 'president', 'law'], category: 'types of government', grades: [4] },
   { example: ['rotation', 'reflection', 'translation'], correct: 'dilation', distractors: ['angle', 'line', 'point'], category: 'geometric transformations', grades: [4] },
+  // Fourth new batch (2026-10-10, Phase 1 continued) — same append-only rule as above.
+  { example: ['spaghetti', 'macaroni', 'penne'], correct: 'fettuccine', distractors: ['bread', 'rice', 'pizza'], category: 'kinds of pasta' },
+  { example: ['poodle', 'beagle', 'bulldog'], correct: 'terrier', distractors: ['cat', 'rabbit', 'hamster'], category: 'dog breeds' },
+  { example: ['diamond', 'ruby', 'emerald'], correct: 'sapphire', distractors: ['rock', 'sand', 'pebble'], category: 'precious gems' },
+  { example: ['Thanksgiving', 'Halloween', 'Christmas'], correct: 'Easter', distractors: ['Monday', 'summer', 'birthday'], category: 'U.S. holidays' },
+  // 4th grade only: finer distinctions, matching this file's existing grades:[4] bar.
+  { example: ['mystery', 'fantasy', 'romance'], correct: 'biography', distractors: ['chapter', 'author', 'library'], category: 'literary genres', grades: [4] },
+  { example: ['oxygen', 'hydrogen', 'carbon'], correct: 'nitrogen', distractors: ['water', 'air', 'salt'], category: 'chemical elements', grades: [4] },
 ]
 
 const gradesOf = (item: RawItem): Grade[] => item.grades ?? [3, 4]

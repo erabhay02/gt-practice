@@ -100,6 +100,14 @@ const RAW_ITEMS: RawItem[] = [
   // 4th grade only: "although/since/because" sentences, matching this file's existing bar.
   { sentence: 'Because the bridge was closed for repairs, drivers had to find an ___ route.', correct: 'alternate', distractors: ['ancient', 'empty', 'narrow'], grades: [4] },
   { sentence: "The scientist's ___ was proven correct after months of careful research.", correct: 'hypothesis', distractors: ['lunch', 'vacation', 'car'], grades: [4] },
+  // Fourth new batch (2026-10-10, Phase 1 continued) — same append-only rule as above.
+  { sentence: 'The little girl was ___ to open her birthday presents.', correct: 'eager', distractors: ['tired', 'worried', 'angry'] },
+  { sentence: 'The old bridge looked ___, so the workers decided to repair it.', correct: 'broken', distractors: ['new', 'painted', 'tall'] },
+  { sentence: 'During the ___, everyone had to stay inside because of the storm.', correct: 'hurricane', distractors: ['party', 'picnic', 'parade'] },
+  { sentence: 'The puppy wagged its ___ happily when its owner came home.', correct: 'tail', distractors: ['ears', 'paws', 'nose'] },
+  // 4th grade only: "although/since/because" sentences, matching this file's existing bar.
+  { sentence: 'Since the museum exhibit was so ___, visitors wanted to learn more.', correct: 'fascinating', distractors: ['boring', 'empty', 'loud'], grades: [4] },
+  { sentence: 'Although the math problem seemed ___, Sam solved it after a few tries.', correct: 'difficult', distractors: ['easy', 'short', 'colorful'], grades: [4] },
 ]
 
 const gradesOf = (item: RawItem): Grade[] => item.grades ?? [3, 4]

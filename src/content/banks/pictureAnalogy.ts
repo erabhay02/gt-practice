@@ -152,6 +152,12 @@ const RAW_ITEMS: RawItem[] = [
   { pairA: ['☔', '🌧️'], pairCStart: '🧯', correct: '🔥', distractors: ['🌧️', '🏠', '💧'], relation: 'helps with' },
   { pairA: ['🔦', '🔋'], pairCStart: '📺', correct: '🔌', distractors: ['🔋', '📻', '💡'], relation: 'needs to work' },
   { pairA: ['🥔', '🍟'], pairCStart: '🥜', correct: '🧈', distractors: ['🍟', '🌰', '🍪'], relation: 'made into' },
+  // Fourth new batch (2026-10-10, Phase 1 continued) — same append-only rule as above.
+  { pairA: ['🍊', '🌳'], pairCStart: '🍓', correct: '🌱', distractors: ['🌳', '🍇', '🍍'], relation: 'grows on' },
+  { pairA: ['🍄', '🌲'], pairCStart: '🌵', correct: '🏜️', distractors: ['🌲', '🏖️', '🌊'], relation: 'grows in' },
+  { pairA: ['🦁', '🐱'], pairCStart: '🐺', correct: '🦊', distractors: ['🐱', '🐕', '🐻'], relation: 'big : small' },
+  { pairA: ['⛸️', '🧊'], pairCStart: '🛹', correct: '🛣️', distractors: ['🧊', '🏞️', '🌊'], relation: 'travels on' },
+  { pairA: ['🐻', '🐟'], pairCStart: '🦅', correct: '🐁', distractors: ['🐟', '🌾', '🦉'], relation: 'eats' },
 ]
 
 const gradesOf = (item: RawItem): Grade[] => item.grades ?? (GRADE1_RELATIONS.has(item.relation) ? [1, 2] : [2])

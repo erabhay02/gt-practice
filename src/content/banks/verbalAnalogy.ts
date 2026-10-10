@@ -124,6 +124,16 @@ const RAW_ITEMS: RawItem[] = [
   // 4th grade only: less familiar words, matching this file's existing grades:[4] bar.
   { pair: ['bland', 'spicy'], start: 'dim', correct: 'bright', distractors: ['dark', 'light', 'spicy'], relation: 'opposites', grades: [4] },
   { pair: ['migrate', 'travel'], start: 'hibernate', correct: 'sleep', distractors: ['travel', 'eat', 'build'], relation: 'animal behavior : simple meaning', grades: [4] },
+  // Fourth new batch (2026-10-10, Phase 1 continued) — same append-only rule as above.
+  { pair: ['sandpaper', 'rough'], start: 'silk', correct: 'smooth', distractors: ['soft', 'shiny', 'rough'], relation: 'texture' },
+  { pair: ['library', 'quiet'], start: 'playground', correct: 'loud', distractors: ['fun', 'outside', 'quiet'], relation: 'place : how it sounds' },
+  { pair: ['sun', 'star'], start: 'earth', correct: 'planet', distractors: ['moon', 'space', 'star'], relation: 'thing : what it is' },
+  { pair: ['boil', 'steam'], start: 'freeze', correct: 'ice', distractors: ['cold', 'water', 'steam'], relation: 'action : result' },
+  { pair: ['artist', 'paint'], start: 'musician', correct: 'play', distractors: ['sing', 'note', 'paint'], relation: 'person : what they do with their art' },
+  { pair: ['whale', 'mammal'], start: 'shark', correct: 'fish', distractors: ['ocean', 'mammal', 'swim'], relation: 'animal : type of animal' },
+  // 4th grade only: less familiar words, matching this file's existing grades:[4] bar.
+  { pair: ['abundant', 'scarce'], start: 'generous', correct: 'stingy', distractors: ['kind', 'scarce', 'rich'], relation: 'opposites', grades: [4] },
+  { pair: ['author', 'write'], start: 'sculptor', correct: 'carve', distractors: ['write', 'paint', 'build'], relation: 'person : what they do', grades: [4] },
 ]
 
 const gradesOf = (item: RawItem): Grade[] => item.grades ?? [3, 4]

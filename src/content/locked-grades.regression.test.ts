@@ -26,13 +26,13 @@ const EXPECTED: Partial<Record<Grade, Record<string, string>>> = {
     generateNumberAnalogyQuestion: '70ae83bf0890f84e',
     generateNumberPuzzleQuestion: '5c598799ffa873ae',
     generateNumberSeriesQuestion: '7230180a1c65041c',
-    // buildPictureAnalogyBank updated 2026-10-10 (three batches): see pictureAnalogy.ts's
-    // "New batch" / "Second new batch" / "Third new batch" comments for what changed.
-    buildPictureAnalogyBank: 'cbd830b7807e0618',
-    // buildPictureClassificationBank updated 2026-10-10 (three batches), same pattern.
-    buildPictureClassificationBank: '34e39a7b1baec3e9',
-    // buildSentenceCompletionBank updated 2026-10-10 (three batches), same pattern.
-    buildSentenceCompletionBank: 'e2b1551ffaf4164a',
+    // buildPictureAnalogyBank updated 2026-10-10 (four batches): see pictureAnalogy.ts's
+    // "New batch" / "Second" / "Third" / "Fourth new batch" comments for what changed.
+    buildPictureAnalogyBank: '9f1258ceb5df2e6c',
+    // buildPictureClassificationBank updated 2026-10-10 (four batches), same pattern.
+    buildPictureClassificationBank: '7b4d0b561d15f30b',
+    // buildSentenceCompletionBank updated 2026-10-10 (four batches), same pattern.
+    buildSentenceCompletionBank: '80693fad9b1d8fac',
   },
   // Recorded before 1st grade was added.
   2: {
@@ -43,9 +43,9 @@ const EXPECTED: Partial<Record<Grade, Record<string, string>>> = {
     generateNumberPuzzleQuestion: 'dcafafff381f5ec8',
     generateNumberSeriesQuestion: 'bc9b85538b9e829e',
     // See the grade-1 comment above — same 2026-10-10 updates.
-    buildPictureAnalogyBank: '0ce7842447fe9a1b',
-    buildPictureClassificationBank: '56a2a5a636a96f26',
-    buildSentenceCompletionBank: 'ed47ddaa62035cb7',
+    buildPictureAnalogyBank: '420d119a669ce05c',
+    buildPictureClassificationBank: '9a650ea0f6a3b653',
+    buildSentenceCompletionBank: '5c35d67738de1d72',
   },
 }
 

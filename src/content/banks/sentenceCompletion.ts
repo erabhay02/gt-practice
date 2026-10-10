@@ -110,6 +110,11 @@ const RAW_ITEMS: RawItem[] = [
   { question: 'Which one keeps your drink cold?', correct: '🧊', distractors: ['🔥', '☀️', '🍞'] },
   { question: 'Which one has feathers?', correct: '🦆', distractors: ['🐕', '🐈', '🐟'] },
   { question: 'Which one would you use to say goodbye?', correct: '👋', distractors: ['👂', '👃', '👄'] },
+  // Fourth new batch (2026-10-10, Phase 1 continued) — same append-only rule as above.
+  { question: "Which animal is known as man's best friend?", correct: '🐕', distractors: ['🐈', '🐦', '🐠'] },
+  { question: 'Which one would you use to measure your weight?', correct: '⚖️', distractors: ['📏', '⏰', '🌡️'] },
+  { question: 'Which one is the fastest land animal?', correct: '🐆', distractors: ['🐢', '🐌', '🐘'] },
+  { question: 'Which one grows from a tadpole?', correct: '🐸', distractors: ['🐟', '🦆', '🐢'] },
 ]
 
 // Two-condition questions ("but", "more than", "and also") and harder
