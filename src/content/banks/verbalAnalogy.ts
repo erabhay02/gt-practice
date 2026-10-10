@@ -134,6 +134,18 @@ const RAW_ITEMS: RawItem[] = [
   // 4th grade only: less familiar words, matching this file's existing grades:[4] bar.
   { pair: ['abundant', 'scarce'], start: 'generous', correct: 'stingy', distractors: ['kind', 'scarce', 'rich'], relation: 'opposites', grades: [4] },
   { pair: ['author', 'write'], start: 'sculptor', correct: 'carve', distractors: ['write', 'paint', 'build'], relation: 'person : what they do', grades: [4] },
+  // Fifth new batch (2026-10-10, Phase 1 continued) — same append-only rule as above.
+  { pair: ['clean', 'spotless'], start: 'dirty', correct: 'filthy', distractors: ['messy', 'spotless', 'muddy'], relation: 'a word : a stronger word' },
+  { pair: ['north', 'south'], start: 'east', correct: 'west', distractors: ['up', 'down', 'south'], relation: 'opposites' },
+  { pair: ['sing', 'song'], start: 'dance', correct: 'routine', distractors: ['music', 'step', 'song'], relation: 'action : the thing made' },
+  { pair: ['wolf', 'pack'], start: 'fish', correct: 'school', distractors: ['pond', 'pack', 'fin'], relation: 'animal : group name' },
+  { pair: ['brick', 'wall'], start: 'thread', correct: 'fabric', distractors: ['needle', 'wall', 'sew'], relation: 'small piece : what it builds' },
+  { pair: ['kind', 'mean'], start: 'brave', correct: 'cowardly', distractors: ['scared', 'mean', 'strong'], relation: 'opposites' },
+  { pair: ['waiter', 'restaurant'], start: 'cashier', correct: 'store', distractors: ['money', 'customer', 'restaurant'], relation: 'worker : workplace' },
+  // 4th grade only: less familiar words, matching this file's existing grades:[4] bar.
+  { pair: ['gain', 'lose'], start: 'increase', correct: 'decrease', distractors: ['lose', 'grow', 'rise'], relation: 'opposites', grades: [4] },
+  { pair: ['famine', 'hunger'], start: 'drought', correct: 'thirst', distractors: ['hunger', 'flood', 'rain'], relation: 'shortage : what it causes', grades: [4] },
+  { pair: ['verdict', 'judge'], start: 'diagnosis', correct: 'doctor', distractors: ['judge', 'patient', 'medicine'], relation: 'decision : who makes it', grades: [4] },
 ]
 
 const gradesOf = (item: RawItem): Grade[] => item.grades ?? [3, 4]

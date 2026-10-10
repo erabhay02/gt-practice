@@ -115,6 +115,11 @@ const RAW_ITEMS: RawItem[] = [
   { question: 'Which one would you use to measure your weight?', correct: '⚖️', distractors: ['📏', '⏰', '🌡️'] },
   { question: 'Which one is the fastest land animal?', correct: '🐆', distractors: ['🐢', '🐌', '🐘'] },
   { question: 'Which one grows from a tadpole?', correct: '🐸', distractors: ['🐟', '🦆', '🐢'] },
+  // Fifth new batch (2026-10-10, Phase 1 continued) — same append-only rule as above.
+  { question: 'Which one would you use to brush your hair?', correct: '🪮', distractors: ['🪥', '🧽', '✂️'] },
+  { question: 'Which one has a trunk and big ears?', correct: '🐘', distractors: ['🦏', '🦛', '🐪'] },
+  { question: 'Which one would you plant in the garden to grow a flower?', correct: '🌱', distractors: ['🪨', '🧱', '🔑'] },
+  { question: 'Which one spins webs to catch bugs?', correct: '🕷️', distractors: ['🐝', '🐞', '🦋'] },
 ]
 
 // Two-condition questions ("but", "more than", "and also") and harder

@@ -220,6 +220,10 @@
     "text": "Which one has a shell on its back?"
   },
   {
+    "id": "3a23f446",
+    "text": "Which one has a trunk and big ears?"
+  },
+  {
     "id": "dce7995b",
     "text": "Which one has feathers?"
   },
@@ -372,6 +376,10 @@
     "text": "Which one shines in the sky at night?"
   },
   {
+    "id": "a6f2eb3c",
+    "text": "Which one spins webs to catch bugs?"
+  },
+  {
     "id": "0b00322a",
     "text": "Which one tells you what time it is?"
   },
@@ -408,12 +416,20 @@
     "text": "Which one would you find in the ocean?"
   },
   {
+    "id": "6e5de827",
+    "text": "Which one would you plant in the garden to grow a flower?"
+  },
+  {
     "id": "9ee582e9",
     "text": "Which one would you see at a birthday party?"
   },
   {
     "id": "d439b47e",
     "text": "Which one would you take outside on a rainy day?"
+  },
+  {
+    "id": "5e21389a",
+    "text": "Which one would you use to brush your hair?"
   },
   {
     "id": "23903b7e",

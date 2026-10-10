@@ -105,6 +105,15 @@ const RAW_ITEMS: RawItem[] = [
   // 4th grade only: finer distinctions, matching this file's existing grades:[4] bar.
   { example: ['mystery', 'fantasy', 'romance'], correct: 'biography', distractors: ['chapter', 'author', 'library'], category: 'literary genres', grades: [4] },
   { example: ['oxygen', 'hydrogen', 'carbon'], correct: 'nitrogen', distractors: ['water', 'air', 'salt'], category: 'chemical elements', grades: [4] },
+  // Fifth new batch (2026-10-10, Phase 1 continued) — same append-only rule as above.
+  { example: ['ant', 'bee', 'termite'], correct: 'wasp', distractors: ['spider', 'worm', 'snail'], category: 'insects that live in colonies' },
+  { example: ['whisper', 'mumble', 'murmur'], correct: 'mutter', distractors: ['shout', 'yell', 'scream'], category: 'words for speaking quietly' },
+  { example: ['swim', 'sail', 'paddle'], correct: 'row', distractors: ['walk', 'drive', 'climb'], category: 'ways to travel across water' },
+  { example: ['ruler', 'scale', 'thermometer'], correct: 'gauge', distractors: ['hammer', 'pencil', 'spoon'], category: 'tools for measuring' },
+  { example: ['guitar', 'violin', 'harp'], correct: 'banjo', distractors: ['drum', 'trumpet', 'flute'], category: 'instruments with strings' },
+  // 4th grade only: finer distinctions, matching this file's existing grades:[4] bar.
+  { example: ['crust', 'mantle', 'core'], correct: 'atmosphere', distractors: ['ocean', 'volcano', 'mountain'], category: "layers of the Earth's structure", grades: [4] },
+  { example: ['ounce', 'pound', 'ton'], correct: 'gram', distractors: ['inch', 'gallon', 'mile'], category: 'units of weight', grades: [4] },
 ]
 
 const gradesOf = (item: RawItem): Grade[] => item.grades ?? [3, 4]
