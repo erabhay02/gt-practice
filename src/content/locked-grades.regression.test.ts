@@ -26,17 +26,13 @@ const EXPECTED: Partial<Record<Grade, Record<string, string>>> = {
     generateNumberAnalogyQuestion: '70ae83bf0890f84e',
     generateNumberPuzzleQuestion: '5c598799ffa873ae',
     generateNumberSeriesQuestion: '7230180a1c65041c',
-    // buildPictureAnalogyBank updated 2026-10-10: 6 new items appended at the end of
-    // RAW_ITEMS (3 color items auto-apply to grades 0/1/2, 1 opposite + 2 number-of-
-    // legs items apply to grade 2 only) — see pictureAnalogy.ts's "New batch" comment.
-    buildPictureAnalogyBank: '5fdb3afa8c954400',
-    // buildPictureClassificationBank updated 2026-10-10: 6 new untagged items
-    // appended at the end (apply to grades 1 and 2, not Kindergarten).
-    buildPictureClassificationBank: '3d81ac3f615f39ff',
-    // buildSentenceCompletionBank updated 2026-10-10: 6 new untagged items
-    // appended at the end (apply at grades 0, 1, and 2 — none use "NOT" or
-    // two-condition phrasing, so none needed the GRADE2_ONLY/NOT_FOR_K tags).
-    buildSentenceCompletionBank: '7962f22f179f42ce',
+    // buildPictureAnalogyBank updated 2026-10-10 (two batches): see pictureAnalogy.ts's
+    // "New batch" / "Second new batch" comments for exactly what changed and why.
+    buildPictureAnalogyBank: 'bfd54d74c87ee1f0',
+    // buildPictureClassificationBank updated 2026-10-10 (two batches), same pattern.
+    buildPictureClassificationBank: 'a0f39ba826d92f65',
+    // buildSentenceCompletionBank updated 2026-10-10 (two batches), same pattern.
+    buildSentenceCompletionBank: 'fe488dade29d6f25',
   },
   // Recorded before 1st grade was added.
   2: {
@@ -46,13 +42,10 @@ const EXPECTED: Partial<Record<Grade, Record<string, string>>> = {
     generateNumberAnalogyQuestion: 'e4e81929466332a6',
     generateNumberPuzzleQuestion: 'dcafafff381f5ec8',
     generateNumberSeriesQuestion: 'bc9b85538b9e829e',
-    // See the grade-1 comment above — same 2026-10-10 addition, 6 new items total
-    // apply at grade 2 (all 6; grade 1 only gets the 3 color ones).
-    buildPictureAnalogyBank: '661b8b1d0a935e72',
-    // See the grade-1 comment above — same 2026-10-10 addition.
-    buildPictureClassificationBank: '57640e156dfb72fa',
-    // See the grade-1 comment above — same 2026-10-10 addition.
-    buildSentenceCompletionBank: '868277179c35d9df',
+    // See the grade-1 comment above — same 2026-10-10 updates.
+    buildPictureAnalogyBank: 'ff0eed5aafbb28fa',
+    buildPictureClassificationBank: 'eb5ea4968bbfbfc6',
+    buildSentenceCompletionBank: '0ffe3c3a97504302',
   },
 }
 

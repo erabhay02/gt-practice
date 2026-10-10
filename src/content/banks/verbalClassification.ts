@@ -81,6 +81,14 @@ const RAW_ITEMS: RawItem[] = [
   // 4th grade only: finer distinctions, matching this file's existing grades:[4] bar.
   { example: ['solar', 'wind', 'hydro'], correct: 'geothermal', distractors: ['coal', 'oil', 'gas'], category: 'renewable energy sources', grades: [4] },
   { example: ['comma', 'period', 'question mark'], correct: 'semicolon', distractors: ['letter', 'word', 'sentence'], category: 'punctuation marks', grades: [4] },
+  // Second new batch (2026-10-10, Phase 1 continued) — same append-only rule as above.
+  { example: ['cake', 'pie', 'cookie'], correct: 'brownie', distractors: ['bread', 'salad', 'soup'], category: 'desserts' },
+  { example: ['rain', 'snow', 'sunshine'], correct: 'fog', distractors: ['umbrella', 'coat', 'cloud'], category: 'kinds of weather' },
+  { example: ['circle', 'oval', 'crescent'], correct: 'ellipse', distractors: ['square', 'triangle', 'star'], category: 'shapes with curves' },
+  { example: ['math', 'science', 'reading'], correct: 'art', distractors: ['recess', 'lunch', 'homework'], category: 'school subjects' },
+  // 4th grade only: finer distinctions, matching this file's existing grades:[4] bar.
+  { example: ['metaphor', 'simile', 'hyperbole'], correct: 'personification', distractors: ['noun', 'paragraph', 'sentence'], category: 'figurative language', grades: [4] },
+  { example: ['biology', 'chemistry', 'physics'], correct: 'astronomy', distractors: ['math', 'history', 'art'], category: 'branches of science', grades: [4] },
 ]
 
 const gradesOf = (item: RawItem): Grade[] => item.grades ?? [3, 4]

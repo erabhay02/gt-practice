@@ -132,6 +132,10 @@
     "text": "Which one can you NOT eat?"
   },
   {
+    "id": "4436f12d",
+    "text": "Which one can you blow up and tie at the end?"
+  },
+  {
     "id": "e1a86fbc",
     "text": "Which one can you ride?"
   },
@@ -192,6 +196,18 @@
     "text": "Which one grows on a tree?"
   },
   {
+    "id": "a45209c0",
+    "text": "Which one grows tall and gives us wood?"
+  },
+  {
+    "id": "4ca318fc",
+    "text": "Which one has a hump on its back?"
+  },
+  {
+    "id": "028622b1",
+    "text": "Which one has a long neck?"
+  },
+  {
     "id": "97440d7a",
     "text": "Which one has a shell on its back?"
   },
@@ -222,6 +238,10 @@
   {
     "id": "e87fbd87",
     "text": "Which one helps you see in the dark?"
+  },
+  {
+    "id": "e6358d08",
+    "text": "Which one hops instead of walks?"
   },
   {
     "id": "34480a0b",
@@ -394,6 +414,10 @@
   {
     "id": "1fb4076b",
     "text": "Which one would you use to see something very far away?"
+  },
+  {
+    "id": "b30c601f",
+    "text": "Which one would you use to see tiny things better?"
   },
   {
     "id": "bb06f81e",

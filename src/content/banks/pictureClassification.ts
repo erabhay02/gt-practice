@@ -87,6 +87,13 @@ const RAW_ITEMS: RawItem[] = [
   { example: ['🧈', '🥚', '🌾'], correct: '🍯', distractors: ['🔨', '👟', '🚗'], category: 'things used for baking' },
   { example: ['🎈', '🎉', '🎁'], correct: '🎊', distractors: ['🚗', '🔨', '📚'], category: 'things at a party' },
   { example: ['⛷️', '🏂', '⛸️'], correct: '🛷', distractors: ['🏄', '🏖️', '🍦'], category: 'winter sports' },
+  // Second new batch (2026-10-10, Phase 1 continued) — same append-only rule as above.
+  { example: ['🐫', '🦂', '🦎'], correct: '🐍', distractors: ['🐧', '🐻', '🐟'], category: 'desert animals' },
+  { example: ['🌻', '🐝', '🦋'], correct: '🐛', distractors: ['🚗', '🔨', '📺'], category: 'things you find in a garden' },
+  { example: ['🦉', '🦇', '🦝'], correct: '🐺', distractors: ['🐓', '☀️', '🐝'], category: 'nocturnal animals' },
+  { example: ['🪵', '🚣', '🦆'], correct: '🦢', distractors: ['🪨', '⚓', '🔑'], category: 'things that float on water' },
+  { example: ['🧳', '🎒', '🛍️'], correct: '👜', distractors: ['🚗', '🐟', '🌳'], category: 'things with handles you carry' },
+  { example: ['🥭', '🍍', '🥥'], correct: '🍌', distractors: ['🍎', '🍇', '🍓'], category: 'tropical fruits' },
 ]
 
 // Categories too abstract (or with tricky traps) for a 1st grader.

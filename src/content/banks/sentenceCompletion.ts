@@ -97,6 +97,13 @@ const RAW_ITEMS: RawItem[] = [
   { question: 'Which one would you use to carry food?', correct: '🧺', distractors: ['🔑', '📚', '🧸'] },
   { question: 'Which one would you use to catch a fish?', correct: '🎣', distractors: ['⚓', '🏐', '🔨'] },
   { question: 'Which one is in the sky during the day?', correct: '☀️', distractors: ['🌙', '⭐', '🪐'] },
+  // Second new batch (2026-10-10, Phase 1 continued) — same append-only rule as above.
+  { question: 'Which one has a long neck?', correct: '🦒', distractors: ['🐘', '🐪', '🐻'] },
+  { question: 'Which one hops instead of walks?', correct: '🐰', distractors: ['🐕', '🐈', '🐄'] },
+  { question: 'Which one grows tall and gives us wood?', correct: '🌳', distractors: ['🌸', '🌱', '🍄'] },
+  { question: 'Which one can you blow up and tie at the end?', correct: '🎈', distractors: ['⚽', '🎁', '🧸'] },
+  { question: 'Which one would you use to see tiny things better?', correct: '🔍', distractors: ['🔭', '📷', '🕶️'] },
+  { question: 'Which one has a hump on its back?', correct: '🐫', distractors: ['🐘', '🦒', '🐴'] },
 ]
 
 // Two-condition questions ("but", "more than", "and also") and harder

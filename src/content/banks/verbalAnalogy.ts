@@ -102,6 +102,18 @@ const RAW_ITEMS: RawItem[] = [
   // 4th grade only: less familiar words, matching this file's existing grades:[4] bar.
   { pair: ['joey', 'kangaroo'], start: 'cygnet', correct: 'swan', distractors: ['duck', 'goose', 'joey'], relation: 'baby animal : grown animal', grades: [4] },
   { pair: ['carnivore', 'meat'], start: 'herbivore', correct: 'plants', distractors: ['animals', 'grass', 'meat'], relation: 'diet type : what it eats', grades: [4] },
+  // Second new batch (2026-10-10, Phase 1 continued) — same append-only rule as above.
+  { pair: ['teacher', 'classroom'], start: 'actor', correct: 'stage', distractors: ['audience', 'script', 'movie'], relation: 'worker : workplace' },
+  { pair: ['knife', 'slice'], start: 'needle', correct: 'sew', distractors: ['thread', 'prick', 'fabric'], relation: 'tool : what it does' },
+  { pair: ['bicycle', 'pedal'], start: 'car', correct: 'drive', distractors: ['wheel', 'road', 'gas'], relation: 'vehicle : how you move it' },
+  { pair: ['light', 'dark'], start: 'full', correct: 'empty', distractors: ['hungry', 'half', 'dark'], relation: 'opposites' },
+  { pair: ['stem', 'flower'], start: 'trunk', correct: 'tree', distractors: ['branch', 'root', 'leaf'], relation: 'part : whole' },
+  { pair: ['sour', 'lemon'], start: 'sweet', correct: 'candy', distractors: ['sugar', 'cake', 'lemon'], relation: 'taste : example' },
+  { pair: ['rooster', 'crow'], start: 'owl', correct: 'hoot', distractors: ['screech', 'howl', 'crow'], relation: 'animal : its sound' },
+  // 4th grade only: less familiar words, matching this file's existing grades:[4] bar.
+  { pair: ['fragile', 'break'], start: 'durable', correct: 'last', distractors: ['break', 'bend', 'shatter'], relation: 'trait : what happens', grades: [4] },
+  { pair: ['predator', 'hunts'], start: 'prey', correct: 'flees', distractors: ['hunts', 'hides', 'sleeps'], relation: 'role : what it does', grades: [4] },
+  { pair: ['vast', 'huge'], start: 'minuscule', correct: 'tiny', distractors: ['huge', 'large', 'tall'], relation: 'same meaning', grades: [4] },
 ]
 
 const gradesOf = (item: RawItem): Grade[] => item.grades ?? [3, 4]

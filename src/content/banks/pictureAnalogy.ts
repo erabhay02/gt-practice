@@ -129,6 +129,20 @@ const RAW_ITEMS: RawItem[] = [
   { pairA: ['⬅️', '➡️'], pairCStart: '⬆️', correct: '⬇️', distractors: ['➡️', '↗️', '↘️'], relation: 'opposite' },
   { pairA: ['🐴', '4️⃣'], pairCStart: '🕷️', correct: '8️⃣', distractors: ['4️⃣', '6️⃣', '2️⃣'], relation: 'number of legs' },
   { pairA: ['🦆', '2️⃣'], pairCStart: '🐜', correct: '6️⃣', distractors: ['2️⃣', '8️⃣', '4️⃣'], relation: 'number of legs' },
+  // Second new batch (2026-10-10, Phase 1 continued) — same append-only rule as above.
+  { pairA: ['🦉', '🐭'], pairCStart: '🦈', correct: '🐟', distractors: ['🌊', '🐭', '🦀'], relation: 'eats' },
+  { pairA: ['🦅', '🐍'], pairCStart: '🦊', correct: '🐇', distractors: ['🐍', '🌾', '🦉'], relation: 'eats' },
+  { pairA: ['🐫', '🏜️'], pairCStart: '🐧', correct: '🧊', distractors: ['🏜️', '🌴', '🔥'], relation: 'lives in' },
+  { pairA: ['🐳', '🌊'], pairCStart: '🦅', correct: '⛰️', distractors: ['🌊', '🐟', '☁️'], relation: 'lives at' },
+  { pairA: ['🍅', '🔴'], pairCStart: '🫛', correct: '🟢', distractors: ['🔴', '🟤', '🟡'], relation: 'color' },
+  { pairA: ['🍆', '🟣'], pairCStart: '🥕', correct: '🟠', distractors: ['🟣', '🟢', '🔴'], relation: 'color' },
+  { pairA: ['🐸', '🟢'], pairCStart: '🦀', correct: '🔴', distractors: ['🟢', '🟤', '🟡'], relation: 'color' },
+  { pairA: ['🐑', '🐏'], pairCStart: '🐄', correct: '🐂', distractors: ['🐏', '🐖', '🐐'], relation: 'female : male' },
+  { pairA: ['🌾', '🍞'], pairCStart: '🥛', correct: '🧈', distractors: ['🍞', '🥚', '🍯'], relation: 'made into' },
+  { pairA: ['🚴', '🦵'], pairCStart: '🏊', correct: '💪', distractors: ['🦵', '🦶', '👀'], relation: 'mainly uses' },
+  { pairA: ['🎨', '🖌️'], pairCStart: '🎵', correct: '🎹', distractors: ['🖌️', '🎤', '🎧'], relation: 'made with' },
+  { pairA: ['⛈️', '☔'], pairCStart: '❄️', correct: '🧣', distractors: ['☔', '🕶️', '🩴'], relation: 'protects from / goes with' },
+  { pairA: ['🦶', '🏃'], pairCStart: '✋', correct: '👋', distractors: ['🏃', '👀', '🦻'], relation: 'used to' },
 ]
 
 const gradesOf = (item: RawItem): Grade[] => item.grades ?? (GRADE1_RELATIONS.has(item.relation) ? [1, 2] : [2])
