@@ -116,6 +116,37 @@ const RAW_ITEMS: RawItem[] = [
   // 4th grade only: "although/since/because" sentences, matching this file's existing bar.
   { sentence: 'Since the volcano had been ___ for years, scientists were surprised when it erupted.', correct: 'dormant', distractors: ['active', 'famous', 'small'], grades: [4] },
   { sentence: 'Although the novel was ___, Leo finished all five hundred pages in a week.', correct: 'lengthy', distractors: ['short', 'boring', 'cheap'], grades: [4] },
+  // Sixth new batch (2026-10-10, Phase 1 continued) — same append-only rule as above.
+  // This batch brings sentence-reading to the plan's "roughly double" target.
+  { sentence: 'The firefighter climbed the ___ to reach the top floor.', correct: 'ladder', distractors: ['chair', 'table', 'bed'] },
+  { sentence: 'The sun was so ___ that everyone wore sunglasses.', correct: 'bright', distractors: ['dark', 'quiet', 'cold'] },
+  { sentence: 'The baker pulled a fresh loaf of ___ out of the oven.', correct: 'bread', distractors: ['ice', 'rocks', 'shoes'] },
+  { sentence: 'After the long flight, the passengers were ___ to stretch their legs.', correct: 'eager', distractors: ['sad', 'angry', 'confused'] },
+  { sentence: 'The squirrel buried the ___ to save for winter.', correct: 'acorn', distractors: ['rock', 'leaf', 'twig'] },
+  { sentence: 'The lifeguard watched the swimmers to keep them ___.', correct: 'safe', distractors: ['wet', 'tired', 'loud'] },
+  { sentence: 'The artist mixed blue and yellow paint to make ___.', correct: 'green', distractors: ['purple', 'orange', 'brown'] },
+  { sentence: 'The thunder was so loud that the baby started to ___.', correct: 'cry', distractors: ['laugh', 'sing', 'dance'] },
+  { sentence: 'The farmer fed ___ to the chickens every morning.', correct: 'corn', distractors: ['rocks', 'water bottles', 'shoes'] },
+  { sentence: 'Because the ice was so thin, the skaters stayed near the ___.', correct: 'edge', distractors: ['middle', 'bottom', 'top'] },
+  { sentence: 'The pirates searched the island for buried ___.', correct: 'treasure', distractors: ['homework', 'laundry', 'vegetables'] },
+  { sentence: 'The astronaut put on a special ___ before walking in space.', correct: 'suit', distractors: ['hat', 'shoe', 'glove'] },
+  { sentence: 'The orchestra played beautiful music as the audience listened in ___.', correct: 'silence', distractors: ['traffic', 'rain', 'chaos'] },
+  { sentence: 'The gardener watered the plants every ___ to help them grow.', correct: 'day', distractors: ['rock', 'chair', 'shoe'] },
+  { sentence: 'The magician pulled a rabbit out of his ___.', correct: 'hat', distractors: ['shoe', 'pocket', 'sleeve'] },
+  { sentence: 'When the power went out, the family lit some ___ to see in the dark.', correct: 'candles', distractors: ['windows', 'mirrors', 'pillows'] },
+  { sentence: 'The soccer player kicked the ball into the ___.', correct: 'goal', distractors: ['sky', 'crowd', 'bench'] },
+  { sentence: "The baby bird couldn't fly yet, so it stayed in the ___.", correct: 'nest', distractors: ['pond', 'cave', 'garage'] },
+  { sentence: 'The teacher wrote the homework assignment on the ___.', correct: 'board', distractors: ['ceiling', 'window', 'floor'] },
+  { sentence: 'The chef wore a tall white ___ while cooking.', correct: 'hat', distractors: ['scarf', 'belt', 'glove'] },
+  // 4th grade only: "although/since/because" sentences, matching this file's existing bar.
+  { sentence: 'Since the river had ___ after the heavy rain, the town had to evacuate.', correct: 'flooded', distractors: ['dried', 'frozen', 'sparkled'], grades: [4] },
+  { sentence: 'Although Mia practiced the piano every day, she remained ___ before the recital.', correct: 'nervous', distractors: ['bored', 'confident', 'careless'], grades: [4] },
+  { sentence: 'Because the ancient manuscript was so ___, historians handled it very carefully.', correct: 'fragile', distractors: ['heavy', 'colorful', 'cheap'], grades: [4] },
+  { sentence: 'The explorer felt a sense of ___ upon discovering the hidden cave.', correct: 'wonder', distractors: ['boredom', 'anger', 'hunger'], grades: [4] },
+  { sentence: 'Since the negotiations had ___, both sides finally reached an agreement.', correct: 'succeeded', distractors: ['failed', 'started', 'ended'], grades: [4] },
+  { sentence: 'The committee will ___ the proposal before making a final decision.', correct: 'review', distractors: ['forget', 'ignore', 'destroy'], grades: [4] },
+  { sentence: 'Although the climb was ___, the hikers reached the summit by sunset.', correct: 'strenuous', distractors: ['easy', 'short', 'flat'], grades: [4] },
+  { sentence: 'The archaeologist carefully brushed away the dirt to reveal an ancient ___.', correct: 'artifact', distractors: ['pizza', 'bicycle', 'television'], grades: [4] },
 ]
 
 const gradesOf = (item: RawItem): Grade[] => item.grades ?? [3, 4]

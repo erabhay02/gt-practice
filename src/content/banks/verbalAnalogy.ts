@@ -146,6 +146,36 @@ const RAW_ITEMS: RawItem[] = [
   { pair: ['gain', 'lose'], start: 'increase', correct: 'decrease', distractors: ['lose', 'grow', 'rise'], relation: 'opposites', grades: [4] },
   { pair: ['famine', 'hunger'], start: 'drought', correct: 'thirst', distractors: ['hunger', 'flood', 'rain'], relation: 'shortage : what it causes', grades: [4] },
   { pair: ['verdict', 'judge'], start: 'diagnosis', correct: 'doctor', distractors: ['judge', 'patient', 'medicine'], relation: 'decision : who makes it', grades: [4] },
+  // Sixth new batch (2026-10-10, Phase 1 continued) — same append-only rule as above.
+  // This batch brings verbal-analogy to the plan's "roughly double" target.
+  { pair: ['bee', 'sting'], start: 'dog', correct: 'bite', distractors: ['bark', 'wag', 'run'], relation: 'animal : how it defends itself' },
+  { pair: ['pencil', 'write'], start: 'eraser', correct: 'erase', distractors: ['paper', 'mistake', 'pencil'], relation: 'tool : what it does' },
+  { pair: ['winter', 'cold'], start: 'summer', correct: 'hot', distractors: ['warm', 'spring', 'cold'], relation: 'season : temperature' },
+  { pair: ['puppy', 'bark'], start: 'kitten', correct: 'meow', distractors: ['purr', 'hiss', 'bark'], relation: 'animal : its sound' },
+  { pair: ['short', 'long'], start: 'thin', correct: 'thick', distractors: ['wide', 'fat', 'long'], relation: 'opposites' },
+  { pair: ['pilot', 'fly'], start: 'driver', correct: 'drive', distractors: ['car', 'road', 'fly'], relation: 'person : what they do' },
+  { pair: ['moon', 'night'], start: 'sun', correct: 'day', distractors: ['star', 'sky', 'night'], relation: 'seen : when' },
+  { pair: ['rose', 'thorns'], start: 'cactus', correct: 'spikes', distractors: ['flower', 'desert', 'thorns'], relation: 'plant : how it protects itself' },
+  { pair: ['bicycle', '2'], start: 'tricycle', correct: '3', distractors: ['4', '1', '2'], relation: 'vehicle : number of wheels' },
+  { pair: ['hammer', 'pound'], start: 'saw', correct: 'cut', distractors: ['wood', 'sharp', 'pound'], relation: 'tool : what it does' },
+  { pair: ['baby', 'crawl'], start: 'toddler', correct: 'walk', distractors: ['run', 'crawl', 'talk'], relation: 'age stage : how they move' },
+  { pair: ['rain', 'wet'], start: 'sun', correct: 'dry', distractors: ['hot', 'bright', 'wet'], relation: 'weather : what it makes things' },
+  { pair: ['garden', 'flowers'], start: 'orchard', correct: 'apples', distractors: ['vegetables', 'grass', 'flowers'], relation: 'place : what grows there' },
+  { pair: ['happy', 'smile'], start: 'sad', correct: 'frown', distractors: ['laugh', 'cry', 'smile'], relation: 'feeling : facial expression' },
+  { pair: ['king', 'crown'], start: 'knight', correct: 'armor', distractors: ['sword', 'castle', 'crown'], relation: 'person : what they wear' },
+  { pair: ['ant', 'small'], start: 'elephant', correct: 'large', distractors: ['gray', 'heavy', 'small'], relation: 'animal : its size' },
+  { pair: ['stove', 'hot'], start: 'freezer', correct: 'cold', distractors: ['ice', 'kitchen', 'hot'], relation: 'appliance : temperature' },
+  { pair: ['leaf', 'green'], start: 'snow', correct: 'white', distractors: ['cold', 'ice', 'green'], relation: 'thing : its color' },
+  { pair: ['book', 'read'], start: 'movie', correct: 'watch', distractors: ['see', 'screen', 'read'], relation: 'thing : how you enjoy it' },
+  { pair: ['fish', 'gills'], start: 'human', correct: 'lungs', distractors: ['skin', 'fins', 'gills'], relation: 'animal : how it breathes' },
+  // 4th grade only: less familiar words, matching this file's existing grades:[4] bar.
+  { pair: ['triumph', 'victory'], start: 'defeat', correct: 'loss', distractors: ['victory', 'win', 'draw'], relation: 'same meaning', grades: [4] },
+  { pair: ['ocean', 'vast'], start: 'puddle', correct: 'tiny', distractors: ['wet', 'vast', 'blue'], relation: 'thing : its size', grades: [4] },
+  { pair: ['composer', 'symphony'], start: 'architect', correct: 'building', distractors: ['symphony', 'music', 'blueprint'], relation: 'creator : work', grades: [4] },
+  { pair: ['generous', 'selfish'], start: 'honest', correct: 'deceitful', distractors: ['selfish', 'kind', 'truthful'], relation: 'opposites', grades: [4] },
+  { pair: ['century', '100'], start: 'decade', correct: '10', distractors: ['100', '1', '1000'], relation: 'unit : number of years', grades: [4] },
+  { pair: ['extinct', 'gone'], start: 'endangered', correct: 'threatened', distractors: ['gone', 'safe', 'common'], relation: 'same meaning', grades: [4] },
+  { pair: ['telescope', 'far'], start: 'microscope', correct: 'small', distractors: ['far', 'close', 'large'], relation: 'tool : what it helps you see', grades: [4] },
 ]
 
 const gradesOf = (item: RawItem): Grade[] => item.grades ?? [3, 4]

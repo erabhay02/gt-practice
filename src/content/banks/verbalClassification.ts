@@ -114,6 +114,33 @@ const RAW_ITEMS: RawItem[] = [
   // 4th grade only: finer distinctions, matching this file's existing grades:[4] bar.
   { example: ['crust', 'mantle', 'core'], correct: 'atmosphere', distractors: ['ocean', 'volcano', 'mountain'], category: "layers of the Earth's structure", grades: [4] },
   { example: ['ounce', 'pound', 'ton'], correct: 'gram', distractors: ['inch', 'gallon', 'mile'], category: 'units of weight', grades: [4] },
+  // Sixth new batch (2026-10-10, Phase 1 continued) — same append-only rule as above.
+  // This batch brings verbal-classification to the plan's "roughly double" target.
+  { example: ['spatula', 'whisk', 'ladle'], correct: 'tongs', distractors: ['plate', 'napkin', 'table'], category: 'kitchen tools' },
+  { example: ['ballet', 'tap', 'salsa'], correct: 'ballroom', distractors: ['gymnastics', 'yoga', 'swimming'], category: 'types of dances' },
+  { example: ['barn', 'silo', 'coop'], correct: 'stable', distractors: ['school', 'store', 'hospital'], category: 'farm buildings' },
+  { example: ['skiing', 'sledding', 'ice skating'], correct: 'snowboarding', distractors: ['swimming', 'surfing', 'sunbathing'], category: 'winter activities' },
+  { example: ['root', 'stem', 'leaf'], correct: 'petal', distractors: ['rock', 'sand', 'cloud'], category: 'parts of a plant' },
+  { example: ['stool', 'recliner', 'rocking chair'], correct: 'armchair', distractors: ['table', 'lamp', 'rug'], category: 'kinds of chairs' },
+  { example: ['huge', 'enormous', 'gigantic'], correct: 'massive', distractors: ['tiny', 'small', 'little'], category: 'words for big' },
+  { example: ['tiny', 'little', 'petite'], correct: 'miniature', distractors: ['huge', 'large', 'giant'], category: 'words for small' },
+  { example: ['parrot', 'monkey', 'toucan'], correct: 'jaguar', distractors: ['polar bear', 'penguin', 'walrus'], category: 'tropical animals' },
+  { example: ['backpack', 'notebook', 'pencil case'], correct: 'binder', distractors: ['couch', 'oven', 'car'], category: 'school supplies' },
+  { example: ['tomato soup', 'chicken soup', 'vegetable soup'], correct: 'minestrone', distractors: ['sandwich', 'salad', 'pizza'], category: 'kinds of soup' },
+  { example: ['puppy', 'kitten', 'chick'], correct: 'calf', distractors: ['dog', 'cat', 'hen'], category: 'baby animals' },
+  { example: ['furious', 'irritated', 'annoyed'], correct: 'enraged', distractors: ['happy', 'calm', 'joyful'], category: 'words meaning angry' },
+  { example: ['zebra', 'tiger', 'candy cane'], correct: 'barber pole', distractors: ['apple', 'ball', 'box'], category: 'things that are striped' },
+  { example: ['Chicago', 'Boston', 'Seattle'], correct: 'Denver', distractors: ['California', 'Texas', 'America'], category: 'U.S. cities' },
+  { example: ['beanie', 'baseball cap', 'sombrero'], correct: 'beret', distractors: ['shoe', 'glove', 'scarf'], category: 'kinds of hats' },
+  { example: ['red', 'orange', 'yellow'], correct: 'green', distractors: ['black', 'white', 'gray'], category: 'colors of the rainbow' },
+  // 4th grade only: finer distinctions, matching this file's existing grades:[4] bar.
+  { example: ['cumulus', 'cirrus', 'stratus'], correct: 'nimbus', distractors: ['fog', 'rain', 'wind'], category: 'types of clouds', grades: [4] },
+  { example: ['kinetic', 'potential', 'thermal'], correct: 'chemical', distractors: ['battery', 'fire', 'heat'], category: 'types of energy', grades: [4] },
+  { example: ['chapter', 'index', 'glossary'], correct: 'appendix', distractors: ['movie', 'song', 'painting'], category: 'parts of a book', grades: [4] },
+  { example: ['granite', 'marble', 'limestone'], correct: 'sandstone', distractors: ['diamond', 'gold', 'silver'], category: 'types of rock', grades: [4] },
+  { example: ['Egyptian', 'Roman', 'Greek'], correct: 'Mayan', distractors: ['modern', 'future', 'recent'], category: 'ancient civilizations', grades: [4] },
+  { example: ['suspension', 'arch', 'beam'], correct: 'truss', distractors: ['tunnel', 'road', 'highway'], category: 'types of bridges', grades: [4] },
+  { example: ['cactus', 'agave', 'yucca'], correct: 'succulent', distractors: ['fern', 'moss', 'lily'], category: 'desert plants', grades: [4] },
 ]
 
 const gradesOf = (item: RawItem): Grade[] => item.grades ?? [3, 4]
