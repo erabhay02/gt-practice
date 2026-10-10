@@ -88,6 +88,15 @@ const RAW_ITEMS: RawItem[] = [
   { question: 'Which one can you ride?', correct: '🚲', distractors: ['🛏️', '📚', '🧸'], kindergartenOnly: true },
   { question: 'Which animal says woof?', correct: '🐕', distractors: ['🐈', '🐄', '🐑'], kindergartenOnly: true },
   { question: 'Which one do you use to draw a picture?', correct: '🖍️', distractors: ['🥄', '🔑', '🧦'], kindergartenOnly: true },
+  // New batch (2026-10-10) — appended at the true end so existing items keep their
+  // index-based ids. None contain "NOT" or two-condition phrasing and none are
+  // listed in GRADE2_ONLY/NOT_FOR_K, so these apply at grades 0, 1, and 2.
+  { question: 'Which one has stripes?', correct: '🦓', distractors: ['🦁', '🐘', '🐪'] },
+  { question: 'Which one lives in a nest?', correct: '🐦', distractors: ['🐕', '🐟', '🐒'] },
+  { question: 'Which one has a shell on its back?', correct: '🐢', distractors: ['🐍', '🐸', '🐛'] },
+  { question: 'Which one would you use to carry food?', correct: '🧺', distractors: ['🔑', '📚', '🧸'] },
+  { question: 'Which one would you use to catch a fish?', correct: '🎣', distractors: ['⚓', '🏐', '🔨'] },
+  { question: 'Which one is in the sky during the day?', correct: '☀️', distractors: ['🌙', '⭐', '🪐'] },
 ]
 
 // Two-condition questions ("but", "more than", "and also") and harder

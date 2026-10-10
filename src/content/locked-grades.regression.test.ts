@@ -30,8 +30,13 @@ const EXPECTED: Partial<Record<Grade, Record<string, string>>> = {
     // RAW_ITEMS (3 color items auto-apply to grades 0/1/2, 1 opposite + 2 number-of-
     // legs items apply to grade 2 only) — see pictureAnalogy.ts's "New batch" comment.
     buildPictureAnalogyBank: '5fdb3afa8c954400',
-    buildPictureClassificationBank: 'c7a3d0057f03bc2d',
-    buildSentenceCompletionBank: 'bfb4bf5ad8869b1e',
+    // buildPictureClassificationBank updated 2026-10-10: 6 new untagged items
+    // appended at the end (apply to grades 1 and 2, not Kindergarten).
+    buildPictureClassificationBank: '3d81ac3f615f39ff',
+    // buildSentenceCompletionBank updated 2026-10-10: 6 new untagged items
+    // appended at the end (apply at grades 0, 1, and 2 — none use "NOT" or
+    // two-condition phrasing, so none needed the GRADE2_ONLY/NOT_FOR_K tags).
+    buildSentenceCompletionBank: '7962f22f179f42ce',
   },
   // Recorded before 1st grade was added.
   2: {
@@ -44,8 +49,10 @@ const EXPECTED: Partial<Record<Grade, Record<string, string>>> = {
     // See the grade-1 comment above — same 2026-10-10 addition, 6 new items total
     // apply at grade 2 (all 6; grade 1 only gets the 3 color ones).
     buildPictureAnalogyBank: '661b8b1d0a935e72',
-    buildPictureClassificationBank: '6ac87d47a7342a87',
-    buildSentenceCompletionBank: '9562f2f454f9209c',
+    // See the grade-1 comment above — same 2026-10-10 addition.
+    buildPictureClassificationBank: '57640e156dfb72fa',
+    // See the grade-1 comment above — same 2026-10-10 addition.
+    buildSentenceCompletionBank: '868277179c35d9df',
   },
 }
 

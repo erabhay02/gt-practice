@@ -73,6 +73,17 @@ const RAW_ITEMS: RawItem[] = [
   { sentence: 'Mount Everest is the ___ mountain in the world.', correct: 'highest', distractors: ['smallest', 'newest', 'wettest'], grades: [4] },
   { sentence: 'The children were ___ to see a rainbow after the storm.', correct: 'delighted', distractors: ['annoyed', 'bored', 'frightened'], grades: [4] },
   { sentence: 'Even though it was raining, the soccer game was not ___.', correct: 'canceled', distractors: ['played', 'wet', 'long'], grades: [4] },
+  // New batch (2026-10-10) — appended at the true end so existing items keep their
+  // index-based ids. promptAudioText is the constant SENTENCE_READING_PROMPT here
+  // (not per-item) — the sentence itself is read by the child, not the app — so
+  // this bank needs no new audio clips.
+  { sentence: 'The campers put out the ___ before they went to sleep.', correct: 'fire', distractors: ['tent', 'lantern', 'sleeping bag'] },
+  { sentence: 'Maya was so ___ after the long hike that she wanted a drink of water.', correct: 'thirsty', distractors: ['proud', 'confused', 'late'] },
+  { sentence: 'The ___ barked loudly when a stranger walked by the house.', correct: 'dog', distractors: ['cat', 'bird', 'fish'] },
+  { sentence: 'Before crossing the street, always look both ___.', correct: 'ways', distractors: ['hands', 'feet', 'eyes'] },
+  // 4th grade only: "although/since/because" sentences, matching this file's existing bar.
+  { sentence: 'Although she was nervous, Priya ___ her hand to answer the question.', correct: 'raised', distractors: ['hid', 'lowered', 'shook'], grades: [4] },
+  { sentence: 'Since the library was ___, the students studied in complete silence.', correct: 'quiet', distractors: ['crowded', 'sunny', 'new'], grades: [4] },
 ]
 
 const gradesOf = (item: RawItem): Grade[] => item.grades ?? [3, 4]

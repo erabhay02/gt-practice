@@ -71,6 +71,16 @@ const RAW_ITEMS: RawItem[] = [
   { example: ['lungs', 'heart', 'brain'], correct: 'stomach', distractors: ['blood', 'air', 'doctor'], category: 'organs', grades: [4] },
   { example: ['pebble', 'boulder', 'rock'], correct: 'stone', distractors: ['tree', 'water', 'mountain'], category: 'words for rocks', grades: [4] },
   { example: ['noun', 'verb', 'adjective'], correct: 'adverb', distractors: ['sentence', 'spelling', 'letter'], category: 'parts of speech', grades: [4] },
+  // New batch (2026-10-10) — appended at the true end so existing items keep their
+  // index-based ids. promptAudioText is the constant VERBAL_CLASSIFICATION_PROMPT
+  // here (not per-item), so this bank needs no new audio clips.
+  { example: ['snake', 'lizard', 'turtle'], correct: 'crocodile', distractors: ['frog', 'fish', 'spider'], category: 'reptiles' },
+  { example: ['oven', 'toaster', 'blender'], correct: 'microwave', distractors: ['plate', 'fork', 'napkin'], category: 'kitchen appliances' },
+  { example: ['chess', 'checkers', 'Monopoly'], correct: 'Scrabble', distractors: ['soccer', 'puzzle', 'cards'], category: 'board games' },
+  { example: ['Asia', 'Africa', 'Europe'], correct: 'Australia', distractors: ['Egypt', 'China', 'London'], category: 'continents' },
+  // 4th grade only: finer distinctions, matching this file's existing grades:[4] bar.
+  { example: ['solar', 'wind', 'hydro'], correct: 'geothermal', distractors: ['coal', 'oil', 'gas'], category: 'renewable energy sources', grades: [4] },
+  { example: ['comma', 'period', 'question mark'], correct: 'semicolon', distractors: ['letter', 'word', 'sentence'], category: 'punctuation marks', grades: [4] },
 ]
 
 const gradesOf = (item: RawItem): Grade[] => item.grades ?? [3, 4]

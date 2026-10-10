@@ -90,6 +90,18 @@ const RAW_ITEMS: RawItem[] = [
   { pair: ['good', 'excellent'], start: 'bad', correct: 'terrible', distractors: ['okay', 'sad', 'excellent'], relation: 'a word : a stronger word', grades: [4] },
   { pair: ['sculptor', 'statue'], start: 'poet', correct: 'poem', distractors: ['rhyme', 'reader', 'book'], relation: 'creator : work', grades: [4] },
   { pair: ['rare', 'common'], start: 'scarce', correct: 'plentiful', distractors: ['few', 'empty', 'rare'], relation: 'opposites', grades: [4] },
+  // New batch (2026-10-10) — appended at the true end so existing items keep their
+  // index-based ids. promptAudioText is the constant VERBAL_ANALOGY_PROMPT here (not
+  // per-item), so unlike sentenceCompletion.ts, this bank needs no new audio clips.
+  { pair: ['cow', 'moo'], start: 'duck', correct: 'quack', distractors: ['honk', 'bark', 'squawk'], relation: 'animal : its sound' },
+  { pair: ['chick', 'chicken'], start: 'lamb', correct: 'sheep', distractors: ['wool', 'goat', 'puppy'], relation: 'baby animal : grown animal' },
+  { pair: ['up', 'down'], start: 'left', correct: 'right', distractors: ['east', 'center', 'down'], relation: 'opposites' },
+  { pair: ['hammer', 'pound'], start: 'broom', correct: 'sweep', distractors: ['dust', 'clean', 'pound'], relation: 'tool : what it does' },
+  { pair: ['petal', 'flower'], start: 'branch', correct: 'tree', distractors: ['leaf', 'root', 'petal'], relation: 'part : whole' },
+  { pair: ['painter', 'brush'], start: 'writer', correct: 'pen', distractors: ['paper', 'book', 'brush'], relation: 'worker : tool they use' },
+  // 4th grade only: less familiar words, matching this file's existing grades:[4] bar.
+  { pair: ['joey', 'kangaroo'], start: 'cygnet', correct: 'swan', distractors: ['duck', 'goose', 'joey'], relation: 'baby animal : grown animal', grades: [4] },
+  { pair: ['carnivore', 'meat'], start: 'herbivore', correct: 'plants', distractors: ['animals', 'grass', 'meat'], relation: 'diet type : what it eats', grades: [4] },
 ]
 
 const gradesOf = (item: RawItem): Grade[] => item.grades ?? [3, 4]

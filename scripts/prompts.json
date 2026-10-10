@@ -192,12 +192,20 @@
     "text": "Which one grows on a tree?"
   },
   {
+    "id": "97440d7a",
+    "text": "Which one has a shell on its back?"
+  },
+  {
     "id": "cbd60bdb",
     "text": "Which one has four wheels?"
   },
   {
     "id": "ce86824b",
     "text": "Which one has more legs than a dog?"
+  },
+  {
+    "id": "8bdb1231",
+    "text": "Which one has stripes?"
   },
   {
     "id": "5ab91ab2",
@@ -252,6 +260,10 @@
     "text": "Which one is hot?"
   },
   {
+    "id": "1019de5a",
+    "text": "Which one is in the sky during the day?"
+  },
+  {
     "id": "b6a5466f",
     "text": "Which one is round and bounces?"
   },
@@ -282,6 +294,10 @@
   {
     "id": "4c532cc2",
     "text": "Which one lays eggs?"
+  },
+  {
+    "id": "c1bdd830",
+    "text": "Which one lives in a nest?"
   },
   {
     "id": "0aabdba1",
@@ -356,8 +372,16 @@
     "text": "Which one would you take outside on a rainy day?"
   },
   {
+    "id": "23903b7e",
+    "text": "Which one would you use to carry food?"
+  },
+  {
     "id": "149d5ae4",
     "text": "Which one would you use to carry your books to school?"
+  },
+  {
+    "id": "7172aea7",
+    "text": "Which one would you use to catch a fish?"
   },
   {
     "id": "b8c952a3",

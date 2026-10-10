@@ -79,6 +79,14 @@ const RAW_ITEMS: RawItem[] = [
   { example: ['🧸', '🪀', '🪁'], correct: '🎈', distractors: ['🍞', '🥄', '🛏️'], category: 'toys', kindergartenOnly: true },
   { example: ['🍞', '🧀', '🥚'], correct: '🍗', distractors: ['🧸', '👟', '🪑'], category: 'food', kindergartenOnly: true },
   { example: ['✋', '🦶', '👂'], correct: '👃', distractors: ['🧤', '🧦', '🎧'], category: 'body parts', kindergartenOnly: true },
+  // New batch (2026-10-10) — appended at the true end so existing items keep their
+  // index-based ids (see pictureAnalogy.ts's "New batch" comment for why this matters).
+  { example: ['🐍', '🦎', '🐢'], correct: '🐊', distractors: ['🐸', '🦀', '🐦'], category: 'reptiles' },
+  { example: ['🩺', '💊', '🩹'], correct: '💉', distractors: ['🔧', '📚', '🎈'], category: 'things found at the doctor' },
+  { example: ['📱', '🎹', '🕹️'], correct: '⌨️', distractors: ['📖', '🍎', '🌳'], category: 'things with buttons' },
+  { example: ['🧈', '🥚', '🌾'], correct: '🍯', distractors: ['🔨', '👟', '🚗'], category: 'things used for baking' },
+  { example: ['🎈', '🎉', '🎁'], correct: '🎊', distractors: ['🚗', '🔨', '📚'], category: 'things at a party' },
+  { example: ['⛷️', '🏂', '⛸️'], correct: '🛷', distractors: ['🏄', '🏖️', '🍦'], category: 'winter sports' },
 ]
 
 // Categories too abstract (or with tricky traps) for a 1st grader.

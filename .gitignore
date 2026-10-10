@@ -12,6 +12,12 @@ dist
 dist-ssr
 *.local
 
+# TTS setup for scripts/generate_audio.py (see its header comment) — large,
+# re-downloadable, environment-specific.
+.venv-tts/
+vits-piper-*/
+vits-piper-*.tar.bz2
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
