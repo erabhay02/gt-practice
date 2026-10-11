@@ -3,27 +3,34 @@
 Live app: https://thinksprout.pages.dev and https://erabhay02.github.io/gt-practice/ (both auto-deploy on every push to `main`; tests must pass first). iPhone/iPad: TestFlight.
 
 ## Content expansion (2026-10-10, in progress — committed locally, not pushed)
-- [ ] **Phase 1 of a broader improvement/expansion plan** (full plan: ask to see it, or
+- [x] **Phase 1 of a broader improvement/expansion plan** (full plan: ask to see it, or
   it covers — in order — content depth, privacy-safe usage insight, CogAT Levels 11/12,
   score context, an accessibility pass, OLSAT/NNAT3, growth/referral, then monetization
-  and a classroom tier last, as requested). Today's slice: **38 new hand-authored items**
-  across all 6 content banks (`src/content/banks/`) — 6 picture-analogy, 6
-  picture-classification, 6 sentence-completion (new audio recorded locally via
-  `scripts/generate_audio.py`'s Piper TTS setup), 8 verbal-analogy, 6
-  verbal-classification, 6 sentence-reading. Every item appended at the true end of its
-  file's `RAW_ITEMS` array (never interleaved) so existing items keep their index-based
-  ids — real kids' "already seen" exclusion history depends on that. Updated the grade
-  1/2 locked-content fingerprint test (`locked-grades.regression.test.ts`) to the new,
-  intentional hashes. Full suite (151 tests) passing, including the audio-coverage
-  check.
-- [ ] **Still well short of "double every bank"** — this was ~40% more than the previous
-  ~90-item baseline on the picture-based banks, less on the verbal ones. Real CogAT-
-  quality item authoring (one unambiguous answer, well-chosen distractors, age-
-  appropriate) is inherently slow; continuing this is its own standing task, not a
-  one-session job.
-- [ ] Waiting on tonight's planned push + the Android/iOS build-and-submit cycle that
-  goes with it (content changes alone don't need a native rebuild, but bundling with
-  whatever else ships tonight was the plan).
+  and a classroom tier last, as requested). Six rounds of hand-authored additions across
+  all 6 content banks (`src/content/banks/`), each appended at the true end of its file's
+  `RAW_ITEMS` array (never interleaved) so existing items keep their index-based ids —
+  real kids' "already seen" exclusion history depends on that. Current counts vs. the
+  original baseline (doubling target in parens):
+  - verbal-analogy: 142/142 — exact 2x, done
+  - verbal-classification: 110/110 — exact 2x, done
+  - sentence-reading: 116/116 — exact 2x, done
+  - picture-analogy: 142/182
+  - picture-classification: 92/132
+  - sentence-completion: 111/148 (new audio recorded locally via
+    `scripts/generate_audio.py`'s offline Piper TTS pipeline each round)
+  Updated the grade 1/2 locked-content fingerprint test
+  (`locked-grades.regression.test.ts`) each round it touched grade 1/2 content. Full
+  suite (151 tests) passing, including the audio-coverage check.
+- [ ] **The three emoji/picture-based banks are still short of "double."** Fresh,
+  unambiguous, single-concept emoji are a scarcer resource than English vocabulary —
+  that's why the three word-based (verbal) banks hit their exact 2x targets first while
+  the picture-based ones are still at 78%/70%/75%. Real CogAT-quality item authoring (one
+  unambiguous answer, well-chosen distractors, age-appropriate, logically sound) is
+  inherently slow at this point; continuing to close the gap on these three is its own
+  standing task, not a one-session job.
+- [ ] Waiting on a future push + the Android/iOS build-and-submit cycle that goes with it
+  (content changes alone don't need a native rebuild, but bundling with whatever else
+  ships was the plan).
 
 ## Next up — needs a parent
 - [ ] Custom domain **thinksprout.astrala.us**: wait until the Astrala site / Nexus AI move is done (handled in a separate project), then Cloudflare → Workers & Pages → thinksprout → Custom domains → add it
