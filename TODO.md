@@ -30,7 +30,25 @@ Live app: https://thinksprout.pages.dev and https://erabhay02.github.io/gt-pract
 - [ ] Waiting on a future push + the Android/iOS build-and-submit cycle that goes with it
   (content changes alone don't need a native rebuild, but bundling with whatever else
   ships was the plan).
-- [ ] Phase 2 next (privacy-safe usage insight — see the full plan).
+- [x] **Phase 2, fully complete (2026-10-10): privacy-safe usage insight.** Migration
+  `supabase/migrations/0003_usage_insights.sql` adds a security-definer function
+  `public.usage_insights()` (same pattern as `has_access()` in `0001_init.sql`) that
+  rolls the existing `sessions` table up into weekly counts by grade/sub_type/kind. No
+  `parent_id`, `child_id`, session id, or child name/avatar in the output, and a
+  `having count(*) >= 3` clause so a single family's activity can't be singled out from
+  a sparse bucket. Applied to the live `thinksprout` project and verified directly:
+  - `select * from usage_insights();` returns only aggregate rows — ran it live and got
+    exactly one row (grade 2, paper-folding, practice, 3 sessions, 62.5% avg accuracy);
+    every other grade/sub_type/kind bucket is still below the suppression threshold on
+    the current small dataset, which is itself a sign the suppression is doing its job.
+  - `information_schema.routine_privileges` confirms EXECUTE is granted only to
+    `postgres` and `service_role` — no `anon`/`authenticated` grant, so the app's public
+    keys cannot call it at all. Owner-only, as intended; no app code calls this.
+  - `public/privacy.html` updated with an honest disclosure that aggregate,
+    de-identified usage counts are reviewed internally, and the "last updated" date
+    bumped to October 10, 2026.
+  Exposure is the SQL editor only for now (per the plan: "start with the SQL-editor
+  route; build UI only if that proves insufficient") — no admin UI built.
 
 ## Next up — needs a parent
 - [ ] Custom domain **thinksprout.astrala.us**: wait until the Astrala site / Nexus AI move is done (handled in a separate project), then Cloudflare → Workers & Pages → thinksprout → Custom domains → add it
