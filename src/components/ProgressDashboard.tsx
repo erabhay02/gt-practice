@@ -162,7 +162,7 @@ export function ProgressDashboard({ profile }: { profile: ChildProfile }) {
           Recent % = last 3 sessions. Green is {FOCUS_THRESHOLD}%+. Difficulty adjusts automatically as scores improve.
         </p>
         <p className="text-center text-xs font-medium text-slate-500">
-          This is a practice score, not a CogAT score — it only tracks how many of today's questions {profile.name} got right.
+          This is a practice score, not a CogAT score — it only tracks how many practice questions {profile.name} got right.
         </p>
         <details className="rounded-2xl bg-white p-4 text-sm shadow-sm">
           <summary className="cursor-pointer font-medium text-slate-700">What does a real CogAT score look like?</summary>

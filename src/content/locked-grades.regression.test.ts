@@ -24,7 +24,10 @@ const EXPECTED: Partial<Record<Grade, Record<string, string>>> = {
     // 2026-10-10 (Phase 5, accessibility): shapePalette.ts's COLORS swapped
     // to a colorblind-safe palette (the old one had a near-total blue/purple
     // collision and a hard green/amber collision under simulated CVD).
-    generateMatrixQuestion: '33fa4bce2893bfe5',
+    // generateMatrixQuestion updated again 2026-10-10: rotation items (arrow/
+    // triangle only) sometimes got a distractor with no shape type, shown as
+    // an empty answer tile; that candidate is now skipped.
+    generateMatrixQuestion: '4dff4c97951b3250',
     generateFigureClassificationQuestion: '534c162ee9f5ac7d',
     generatePaperFoldingQuestion: '8381f251f272c499',
     generateNumberAnalogyQuestion: '70ae83bf0890f84e',

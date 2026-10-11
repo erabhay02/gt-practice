@@ -1,4 +1,4 @@
-import { useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
 import { getQuestionPool, subtypesForGrade } from '../content/contentLoader'
 import type { Question, SubType } from '../content/types'
@@ -24,17 +24,22 @@ export function PracticeSession() {
   const questions = useMemo<Question[]>(() => {
     if (!info || !profile) return []
     const progress = useProgressStore.getState().byProfile[profile.id]
-    const pool = getQuestionPool(
+    return getQuestionPool(
       info.subType,
       progress ? difficultyForSubType(progress, info.subType) : 1,
       SESSION_LENGTH,
       progress ? recentlyShownIds(progress, info.subType) : [],
       profile.grade,
     )
-    recordShownQuestions(profile.id, info.subType, pool.map((q) => q.id))
-    return pool
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [info?.subType, profile?.id])
+
+  // Recorded in an effect, not during render: updating the store while
+  // rendering makes React warn about setState in another component's render.
+  useEffect(() => {
+    if (profile && info && questions.length) recordShownQuestions(profile.id, info.subType, questions.map((q) => q.id))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [questions])
 
   if (!profile) return <Navigate to="/who" replace />
   if (!info || questions.length === 0) return <Navigate to="/" replace />

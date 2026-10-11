@@ -125,11 +125,17 @@ export function MockTest() {
       const recent = progress ? recentlyShownIds(progress, info.subType) : []
       const questions = getRampedQuestions(info.subType, count, recent, profile.grade)
       const [sample] = getQuestionPool(info.subType, 1, 1, [...recent, ...questions.map((q) => q.id)], profile.grade)
-      recordShownQuestions(profile.id, info.subType, [sample, ...questions].map((q) => q.id))
       return { info, questions, sample, seconds: partSeconds(count, mode, profile.grade) }
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode, profile?.id])
+
+  // Recorded in an effect, not during render (see PracticeSession).
+  useEffect(() => {
+    if (!profile) return
+    for (const b of blocks) recordShownQuestions(profile.id, b.info.subType, [b.sample, ...b.questions].map((q) => q.id))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [blocks])
 
   const [blockIdx, setBlockIdx] = useState(0)
   const [qIdx, setQIdx] = useState(0)

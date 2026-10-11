@@ -35,6 +35,18 @@ describe('generateMatrixQuestion (2x2 analogy, like CogAT Level 8)', () => {
     }
   })
 
+  it('every shape has a type at every grade (an untyped spec renders as an empty tile)', () => {
+    for (const grade of [0, 1, 2, 3, 4, 5, 6] as const) {
+      for (const seed of seeds) {
+        for (const d of [1, 2, 3] as const) {
+          const q = generateMatrixQuestion(d, seed, grade)
+          const shapes = [...q.choices.map((c) => c.content), ...q.promptVisual!.flat()].filter((c) => c.kind === 'shape')
+          for (const c of shapes) expect(spec(c).type, `grade ${grade} d${d} seed ${seed}`).toBeTruthy()
+        }
+      }
+    }
+  })
+
   it('the top-row change is always visible', () => {
     for (const seed of seeds) {
       const q = generateMatrixQuestion(1, seed)

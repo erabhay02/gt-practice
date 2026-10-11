@@ -213,7 +213,11 @@ function buildDistractors(rng: RngFn, item: ReturnType<typeof buildItem>): Shape
   candidates.push(apply(c, transforms.map((t, i) => (i === wrongIdx ? wrongVersion(rng, t, c, fills) : t))))
 
   candidates.push(b)
-  candidates.push({ ...d, type: pickOne(rng, typePool.filter((t) => t !== d.type && t !== b.type)) })
+  // A two-shape pool (1st-grade rotation items: arrow/triangle) has no third
+  // type left, and an undefined type renders as an empty tile. Still draw from
+  // rng so every other item's sequence stays the same.
+  const otherType = pickOne(rng, typePool.filter((t) => t !== d.type && t !== b.type))
+  if (otherType) candidates.push({ ...d, type: otherType })
   candidates.push(c)
   candidates.push(apply(c, transforms.map((t) => wrongVersion(rng, t, c, fills))))
 

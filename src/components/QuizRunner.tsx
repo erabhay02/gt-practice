@@ -78,10 +78,12 @@ export function QuizRunner({ title, questions, explanationFor, onFinish, finishe
     const ratio = correctCount / questions.length
     const stars = ratio >= 0.85 ? 3 : ratio >= 0.6 ? 2 : 1
     const skipped = questions.length - Object.keys(answers).length
+    // Same 2-star line the confetti and cheering mascot use.
+    const passed = stars >= 2
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-5 bg-cream p-6 text-center">
-        {(stars >= 2 || milestoneStreak) && <Confetti />}
-        <Mascot mood={stars >= 2 || milestoneStreak ? 'cheer' : 'happy'} size={140} float />
+        {(passed || milestoneStreak) && <Confetti />}
+        <Mascot mood={passed || milestoneStreak ? 'cheer' : 'happy'} size={140} float />
         {milestoneStreak && (
           <p className="animate-pop rounded-full bg-sun-300 px-4 py-1.5 font-display text-lg font-semibold text-ink shadow-sm">
             🔥 {milestoneStreak}-day streak!
@@ -94,11 +96,12 @@ export function QuizRunner({ title, questions, explanationFor, onFinish, finishe
             </span>
           ))}
         </div>
-        <h2 className="font-display text-3xl font-semibold text-ink">{finishedMessage ?? 'Great job!'}</h2>
+        <h2 className="font-display text-3xl font-semibold text-ink">{finishedMessage ?? (passed ? 'Great job!' : 'Nice try!')}</h2>
         <p className="font-display text-xl text-slate-600">
           You got {correctCount} out of {questions.length} right.
           {skipped > 0 && <span className="block text-base text-sun-600">({skipped} skipped)</span>}
         </p>
+        {!passed && <p className="text-slate-600">Every try helps your brain grow. Let's practice again!</p>}
         <div className="flex gap-3">
           <KidButton variant="white" onClick={() => navigate(0)}>
             Again

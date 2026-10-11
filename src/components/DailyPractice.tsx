@@ -1,4 +1,4 @@
-import { useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { Navigate } from 'react-router-dom'
 import { subtypeInfo } from '../content/contentLoader'
 import { buildDailyQuestions } from '../state/dailyPlan'
@@ -22,13 +22,18 @@ export function DailyPractice() {
   const questions = useMemo(() => {
     if (!profile) return []
     const progress = useProgressStore.getState().byProfile[profile.id] ?? EMPTY_PROGRESS
-    const qs = buildDailyQuestions(progress, profile.grade, todayStr())
-    for (const subType of new Set(qs.map((q) => q.subType))) {
-      recordShownQuestions(profile.id, subType, qs.filter((q) => q.subType === subType).map((q) => q.id))
-    }
-    return qs
+    return buildDailyQuestions(progress, profile.grade, todayStr())
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile?.id])
+
+  // Recorded in an effect, not during render (see PracticeSession).
+  useEffect(() => {
+    if (!profile) return
+    for (const subType of new Set(questions.map((q) => q.subType))) {
+      recordShownQuestions(profile.id, subType, questions.filter((q) => q.subType === subType).map((q) => q.id))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [questions])
 
   if (!profile) return <Navigate to="/who" replace />
 

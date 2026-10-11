@@ -145,7 +145,11 @@ export const useProgressStore = create<ProgressState>()(
           update(profileId, (p) => ({
             shownQuestionIds: {
               ...p.shownQuestionIds,
-              [subType]: [...(p.shownQuestionIds[subType] ?? []), ...ids].slice(-MAX_SHOWN_IDS_PER_SUBTYPE),
+              // Idempotent: re-recording the same ids (React StrictMode runs
+              // effects twice in dev) moves them to the end instead of duplicating.
+              [subType]: [...(p.shownQuestionIds[subType] ?? []).filter((id) => !ids.includes(id)), ...ids].slice(
+                -MAX_SHOWN_IDS_PER_SUBTYPE,
+              ),
             },
           })),
         recordDailyPlanDone: (profileId) =>
