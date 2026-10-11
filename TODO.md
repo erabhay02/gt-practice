@@ -79,6 +79,24 @@ Live app: https://thinksprout.pages.dev and https://erabhay02.github.io/gt-pract
     `grade >= 0 AND grade <= 6`). The app's grade picker now genuinely lets a parent
     select 5th/6th grade for a real child end to end.
 
+- [x] **Phase 4, fully complete (2026-10-10): score context.** Researched first, per
+  the plan's own bar: Riverside publishes the general CogAT score *scale* (Standard
+  Age Score mean 100/SD 16, Age Percentile Rank 1–99, stanine breakdown) in
+  parent-facing explainer PDFs, but the actual age-adjusted norm tables are
+  proprietary and never published — there's no legitimate way to translate
+  ThinkSprout's own practice-accuracy percentage into a real percentile, since
+  practice items aren't age-normed against a national sample. Took the plan's
+  explicit fallback instead of inventing a fake calibration: `ProgressDashboard.tsx`
+  now shows an always-visible "this is a practice score, not a CogAT score"
+  disclaimer right below the score legend (there was previously none anywhere near
+  the actual score display — only a generic trademark note on a separate Settings
+  screen), plus a collapsible "What does a real CogAT score look like?" explainer
+  with genuinely useful, publicly sourced context on the SAS/percentile scale, so
+  parents have something real to calibrate against once they get an actual school
+  report. `tsc -b` clean, full suite (151 tests) passing, dev server boots cleanly.
+  **Not verified in an actual browser session** (no browser automation tool
+  available) — worth a quick manual look in Parent Area → Progress before shipping.
+
 ## Next up — needs a parent
 - [ ] Custom domain **thinksprout.astrala.us**: wait until the Astrala site / Nexus AI move is done (handled in a separate project), then Cloudflare → Workers & Pages → thinksprout → Custom domains → add it
 - [ ] Sign in on every device the kids already use **at the github.io link** (uploads their local progress) before switching addresses
