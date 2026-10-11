@@ -1,12 +1,14 @@
 import { useState, type FormEvent, type ReactNode } from 'react'
+import { Capacitor } from '@capacitor/core'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { friendlyError, useAuthStore } from '../../cloud/authStore'
 import { supabase } from '../../cloud/supabase'
 import { Mascot } from '../../ui/Mascot'
+import { Landing } from '../Landing'
 
-export const PRIVACY_URL = `${import.meta.env.BASE_URL}privacy.html`
-export const TERMS_URL = `${import.meta.env.BASE_URL}terms.html`
+import { PRIVACY_URL, TERMS_URL } from '../../ui/legalLinks'
 
-type Step = 'signIn' | 'signUp' | 'verify' | 'forgot' | 'reset'
+export type Step = 'signIn' | 'signUp' | 'verify' | 'forgot' | 'reset'
 
 // Supabase email codes are 6–10 digits depending on the project's setting.
 const MIN_CODE = 6
@@ -17,10 +19,15 @@ const input = 'w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 te
 const primary = 'w-full rounded-xl bg-sprout-500 py-3 font-semibold text-white disabled:opacity-50'
 const linkBtn = 'text-sm font-semibold text-sprout-700 underline'
 
-function Shell({ title, subtitle, children }: { title: string; subtitle?: string; children: ReactNode }) {
+function Shell({ title, subtitle, children, onBack }: { title: string; subtitle?: string; children: ReactNode; onBack?: () => void }) {
   return (
     <div className="min-h-screen bg-cream px-5 py-8">
       <div className="mx-auto flex max-w-sm flex-col items-center gap-3">
+        {onBack && (
+          <button onClick={onBack} className="self-start font-display text-base text-slate-500">
+            ← About ThinkSprout
+          </button>
+        )}
         <Mascot size={96} float />
         <p className="font-display text-2xl font-semibold text-ink">ThinkSprout</p>
         <div className="w-full rounded-2xl bg-white p-5 shadow-sm">
@@ -64,9 +71,9 @@ function useAction() {
 const ErrorText = ({ error }: { error: string | null }) =>
   error ? <p className="mt-3 rounded-lg bg-red-50 p-2 text-sm text-red-700">{error}</p> : null
 
-export function AuthScreens() {
+export function AuthScreens({ initialStep = 'signIn', onBack }: { initialStep?: Step; onBack?: () => void }) {
   const auth = useAuthStore()
-  const [step, setStep] = useState<Step>('signIn')
+  const [step, setStep] = useState<Step>(initialStep)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [invite, setInvite] = useState('')
@@ -88,7 +95,7 @@ export function AuthScreens() {
 
   if (step === 'signIn') {
     return (
-      <Shell title="Sign in" subtitle="Welcome back! Sign in to practice and keep progress in sync.">
+      <Shell title="Sign in" subtitle="Welcome back! Sign in to practice and keep progress in sync." onBack={onBack}>
         <form
           className="flex flex-col gap-3"
           onSubmit={submit(async () => {
@@ -126,7 +133,7 @@ export function AuthScreens() {
 
   if (step === 'signUp') {
     return (
-      <Shell title="Create a parent account" subtitle="ThinkSprout is invite-only for now. Enter the invite code you received.">
+      <Shell title="Create a parent account" subtitle="ThinkSprout is invite-only for now. Enter the invite code you received." onBack={onBack}>
         <form
           className="flex flex-col gap-3"
           onSubmit={submit(async () => {
@@ -259,9 +266,26 @@ export function WaitingForInvite() {
 }
 
 /** Shows sign-in until the parent is signed in with access (only in cloud builds). */
+// The phone apps skip the public welcome page and open on sign-in.
+const isWeb = !Capacitor.isNativePlatform()
+
 export function AuthGate({ children }: { children: ReactNode }) {
   const status = useAuthStore((s) => s.status)
   const hasAccess = useAuthStore((s) => s.hasAccess)
+  const location = useLocation()
+  const navigate = useNavigate()
+  // Which sign-in screen a signed-out web visitor picked on the welcome page.
+  const [authStep, setAuthStep] = useState<Step | null>(null)
+  const inApp = status === 'disabled' || (status === 'signedIn' && hasAccess)
+
+  // #/welcome shows the welcome page to anyone (e.g. links from astrala.us).
+  if (location.pathname === '/welcome') {
+    const open = (step: Step) => {
+      if (!inApp) setAuthStep(step)
+      navigate('/', { replace: true })
+    }
+    return <Landing signedIn={inApp} onGetStarted={() => open('signUp')} onSignIn={() => open('signIn')} />
+  }
   if (status === 'disabled') return <>{children}</>
   if (status === 'loading') {
     return (
@@ -270,7 +294,12 @@ export function AuthGate({ children }: { children: ReactNode }) {
       </div>
     )
   }
-  if (status === 'signedOut') return <AuthScreens />
+  if (status === 'signedOut') {
+    if (isWeb && authStep === null) {
+      return <Landing signedIn={false} onGetStarted={() => setAuthStep('signUp')} onSignIn={() => setAuthStep('signIn')} />
+    }
+    return <AuthScreens key={authStep ?? 'signIn'} initialStep={authStep ?? 'signIn'} onBack={isWeb ? () => setAuthStep(null) : undefined} />
+  }
   if (!hasAccess) return <WaitingForInvite />
   return <>{children}</>
 }

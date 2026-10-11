@@ -1,7 +1,7 @@
 import { useState, type ReactNode } from 'react'
 import { friendlyError, useAuthStore } from '../../cloud/authStore'
 import { cloudEnabled } from '../../cloud/supabase'
-import { PRIVACY_URL, TERMS_URL } from './AuthScreens'
+import { PRIVACY_URL, TERMS_URL } from '../../ui/legalLinks'
 
 function Card({ title, children }: { title: string; children: ReactNode }) {
   return (
