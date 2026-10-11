@@ -161,6 +161,19 @@ export function ProgressDashboard({ profile }: { profile: ChildProfile }) {
         <p className="text-center text-xs text-slate-400">
           Recent % = last 3 sessions. Green is {FOCUS_THRESHOLD}%+. Difficulty adjusts automatically as scores improve.
         </p>
+        <p className="text-center text-xs font-medium text-slate-500">
+          This is a practice score, not a CogAT score — it only tracks how many of today's questions {profile.name} got right.
+        </p>
+        <details className="rounded-2xl bg-white p-4 text-sm shadow-sm">
+          <summary className="cursor-pointer font-medium text-slate-700">What does a real CogAT score look like?</summary>
+          <p className="mt-2 text-xs text-slate-500">
+            The real test doesn't report a percentage correct. Schools get back a Standard Age Score (100 is typical for a
+            child's age) and an Age Percentile Rank from 1 to 99 — a percentile rank of 70 means a child did as well as or
+            better than 70% of other kids the same age nationally. There's no public way to translate a ThinkSprout practice
+            percentage into those numbers, so please don't read a high or low practice score here as a preview of the real one
+            — it isn't.
+          </p>
+        </details>
       </div>
     </div>
   )
