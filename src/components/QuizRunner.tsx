@@ -16,6 +16,10 @@ interface Props {
   // Called once, when the child taps Finish on the last question.
   onFinish: (answers: Answers) => void
   finishedMessage?: string
+  // True only for a child's very first-ever session (no sessions recorded
+  // yet): shows a one-time "how this works" screen before question 1. Every
+  // later session — this subtype or any other — skips straight to the quiz.
+  showWelcome?: boolean
 }
 
 export function QuizHeader({ title, index, total, onExit }: { title: string; index: number; total: number; onExit: () => void }) {
@@ -36,13 +40,14 @@ export function QuizHeader({ title, index, total, onExit }: { title: string; ind
   )
 }
 
-export function QuizRunner({ title, questions, explanationFor, onFinish, finishedMessage }: Props) {
+export function QuizRunner({ title, questions, explanationFor, onFinish, finishedMessage, showWelcome }: Props) {
   const navigate = useNavigate()
   const { speak, stop, speaking, problem, isSupported } = useSpeech()
   const [index, setIndex] = useState(0)
   // First answer per question; it's what counts, and Previous shows it again.
   const [answers, setAnswers] = useState<Answers>({})
   const [complete, setComplete] = useState(false)
+  const [welcomeSeen, setWelcomeSeen] = useState(false)
 
   const current = questions[index]
   const selected = answers[index] ?? null
@@ -50,6 +55,20 @@ export function QuizRunner({ title, questions, explanationFor, onFinish, finishe
 
   // Read aloud only on request; stop any reading when the question changes.
   useEffect(() => stop, [index, stop])
+
+  if (showWelcome && !welcomeSeen) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-cream p-6 text-center">
+        <Mascot mood="happy" size={120} float />
+        <h2 className="font-display text-3xl font-semibold text-ink">Let's practice!</h2>
+        <p className="text-slate-600">
+          Tap the answer you think is right. I'll tell you right away if you got it, and why. See a speaker button? Tap it
+          to hear the question again. You don't have to get every one right — that's how we learn!
+        </p>
+        <KidButton onClick={() => setWelcomeSeen(true)}>Let's go!</KidButton>
+      </div>
+    )
+  }
 
   if (complete) {
     const ratio = correctCount / questions.length

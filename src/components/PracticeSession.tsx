@@ -3,7 +3,7 @@ import { Navigate, useParams } from 'react-router-dom'
 import { getQuestionPool, subtypesForGrade } from '../content/contentLoader'
 import type { Question, SubType } from '../content/types'
 import { useActiveProfile } from '../state/profilesStore'
-import { difficultyForSubType, recentlyShownIds, useProgressStore } from '../state/progressStore'
+import { difficultyForSubType, recentlyShownIds, useProfileProgress, useProgressStore } from '../state/progressStore'
 import { QuizRunner } from './QuizRunner'
 
 const SESSION_LENGTH = 8
@@ -11,6 +11,7 @@ const SESSION_LENGTH = 8
 export function PracticeSession() {
   const { subtype } = useParams<{ domain: string; subtype: SubType }>()
   const profile = useActiveProfile()
+  const neverPracticed = useProfileProgress(profile?.id).sessions.length === 0
   const recordSession = useProgressStore((s) => s.recordSession)
   const recordShownQuestions = useProgressStore((s) => s.recordShownQuestions)
   const info = profile ? subtypesForGrade(profile.grade).find((s) => s.subType === subtype) : undefined
@@ -38,6 +39,7 @@ export function PracticeSession() {
       title={info.label}
       questions={questions}
       explanationFor={(q) => q.explanationAudioText ?? info.tip}
+      showWelcome={neverPracticed}
       onFinish={(answers) =>
         recordSession(profile.id, {
           subType: info.subType,

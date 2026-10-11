@@ -3,12 +3,13 @@ import { Navigate } from 'react-router-dom'
 import { subtypeInfo } from '../content/contentLoader'
 import { buildDailyQuestions } from '../state/dailyPlan'
 import { useActiveProfile } from '../state/profilesStore'
-import { EMPTY_PROGRESS, todayStr, useProgressStore } from '../state/progressStore'
+import { EMPTY_PROGRESS, todayStr, useProfileProgress, useProgressStore } from '../state/progressStore'
 import { QuizRunner } from './QuizRunner'
 
 /** "Today's practice": a short mix weighted toward the child's weakest parts. */
 export function DailyPractice() {
   const profile = useActiveProfile()
+  const neverPracticed = useProfileProgress(profile?.id).sessions.length === 0
   const recordSession = useProgressStore((s) => s.recordSession)
   const recordShownQuestions = useProgressStore((s) => s.recordShownQuestions)
   const recordDailyPlanDone = useProgressStore((s) => s.recordDailyPlanDone)
@@ -32,6 +33,7 @@ export function DailyPractice() {
       questions={questions}
       explanationFor={(q) => q.explanationAudioText ?? subtypeInfo(q.subType, profile.grade)?.tip}
       finishedMessage="Today's practice is done!"
+      showWelcome={neverPracticed}
       onFinish={(answers) => {
         const now = new Date().toISOString()
         for (const subType of new Set(questions.map((q) => q.subType))) {
