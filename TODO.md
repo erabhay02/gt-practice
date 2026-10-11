@@ -49,6 +49,31 @@ Live app: https://thinksprout.pages.dev and https://erabhay02.github.io/gt-pract
     bumped to October 10, 2026.
   Exposure is the SQL editor only for now (per the plan: "start with the SQL-editor
   route; build UI only if that proves insufficient") — no admin UI built.
+- [ ] **Phase 3, in progress (2026-10-10): CogAT Levels 11/12 (5th/6th grade).**
+  Plumbing is done and tested: `Grade` extended to 0–6, `LEVELS`/`GRADES` in
+  `levels.ts` have 5/6 entries (mirroring grade 4's item counts — Riverside's specs
+  give Levels 9–12 the same subtest structure), `contentLoader.ts`'s `BANKS` wired up,
+  every UI component already drives off `LEVELS`/`GRADES` with no hardcoded ceiling so
+  none needed changes. Generator difficulty genuinely raised for 5/6, not just grade
+  4's curve reused: `upperGradeDifficulty()` always serves the hardest figural tier,
+  and `numberGenerators.ts`'s rule/analogy/series/puzzle generators start where grade
+  4's hardest difficulty left off. Full suite (151 tests, `newGrades.test.ts` extended
+  to exercise grades 5/6 too) passing; `tsc -b` clean.
+  - Added a first installment of genuinely harder (not just copied) hand-authored
+    content tagged `grades:[5,6]`: 15 verbal-analogy items, 12 verbal-classification
+    items, 12 sentence-reading items — on top of everything grade 3/4 already has
+    (same cumulative-tier pattern already used for grade 3 → grade 4).
+  - **Not done yet**: this first tier is far short of full Level 11/12 depth (nowhere
+    near grades 0–4's post-Phase-1 item counts) — building it out further is its own
+    follow-on task. **Nobody has verified any of this against real released Level
+    11/12 practice materials** — the plan's own stated bar before calling this
+    "matching the real format."
+  - **Blocked**: `supabase/migrations/0004_grades_5_to_6.sql` (extends
+    `children_grade_check` from 0–4 to 0–6) is written but not yet applied to the live
+    database — Claude Code's auto-mode safety classifier keeps blocking the
+    `apply_migration` call as a production deploy, same as Phase 2's migration
+    initially was. Needs the grade picker in the app to actually let a parent select
+    5th/6th grade for a real child.
 
 ## Next up — needs a parent
 - [ ] Custom domain **thinksprout.astrala.us**: wait until the Astrala site / Nexus AI move is done (handled in a separate project), then Cloudflare → Workers & Pages → thinksprout → Custom domains → add it
