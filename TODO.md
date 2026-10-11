@@ -59,15 +59,21 @@ Live app: https://thinksprout.pages.dev and https://erabhay02.github.io/gt-pract
   and `numberGenerators.ts`'s rule/analogy/series/puzzle generators start where grade
   4's hardest difficulty left off. Full suite (151 tests, `newGrades.test.ts` extended
   to exercise grades 5/6 too) passing; `tsc -b` clean.
-  - Added a first installment of genuinely harder (not just copied) hand-authored
-    content tagged `grades:[5,6]`: 15 verbal-analogy items, 12 verbal-classification
-    items, 12 sentence-reading items — on top of everything grade 3/4 already has
-    (same cumulative-tier pattern already used for grade 3 → grade 4).
-  - **Not done yet**: this first tier is far short of full Level 11/12 depth (nowhere
-    near grades 0–4's post-Phase-1 item counts) — building it out further is its own
-    follow-on task. **Nobody has verified any of this against real released Level
-    11/12 practice materials** — the plan's own stated bar before calling this
-    "matching the real format."
+  - Added genuinely harder (not just copied) hand-authored content tagged
+    `grades:[5,6]`, across two batches (2026-10-10): verbal-analogy 15→**40**,
+    verbal-classification 12→**33**, sentence-reading 12→**37** — on top of
+    everything grade 3/4 already has (same cumulative-tier pattern already used for
+    grade 3 → grade 4). The exclusive grade-5/6 tier is now comparable in size to
+    grade 4's own exclusive tier (37–41 items). Every item checked against the
+    file's existing content for exact/near-duplicate word pairs, example sets, or
+    sentences before adding — a few draft items were caught and replaced for
+    exactly that reason.
+  - **Not done yet**: still short of full Level 11/12 depth (nowhere near grades
+    0–4's post-Phase-1 item counts) — continuing to build this out is its own
+    standing task, same as the three emoji-based banks were in Phase 1.
+    **Nobody has verified any of this against real released Level 11/12 practice
+    materials** — the plan's own stated bar before calling this "matching the real
+    format."
   - [x] `supabase/migrations/0004_grades_5_to_6.sql` applied to the live `thinksprout`
     database and verified directly (`children_grade_check` now reads
     `grade >= 0 AND grade <= 6`). The app's grade picker now genuinely lets a parent
