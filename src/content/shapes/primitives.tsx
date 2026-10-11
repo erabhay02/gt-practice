@@ -163,6 +163,9 @@ export function ShapeRenderer({ spec, className, scale = 1 }: { spec: ShapeSpec;
       </defs>
       {shapeElement(spec.type, c, r, paint)}
       {spec.color === DASHED_STROKE_COLOR &&
+        // Single shapes only: on 2–3 scaled-down copies any edge pattern reads
+        // as speckle, and those items differ by how many, not by color alone.
+        scale === 1 &&
         shapeElement(spec.type, c, r, { fill: 'none', stroke: 'white', strokeWidth: Math.max(1.5, paint.strokeWidth * 0.5), strokeDasharray: '3 3' })}
       {spec.nested && shapeElement(spec.nested, c, r * 0.38, { fill: 'white', stroke: MARK_COLOR, strokeWidth: 2 })}
       {!spec.nested && <InnerMark mark={spec.inner} c={c} r={r} />}

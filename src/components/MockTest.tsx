@@ -4,11 +4,12 @@ import {
   BATTERIES,
   getQuestionPool,
   getRampedQuestions,
-  subtypesForGrade,
+  testPlan,
   type SubtestInfo,
+  type TestPlan,
 } from '../content/contentLoader'
-import { LEVELS, mockLengthFor } from '../content/levels'
-import type { Choice, Grade, Question, SubType } from '../content/types'
+import { familyOf } from '../content/families'
+import type { Choice, Question, SubType } from '../content/types'
 import { useSpeech } from '../hooks/useSpeech'
 import { useActiveProfile } from '../state/profilesStore'
 import { recentlyShownIds, useProgressStore } from '../state/progressStore'
@@ -19,9 +20,9 @@ import { Mascot, MascotSays } from '../ui/Mascot'
 import { AnswerFeedback, QuestionNav, QuestionView } from './QuestionView'
 import { QuizHeader } from './QuizRunner'
 
-// Not an official figure (K–2 levels are officially untimed): a generous
-// per-item budget used only when a parent turns the timer on. Grades 3–4 use
-// the real per-part limit from LEVELS instead.
+// Not an official figure (K–2 CogAT and OLSAT practice here are untimed): a
+// generous per-item budget used only when a parent turns the timer on. CogAT
+// grades 3+ use the real per-part limit; NNAT3 splits its real 30 minutes.
 const SECONDS_PER_ITEM = 45
 const QUICK_ITEMS_PER_SUBTEST = 3
 
@@ -43,20 +44,34 @@ interface BlockResult {
 
 const minutes = (seconds: number) => `${Math.round(seconds / 60)} min`
 
-function partLength(subType: SubType, mode: Mode, grade: Grade): number {
-  return mode === 'quick' ? QUICK_ITEMS_PER_SUBTEST : mockLengthFor(grade, subType)
+function partLength(subType: SubType, mode: Mode, plan: TestPlan): number {
+  return mode === 'quick' ? QUICK_ITEMS_PER_SUBTEST : plan.mockLength(subType)
 }
 
-function partSeconds(count: number, mode: Mode, grade: Grade): number {
-  const official = LEVELS[grade].minutesPerPart
-  return official && mode !== 'quick' ? official * 60 : count * SECONDS_PER_ITEM
+function partSeconds(count: number, mode: Mode, plan: TestPlan): number {
+  if (mode === 'quick') return count * SECONDS_PER_ITEM
+  if (plan.minutesPerPart) return plan.minutesPerPart * 60
+  if (plan.totalMinutes) {
+    // One timed sitting: each part gets its share of the real total.
+    const total = plan.parts.reduce((n, s) => n + plan.mockLength(s.subType), 0)
+    return Math.round((plan.totalMinutes * 60 * count) / total)
+  }
+  return count * SECONDS_PER_ITEM
+}
+
+/** What the chooser says about timing on the real test. */
+function timingNote(plan: TestPlan, timed: boolean): string {
+  if (timed) return 'Each part is timed.'
+  if (plan.minutesPerPart) return `No timer today. On the real test, each part has ${plan.minutesPerPart} minutes.`
+  if (plan.totalMinutes) return `No timer today. On the real test, you have ${plan.totalMinutes} minutes for all the questions.`
+  return plan.family === 'olsat' ? 'No timer today. The real test takes up to about 75 minutes in all.' : 'No timer (like the real test at this age).'
 }
 
 export function MockTestChooser() {
   const profile = useActiveProfile()
   const timed = useSettingsStore((s) => s.timerEnabled)
   if (!profile) return <Navigate to="/who" replace />
-  const grade = profile.grade
+  const plan = testPlan(familyOf(profile), profile.grade)
 
   return (
     <div className="min-h-screen bg-cream p-5">
@@ -66,17 +81,12 @@ export function MockTestChooser() {
         </Link>
         <MascotSays mood="think">Practice tests are just like test day. Take your time and do your best!</MascotSays>
         <p className="px-1 text-sm text-slate-600">
-          Questions start easy and get harder. Each part begins with an example.{' '}
-          {timed
-            ? 'Each part is timed.'
-            : LEVELS[grade].minutesPerPart
-              ? `No timer today. On the real test, each part has ${LEVELS[grade].minutesPerPart} minutes.`
-              : 'No timer (like the real test at this age).'}
+          Questions start easy and get harder. Each part begins with an example. {timingNote(plan, timed)}
         </p>
-        {BATTERIES.map(({ domain, kidLabel, label, icon }) => {
-          const subtests = subtypesForGrade(grade).filter((s) => s.domain === domain)
-          const items = subtests.reduce((n, s) => n + partLength(s.subType, domain as Mode, grade), 0)
-          const seconds = subtests.reduce((n, s) => n + partSeconds(partLength(s.subType, domain as Mode, grade), domain as Mode, grade), 0)
+        {BATTERIES.filter(({ domain }) => plan.parts.some((s) => s.domain === domain)).map(({ domain, kidLabel, label, icon }) => {
+          const subtests = plan.parts.filter((s) => s.domain === domain)
+          const items = subtests.reduce((n, s) => n + partLength(s.subType, domain as Mode, plan), 0)
+          const seconds = subtests.reduce((n, s) => n + partSeconds(partLength(s.subType, domain as Mode, plan), domain as Mode, plan), 0)
           return (
             <Link
               key={domain}
@@ -96,7 +106,7 @@ export function MockTestChooser() {
         <Link to="/mock-test/quick" className={`${kidLinkClass('primary')} flex-col !items-start p-5 text-left`}>
           <span className="text-xl">⚡ Quick mixed test</span>
           <span className="text-sm font-normal text-sprout-50">
-            All 9 parts, {QUICK_ITEMS_PER_SUBTEST} questions each
+            All {plan.parts.length} parts, {QUICK_ITEMS_PER_SUBTEST} questions each
           </span>
         </Link>
       </div>
@@ -118,14 +128,14 @@ export function MockTest() {
   const blocks = useMemo<Block[]>(() => {
     if (!profile) return []
     const progress = useProgressStore.getState().byProfile[profile.id]
-    const parts = subtypesForGrade(profile.grade)
-    const infos = mode === 'quick' ? parts : parts.filter((s) => s.domain === mode)
+    const plan = testPlan(familyOf(profile), profile.grade)
+    const infos = mode === 'quick' ? plan.parts : plan.parts.filter((s) => s.domain === mode)
     return infos.map((info) => {
-      const count = partLength(info.subType, mode, profile.grade)
+      const count = partLength(info.subType, mode, plan)
       const recent = progress ? recentlyShownIds(progress, info.subType) : []
       const questions = getRampedQuestions(info.subType, count, recent, profile.grade)
       const [sample] = getQuestionPool(info.subType, 1, 1, [...recent, ...questions.map((q) => q.id)], profile.grade)
-      return { info, questions, sample, seconds: partSeconds(count, mode, profile.grade) }
+      return { info, questions, sample, seconds: partSeconds(count, mode, plan) }
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode, profile?.id])

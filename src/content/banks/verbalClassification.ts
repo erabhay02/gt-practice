@@ -112,7 +112,7 @@ const RAW_ITEMS: RawItem[] = [
   { example: ['ruler', 'scale', 'thermometer'], correct: 'gauge', distractors: ['hammer', 'pencil', 'spoon'], category: 'tools for measuring' },
   { example: ['guitar', 'violin', 'harp'], correct: 'banjo', distractors: ['drum', 'trumpet', 'flute'], category: 'instruments with strings' },
   // 4th grade only: finer distinctions, matching this file's existing grades:[4] bar.
-  { example: ['crust', 'mantle', 'core'], correct: 'atmosphere', distractors: ['ocean', 'volcano', 'mountain'], category: "layers of the Earth's structure", grades: [4, 5, 6] },
+  { example: ['crust', 'mantle', 'outer core'], correct: 'inner core', distractors: ['ocean', 'volcano', 'mountain'], category: "layers of the Earth's structure", grades: [4, 5, 6] },
   { example: ['ounce', 'pound', 'ton'], correct: 'gram', distractors: ['inch', 'gallon', 'mile'], category: 'units of weight', grades: [4, 5, 6] },
   // Sixth new batch (2026-10-10, Phase 1 continued) — same append-only rule as above.
   // This batch brings verbal-classification to the plan's "roughly double" target.
@@ -145,7 +145,7 @@ const RAW_ITEMS: RawItem[] = [
   // notch past the 4th-grade knowledge-classification tier above, same
   // cumulative, append-only pattern as verbalAnalogy.ts.
   { example: ['onomatopoeia', 'alliteration', 'idiom'], correct: 'allusion', distractors: ['noun', 'verb', 'adjective'], category: 'figures of speech', grades: [5, 6] },
-  { example: ['theocracy', 'oligarchy', 'communism'], correct: 'federalism', distractors: ['election', 'senate', 'mayor'], category: 'systems of government', grades: [5, 6] },
+  { example: ['theocracy', 'oligarchy', 'autocracy'], correct: 'aristocracy', distractors: ['election', 'senate', 'mayor'], category: 'forms of rule by a particular person or group', grades: [5, 6] },
   { example: ['protagonist', 'antagonist', 'narrator'], correct: 'foil', distractors: ['setting', 'plot', 'theme'], category: 'roles a character can play in a story', grades: [5, 6] },
   { example: ['equilateral', 'isosceles', 'scalene'], correct: 'right', distractors: ['circle', 'square', 'hexagon'], category: 'types of triangles', grades: [5, 6] },
   { example: ['mitosis', 'meiosis', 'binary fission'], correct: 'budding', distractors: ['photosynthesis', 'respiration', 'digestion'], category: 'ways cells or organisms reproduce', grades: [5, 6] },
@@ -160,12 +160,12 @@ const RAW_ITEMS: RawItem[] = [
   { example: ['acute', 'obtuse', 'right'], correct: 'reflex', distractors: ['circle', 'square', 'line'], category: 'types of angles', grades: [5, 6] },
   { example: ['tundra', 'savanna', 'rainforest'], correct: 'desert', distractors: ['ocean', 'river', 'lake'], category: 'biomes', grades: [5, 6] },
   { example: ['Jupiter', 'Saturn', 'Neptune'], correct: 'Mercury', distractors: ['Sun', 'Moon', 'comet'], category: 'planets in our solar system', grades: [5, 6] },
-  { example: ['proton', 'neutron', 'electron'], correct: 'quark', distractors: ['atom', 'molecule', 'ion'], category: 'parts of an atom', grades: [5, 6] },
+  { example: ['proton', 'neutron', 'electron'], correct: 'quark', distractors: ['atom', 'molecule', 'ion'], category: 'particles inside an atom', grades: [5, 6] },
   { example: ['femur', 'tibia', 'humerus'], correct: 'cranium', distractors: ['heart', 'lung', 'brain'], category: 'bones in the human body', grades: [5, 6] },
-  { example: ['Great Wall of China', 'Pyramids of Giza', 'Colosseum'], correct: 'Taj Mahal', distractors: ['Eiffel Tower', 'Statue of Liberty', 'Golden Gate Bridge'], category: 'ancient wonders of the world', grades: [5, 6] },
+  { example: ['Great Wall of China', 'Pyramids of Giza', 'Colosseum'], correct: 'Stonehenge', distractors: ['Eiffel Tower', 'Statue of Liberty', 'Golden Gate Bridge'], category: 'landmarks built in ancient times', grades: [5, 6] },
   { example: ['Picasso', 'Monet', 'Van Gogh'], correct: 'Rembrandt', distractors: ['Beethoven', 'Mozart', 'Shakespeare'], category: 'famous painters', grades: [5, 6] },
   { example: ['Beethoven', 'Mozart', 'Bach'], correct: 'Chopin', distractors: ['Picasso', 'Shakespeare', 'Einstein'], category: 'classical composers', grades: [5, 6] },
-  { example: ['tectonic plates', 'earthquakes', 'volcanoes'], correct: 'tsunamis', distractors: ['hurricanes', 'tornadoes', 'blizzards'], category: 'events caused by tectonic plate movement', grades: [5, 6] },
+  { example: ['earthquakes', 'volcanic eruptions', 'mountain building'], correct: 'tsunamis', distractors: ['hurricanes', 'tornadoes', 'blizzards'], category: 'events caused by moving tectonic plates', grades: [5, 6] },
   { example: ['exoskeleton', 'antennae', 'compound eyes'], correct: 'thorax', distractors: ['fur', 'feathers', 'scales'], category: 'insect body features', grades: [5, 6] },
   { example: ['Jurassic', 'Cretaceous', 'Triassic'], correct: 'Paleogene', distractors: ['Renaissance', 'Medieval', 'Victorian'], category: 'geological time periods', grades: [5, 6] },
   { example: ['prime number', 'composite number', 'even number'], correct: 'odd number', distractors: ['fraction', 'decimal', 'percentage'], category: 'ways to classify whole numbers', grades: [5, 6] },
@@ -178,9 +178,50 @@ const RAW_ITEMS: RawItem[] = [
   { example: ['x-axis', 'y-axis', 'origin'], correct: 'quadrant', distractors: ['radius', 'diameter', 'circumference'], category: 'parts of a coordinate plane', grades: [5, 6] },
   { example: ['hibernation', 'migration', 'camouflage'], correct: 'mimicry', distractors: ['domestication', 'extinction', 'pollination'], category: 'animal survival strategies', grades: [5, 6] },
   { example: ['stanza', 'rhyme scheme', 'meter'], correct: 'refrain', distractors: ['footnote', 'bibliography', 'index'], category: "a poem's structural parts", grades: [5, 6] },
+  // Third grade-5/6 batch (2026-10-10) — Phase 3 depth. Each set has one
+  // close trap that is related but outside the group (e.g. flute among brass).
+  { example: ['sonata', 'concerto', 'symphony'], correct: 'opera', distractors: ['orchestra', 'conductor', 'violin'], category: 'kinds of musical compositions', grades: [5, 6] },
+  { example: ['Nile', 'Amazon', 'Mississippi'], correct: 'Yangtze', distractors: ['Sahara', 'Andes', 'Pacific'], category: 'rivers', grades: [5, 6] },
+  { example: ['Africa', 'Asia', 'Europe'], correct: 'Antarctica', distractors: ['Canada', 'Egypt', 'Atlantic'], category: 'continents', grades: [5, 6] },
+  { example: ['perimeter', 'area', 'volume'], correct: 'circumference', distractors: ['triangle', 'ruler', 'graph'], category: 'measurements of shapes', grades: [5, 6] },
+  { example: ['sum', 'difference', 'product'], correct: 'quotient', distractors: ['equation', 'digit', 'fraction'], category: 'answers to arithmetic operations', grades: [5, 6] },
+  { example: ['pistil', 'stamen', 'petal'], correct: 'sepal', distractors: ['root', 'bark', 'seedling'], category: 'parts of a flower', grades: [5, 6] },
+  { example: ['amphibian', 'reptile', 'mammal'], correct: 'bird', distractors: ['insect', 'spider', 'worm'], category: 'classes of animals with backbones', grades: [5, 6] },
+  { example: ['magma', 'lava', 'ash'], correct: 'pumice', distractors: ['glacier', 'sand dune', 'coral'], category: 'materials from volcanoes', grades: [5, 6] },
+  { example: ['latitude', 'longitude', 'equator'], correct: 'prime meridian', distractors: ['compass', 'ocean', 'continent'], category: 'lines used to locate places on Earth', grades: [5, 6] },
+  { example: ['benevolent', 'compassionate', 'charitable'], correct: 'kindhearted', distractors: ['cruel', 'wealthy', 'famous'], category: 'words for kind', grades: [5, 6] },
+  { example: ['furious', 'irate', 'livid'], correct: 'enraged', distractors: ['annoyed', 'calm', 'sad'], category: 'words for very angry', grades: [5, 6] },
+  { example: ['meager', 'scant', 'sparse'], correct: 'scarce', distractors: ['plentiful', 'heavy', 'tall'], category: 'words for not enough', grades: [5, 6] },
+  { example: ['thrifty', 'frugal', 'economical'], correct: 'stingy', distractors: ['wasteful', 'generous', 'wealthy'], category: 'words for spending very little', grades: [5, 6] },
+  { example: ['parallelogram', 'rhombus', 'trapezoid'], correct: 'rectangle', distractors: ['triangle', 'pentagon', 'circle'], category: 'four-sided shapes', grades: [5, 6] },
+  { example: ['carbon dioxide', 'water vapor', 'methane'], correct: 'ozone', distractors: ['iron', 'salt', 'sand'], category: 'gases in the air that trap heat', grades: [5, 6] },
+  { example: ['ally', 'comrade', 'companion'], correct: 'partner', distractors: ['rival', 'stranger', 'enemy'], category: 'words for someone on your side', grades: [5, 6] },
+  { example: ['rival', 'opponent', 'adversary'], correct: 'foe', distractors: ['ally', 'teammate', 'friend'], category: 'words for someone against you', grades: [5, 6] },
+  { example: ['telescope', 'microscope', 'magnifying glass'], correct: 'binoculars', distractors: ['stethoscope', 'thermometer', 'compass'], category: 'tools with lenses for seeing', grades: [5, 6] },
+  { example: ['predator', 'prey', 'scavenger'], correct: 'decomposer', distractors: ['habitat', 'climate', 'forest'], category: 'roles in a food web', grades: [5, 6] },
+  { example: ['Washington', 'Lincoln', 'Jefferson'], correct: 'Roosevelt', distractors: ['Hamilton', 'Edison', 'Columbus'], category: 'U.S. presidents', grades: [5, 6] },
+  { example: ['Shakespeare', 'Dickens', 'Twain'], correct: 'Austen', distractors: ['Picasso', 'Mozart', 'Newton'], category: 'famous authors', grades: [5, 6] },
+  { example: ['liter', 'milliliter', 'kiloliter'], correct: 'centiliter', distractors: ['gram', 'meter', 'gallon'], category: 'metric units of volume', grades: [5, 6] },
+  { example: ['retina', 'cornea', 'iris'], correct: 'pupil', distractors: ['eardrum', 'tongue', 'nostril'], category: 'parts of the eye', grades: [5, 6] },
+  { example: ['hypothesis', 'experiment', 'conclusion'], correct: 'observation', distractors: ['opinion', 'rumor', 'story'], category: 'steps of the scientific method', grades: [5, 6] },
+  { example: ['trumpet', 'trombone', 'tuba'], correct: 'French horn', distractors: ['flute', 'drum', 'violin'], category: 'brass instruments', grades: [5, 6] },
+  { example: ['flute', 'clarinet', 'oboe'], correct: 'bassoon', distractors: ['trumpet', 'cymbal', 'harp'], category: 'woodwind instruments', grades: [5, 6] },
+  { example: ['kilobyte', 'megabyte', 'gigabyte'], correct: 'terabyte', distractors: ['kilometer', 'kilogram', 'pixel'], category: 'units of digital storage', grades: [5, 6] },
+  { example: ['savanna', 'prairie', 'steppe'], correct: 'pampas', distractors: ['jungle', 'glacier', 'reef'], category: 'grasslands', grades: [5, 6] },
+  { example: ['Mandarin', 'Spanish', 'Arabic'], correct: 'Hindi', distractors: ['Mexico', 'Asia', 'alphabet'], category: 'languages', grades: [5, 6] },
+  { example: ['coral reef', 'kelp forest', 'open ocean'], correct: 'tide pool', distractors: ['desert', 'tundra', 'meadow'], category: 'ocean habitats', grades: [5, 6] },
+  { example: ['reluctant', 'hesitant', 'unwilling'], correct: 'unenthusiastic', distractors: ['eager', 'ready', 'keen'], category: 'words for not wanting to do something', grades: [5, 6] },
+  { example: ['eloquent', 'articulate', 'fluent'], correct: 'well-spoken', distractors: ['mumbling', 'silent', 'loud'], category: 'words for speaking well', grades: [5, 6] },
+  { example: ['abolish', 'eliminate', 'eradicate'], correct: 'wipe out', distractors: ['create', 'repair', 'collect'], category: 'words for getting rid of completely', grades: [5, 6] },
+  { example: ['photosynthesis', 'respiration', 'transpiration'], correct: 'germination', distractors: ['erosion', 'magnetism', 'gravity'], category: 'processes in plants', grades: [5, 6] },
+  { example: ['Renaissance', 'Industrial Revolution', 'Middle Ages'], correct: 'Bronze Age', distractors: ['Jurassic', 'Cretaceous', 'Triassic'], category: 'periods in human history', grades: [5, 6] },
+  { example: ['viceroy', 'monarch', 'swallowtail'], correct: 'painted lady', distractors: ['beetle', 'dragonfly', 'moth'], category: 'kinds of butterflies', grades: [5, 6] },
 ]
 
-const gradesOf = (item: RawItem): Grade[] => item.grades ?? [3, 4, 5, 6]
+// Untagged items are the Level 9/10 baseline: 5th–6th grade (Levels 11/12)
+// get the harder [4, 5, 6] and [5, 6] tiers instead, so a 5th grader isn't
+// mostly served 3rd-grade words like "puppy : dog".
+const gradesOf = (item: RawItem): Grade[] => item.grades ?? [3, 4]
 
 export const VERBAL_CLASSIFICATION_PROMPT =
   'The three words in the top row are alike in some way. Which word below goes with them?'

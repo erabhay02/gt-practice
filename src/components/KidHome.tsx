@@ -1,5 +1,6 @@
 import { Link, Navigate } from 'react-router-dom'
-import { BATTERIES, subtypesForGrade } from '../content/contentLoader'
+import { BATTERIES, testPlan } from '../content/contentLoader'
+import { familyOf } from '../content/families'
 import { LEVELS } from '../content/levels'
 import type { Domain } from '../content/types'
 import { DAILY_PARTS, DAILY_QUESTIONS_PER_PART } from '../state/dailyPlan'
@@ -34,6 +35,7 @@ export function KidHome() {
   if (!profile) return <Navigate to="/who" replace />
 
   const doneToday = progress.dailyPlanDates.includes(todayStr())
+  const parts = testPlan(familyOf(profile), profile.grade).parts
   const days = daysUntil(profile.testDate)
   const stars = progress.sessions.reduce((n, s) => n + s.correct, 0)
   const greeting = doneToday
@@ -84,13 +86,13 @@ export function KidHome() {
           <Stat icon="📅" value={days !== null && days >= 0 ? days : '—'} label="days to test" />
         </div>
 
-        {BATTERIES.map(({ domain, kidLabel, icon }) => (
+        {BATTERIES.filter(({ domain }) => parts.some((s) => s.domain === domain)).map(({ domain, kidLabel, icon }) => (
           <section key={domain}>
             <h2 className={`mb-2 px-1 font-display text-xl font-semibold ${BATTERY_STYLE[domain].title}`}>
               {icon} {kidLabel}
             </h2>
             <div className="grid grid-cols-3 gap-3">
-              {subtypesForGrade(profile.grade).filter((s) => s.domain === domain).map((s) => (
+              {parts.filter((s) => s.domain === domain).map((s) => (
                 <Link
                   key={s.subType}
                   to={`/practice/${domain}/${s.subType}`}

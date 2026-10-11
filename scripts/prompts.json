@@ -1,5 +1,13 @@
 [
   {
+    "id": "5c964b20",
+    "text": "A garden has three rows of carrots with five carrots in each row. How many carrots are in the garden?"
+  },
+  {
+    "id": "7942696a",
+    "text": "A pack has six juice boxes. How many juice boxes are in three packs?"
+  },
+  {
     "id": "593eb2af",
     "text": "A piece of paper is folded along the dotted line. Then a hole is punched through it. When the paper is opened up, what will it look like?"
   },
@@ -20,20 +28,256 @@
     "text": "A piece of paper is folded two times. Then a hole is punched through it. When the paper is opened up, what will it look like?"
   },
   {
+    "id": "b47edae5",
+    "text": "A spider has eight legs. How many legs do two spiders have?"
+  },
+  {
+    "id": "5c396122",
+    "text": "After rain, when the sun comes out, what colorful thing might you see in the sky?"
+  },
+  {
+    "id": "73f7f3f2",
+    "text": "Ana picked one flower, then two more, then one more. Which box shows how many flowers Ana picked?"
+  },
+  {
+    "id": "02a3192d",
+    "text": "Ava has three red apples and four green apples. Ava gives away two apples. Which box shows how many apples Ava has left?"
+  },
+  {
+    "id": "405061a4",
+    "text": "Ben read nine pages yesterday and twice as many pages today. How many pages did Ben read today?"
+  },
+  {
+    "id": "6ebbc61c",
+    "text": "Each bike has two wheels. How many wheels do nine bikes have?"
+  },
+  {
+    "id": "be0d0f40",
+    "text": "Each dog has one bone. There are four dogs. Which box shows how many bones there are?"
+  },
+  {
     "id": "086dc2f8",
     "text": "Each pair of numbers follows the same rule. Which number goes where the question mark is?"
+  },
+  {
+    "id": "6974f803",
+    "text": "Each row and each column follows a pattern. Which picture goes in the empty box?"
   },
   {
     "id": "758a3bf2",
     "text": "Each shape stands for a number. What number goes where the question mark is?"
   },
   {
+    "id": "15c6d18d",
+    "text": "Eli is seven years old. Eli's sister is three years older. How old will Eli's sister be in two years?"
+  },
+  {
+    "id": "1d1001ab",
+    "text": "Find the box where every animal can fly."
+  },
+  {
+    "id": "018ab094",
+    "text": "Find the box where the apple is between the banana and the grapes."
+  },
+  {
+    "id": "62040027",
+    "text": "Find the box where the bird is last."
+  },
+  {
+    "id": "ec9136a5",
+    "text": "Find the box where the car is below the plane and above the boat."
+  },
+  {
+    "id": "4c73cb60",
+    "text": "Find the box where the cat is not next to the dog."
+  },
+  {
+    "id": "79a2e72e",
+    "text": "Find the box where the dog is first."
+  },
+  {
+    "id": "de603600",
+    "text": "Find the box where the duck is in the middle."
+  },
+  {
+    "id": "bc1a7c99",
+    "text": "Find the box where the first and last pictures match."
+  },
+  {
+    "id": "6998ce44",
+    "text": "Find the box where the last two pictures are the same."
+  },
+  {
+    "id": "69fdd2db",
+    "text": "Find the box where the moon is above the star, and the star is above the tree."
+  },
+  {
+    "id": "220871ba",
+    "text": "Find the box where the rocket is above the moon and the star is below the moon."
+  },
+  {
+    "id": "670c0a33",
+    "text": "Find the box where the second animal is a frog."
+  },
+  {
+    "id": "7f035fd7",
+    "text": "Find the box where the snail comes right after the turtle."
+  },
+  {
+    "id": "4638ce16",
+    "text": "Find the box with a ball between two hats."
+  },
+  {
+    "id": "185fd9ea",
+    "text": "Find the box with a car next to a house."
+  },
+  {
+    "id": "c8764eb3",
+    "text": "Find the box with a cat below a tree."
+  },
+  {
+    "id": "ea3f5aa6",
+    "text": "Find the box with a fish on the left and a boat on the right."
+  },
+  {
+    "id": "19d7f6cb",
+    "text": "Find the box with a red heart and a blue heart, and nothing else."
+  },
+  {
+    "id": "46f579ca",
+    "text": "Find the box with a star above a moon."
+  },
+  {
+    "id": "33a2abc2",
+    "text": "Find the box with a star on each side of the heart."
+  },
+  {
+    "id": "9d60d470",
+    "text": "Find the box with a sun above a cloud."
+  },
+  {
+    "id": "23a07429",
+    "text": "Find the box with an even number of balls."
+  },
+  {
+    "id": "03f70beb",
+    "text": "Find the box with four stars in two rows."
+  },
+  {
+    "id": "241024cb",
+    "text": "Find the box with more cookies in the bottom row than in the top row."
+  },
+  {
+    "id": "ad9656e7",
+    "text": "Find the box with more fish than boats."
+  },
+  {
+    "id": "4914c490",
+    "text": "Find the box with more trees than houses, where the house is first."
+  },
+  {
+    "id": "1acd4683",
+    "text": "Find the box with no flowers."
+  },
+  {
+    "id": "a58e9355",
+    "text": "Find the box with one more apple than pears."
+  },
+  {
+    "id": "86dac210",
+    "text": "Find the box with the fewest stars."
+  },
+  {
+    "id": "15102c54",
+    "text": "Find the box with the most balloons."
+  },
+  {
+    "id": "3e2fe6f4",
+    "text": "Find the box with the same number of hearts and stars."
+  },
+  {
+    "id": "cbffe253",
+    "text": "Find the box with the umbrella between the sun and the cloud."
+  },
+  {
+    "id": "a4b8ffa5",
+    "text": "Find the box with three apples."
+  },
+  {
+    "id": "e87a44b8",
+    "text": "Find the box with three shapes, where the circle is last."
+  },
+  {
+    "id": "d55fc7df",
+    "text": "Find the box with two dogs and two cats."
+  },
+  {
+    "id": "736ae7d4",
+    "text": "Find the box with two hearts and one star."
+  },
+  {
+    "id": "670b098c",
+    "text": "First you put on your socks, and then you put these on your feet. What are they?"
+  },
+  {
+    "id": "02d38c2b",
+    "text": "Four friends share twenty cookies equally. How many cookies does each friend get?"
+  },
+  {
     "id": "3a43aa62",
     "text": "How many should go where the question mark is to make both sides the same?"
   },
   {
+    "id": "d5f12f91",
+    "text": "I have four legs and a long trunk. What am I?"
+  },
+  {
     "id": "054a3294",
     "text": "If you heard a loud moo, which animal would it be?"
+  },
+  {
+    "id": "8d44f7eb",
+    "text": "In each row, the first two pictures are put on top of each other, and the lines they share disappear. Which picture goes in the empty box?"
+  },
+  {
+    "id": "e95ccf2d",
+    "text": "In each row, the first two pictures are put together to make the third picture. Which picture goes in the empty box?"
+  },
+  {
+    "id": "0a284a45",
+    "text": "It is cold and snowy, so Ana puts on something warm before going outside. What does Ana put on?"
+  },
+  {
+    "id": "30bd25b8",
+    "text": "It started to rain. Which one keeps you dry?"
+  },
+  {
+    "id": "511d7629",
+    "text": "Kim had five stars and gave two to a friend. Which box shows how many stars Kim has left?"
+  },
+  {
+    "id": "e8e727d0",
+    "text": "Kim had twenty-five cents and spent ten cents. How much money does Kim have left?"
+  },
+  {
+    "id": "3f946a8c",
+    "text": "Kim put the cup on the table and the book under the table. Which one is on top of the table?"
+  },
+  {
+    "id": "286eaa68",
+    "text": "Leo had four toy cars, got three more for a birthday, and then one more from a friend. Which box shows how many toy cars Leo has now?"
+  },
+  {
+    "id": "49bc85e9",
+    "text": "Leo had thirty marbles and lost thirteen. How many marbles does Leo have now?"
+  },
+  {
+    "id": "f77b9ed5",
+    "text": "Look at how the pictures change across each row and down each column. Which picture goes in the empty box?"
+  },
+  {
+    "id": "7504ffb5",
+    "text": "Look at the big pattern. Which piece fills the empty space to finish it?"
   },
   {
     "id": "5cc14e4f",
@@ -44,8 +288,44 @@
     "text": "Look at the top row. The pictures change in some way. The bottom row should change the same way. Which picture goes where the question mark is?"
   },
   {
+    "id": "c4fd6634",
+    "text": "Maya has fifteen stickers. Sam has eight stickers. How many more stickers does Maya have than Sam?"
+  },
+  {
+    "id": "ae1d8dbe",
+    "text": "Mia has three balloons. Leo has two balloons. Which box shows how many balloons they have together?"
+  },
+  {
+    "id": "d827f0d4",
+    "text": "Nine bees were on a flower. Five flew away. Which box shows how many bees are still on the flower?"
+  },
+  {
+    "id": "228d0a0e",
+    "text": "Omar had ten grapes and ate four. Which box shows how many grapes are left?"
+  },
+  {
+    "id": "f7c4beec",
+    "text": "Omar has four crayons and loses one. Which box shows how many crayons Omar has now?"
+  },
+  {
+    "id": "5df33637",
+    "text": "Put the words in order to make the best sentence. Which word would come last?"
+  },
+  {
+    "id": "24065795",
+    "text": "Read the problem. Which answer is correct?"
+  },
+  {
+    "id": "1def1549",
+    "text": "Read the sentence. Which answer makes it true every time?"
+  },
+  {
     "id": "419e3f73",
     "text": "Read the sentence. Which word fits best in the blank?"
+  },
+  {
+    "id": "915ce196",
+    "text": "Sam had two apples and got one more. Which box shows how many apples Sam has now?"
   },
   {
     "id": "a433d39c",
@@ -56,12 +336,36 @@
     "text": "The beads on this abacus follow a pattern. How many beads should go on the last rod, where the question mark is?"
   },
   {
+    "id": "31c0fdb3",
+    "text": "The bear ate more berries than the fox. The fox ate more berries than the rabbit. Which animal ate the most berries?"
+  },
+  {
+    "id": "aa3fa7b2",
+    "text": "The blue jar has more marbles than the red jar. The red jar has more marbles than the green jar. Which jar has the fewest marbles?"
+  },
+  {
     "id": "70552224",
     "text": "The first two words go together in some way. Which word goes with the third word in the same way?"
   },
   {
+    "id": "579e0fcd",
+    "text": "The kite is above the tree, and the bird is below the tree. Which one is the highest?"
+  },
+  {
     "id": "b3905221",
     "text": "The numbers follow a pattern. Which number comes next?"
+  },
+  {
+    "id": "fe4e20eb",
+    "text": "The numbers in each row follow the same rule. Which number goes in the empty box?"
+  },
+  {
+    "id": "4b0639d7",
+    "text": "The red tower is taller than the blue tower. The blue tower is taller than the green tower. Which tower is the shortest?"
+  },
+  {
+    "id": "06e03c41",
+    "text": "The shapes change in a pattern from left to right. Which shape comes next?"
   },
   {
     "id": "32c74a4f",
@@ -84,12 +388,64 @@
     "text": "The two pictures in the top row go together in some way. Which picture goes with the picture in the bottom row in the same way?"
   },
   {
+    "id": "c9e331bc",
+    "text": "There are eight cupcakes. Half of them have cherries on top. Which box shows how many cupcakes have cherries?"
+  },
+  {
+    "id": "71fbb4ec",
+    "text": "There are five cookies. Ben eats two. Which box shows how many cookies are left?"
+  },
+  {
+    "id": "3a3d14ab",
+    "text": "There are four rows of chairs with five chairs in each row. How many chairs are there?"
+  },
+  {
+    "id": "4c2ead8a",
+    "text": "There are six fish in a bowl. Three more fish are added. Which box shows how many fish are in the bowl now?"
+  },
+  {
+    "id": "2d237ec1",
+    "text": "There are sixteen crayons. Ana uses half of them. How many crayons does Ana use?"
+  },
+  {
+    "id": "45fe1b00",
+    "text": "There are three ducks in the pond. Two more ducks come. Then one duck leaves. Which box shows how many ducks are in the pond now?"
+  },
+  {
+    "id": "57f5f88f",
+    "text": "There are twelve children on a bus. At the first stop, five get off and three get on. How many children are on the bus now?"
+  },
+  {
+    "id": "0c8296f8",
+    "text": "There are two frogs on a log. Two more frogs jump on. Which box shows how many frogs are on the log now?"
+  },
+  {
+    "id": "a784d266",
+    "text": "There are two plates with three strawberries on each plate. Which box shows how many strawberries there are?"
+  },
+  {
+    "id": "2f9ce979",
+    "text": "There were eleven ducks. Some swam away, and now there are seven. How many ducks swam away?"
+  },
+  {
+    "id": "d19a8b9b",
+    "text": "There were four birds on a branch. One flew away. Which box shows how many birds are left?"
+  },
+  {
+    "id": "6ec29f8e",
+    "text": "There were ten balloons. Some popped, and now there are six. Which box shows how many balloons popped?"
+  },
+  {
     "id": "087b2b72",
     "text": "This is a sound check. Which one can fly, but is not a bird?"
   },
   {
     "id": "b1501a9e",
     "text": "What number goes where the question mark is, so that both sides are equal?"
+  },
+  {
+    "id": "d6a06fa4",
+    "text": "When the sun goes down and it gets dark, what do you often see in the sky?"
   },
   {
     "id": "a091f943",
@@ -112,6 +468,10 @@
     "text": "Which animal has a very long neck?"
   },
   {
+    "id": "ac04803e",
+    "text": "Which animal has feathers but cannot fly?"
+  },
+  {
     "id": "dd2efe60",
     "text": "Which animal is known as man's best friend?"
   },
@@ -130,6 +490,10 @@
   {
     "id": "05b81b02",
     "text": "Which animal says woof?"
+  },
+  {
+    "id": "ced6acca",
+    "text": "Which fruit is yellow and long?"
   },
   {
     "id": "86969930",
@@ -156,6 +520,10 @@
     "text": "Which one can swim and has flippers?"
   },
   {
+    "id": "21bb74f5",
+    "text": "Which one can swim in a pond and also walk on land?"
+  },
+  {
     "id": "f5d7ac85",
     "text": "Which one can you NOT eat?"
   },
@@ -166,6 +534,10 @@
   {
     "id": "e1a86fbc",
     "text": "Which one can you ride?"
+  },
+  {
+    "id": "458ec647",
+    "text": "Which one can you use to dig in the sand and also to carry water?"
   },
   {
     "id": "d7ca53c7",
@@ -200,6 +572,10 @@
     "text": "Which one do you need to build a snowman?"
   },
   {
+    "id": "08e2db2f",
+    "text": "Which one do you need to see in the dark?"
+  },
+  {
     "id": "90e4219b",
     "text": "Which one do you sleep in?"
   },
@@ -232,12 +608,20 @@
     "text": "Which one does NOT live in water?"
   },
   {
+    "id": "34d686eb",
+    "text": "Which one does not belong with the others: a spoon, a fork, a ball, and chopsticks?"
+  },
+  {
     "id": "06319331",
     "text": "Which one found on a farm is NOT an animal?"
   },
   {
     "id": "518fa648",
     "text": "Which one gives us milk?"
+  },
+  {
+    "id": "5ea9f56e",
+    "text": "Which one grows from a seed and is good to eat?"
   },
   {
     "id": "3c78d91b",
@@ -348,12 +732,20 @@
     "text": "Which one has more legs than a dog?"
   },
   {
+    "id": "c66d7ab9",
+    "text": "Which one has no legs at all?"
+  },
+  {
     "id": "8bdb1231",
     "text": "Which one has stripes?"
   },
   {
     "id": "5ab91ab2",
     "text": "Which one has the most legs?"
+  },
+  {
+    "id": "156d10f7",
+    "text": "Which one has wheels and can carry many people at once?"
   },
   {
     "id": "18ee522b",
@@ -436,6 +828,10 @@
     "text": "Which one is covered in fur and hibernates in winter?"
   },
   {
+    "id": "9f4f1568",
+    "text": "Which one is heavier than a chair?"
+  },
+  {
     "id": "974cfce6",
     "text": "Which one is hot?"
   },
@@ -448,6 +844,10 @@
     "text": "Which one is known for saying 'cock-a-doodle-doo' in the morning?"
   },
   {
+    "id": "01211435",
+    "text": "Which one is not an animal: a dog, a frog, a tree, or a bird?"
+  },
+  {
     "id": "f764386d",
     "text": "Which one is pink and loves mud?"
   },
@@ -458,6 +858,14 @@
   {
     "id": "b6a5466f",
     "text": "Which one is round and bounces?"
+  },
+  {
+    "id": "4c71a3b8",
+    "text": "Which one is round, bounces, and is used to play a game?"
+  },
+  {
+    "id": "297ad49f",
+    "text": "Which one is smaller than a cat?"
   },
   {
     "id": "33e07cd0",
@@ -518,6 +926,10 @@
   {
     "id": "c1bdd830",
     "text": "Which one lives in a nest?"
+  },
+  {
+    "id": "4a21f3ca",
+    "text": "Which one lives in the water and has fins?"
   },
   {
     "id": "0aabdba1",
@@ -608,12 +1020,20 @@
     "text": "Which one would you plant in the garden to grow a flower?"
   },
   {
+    "id": "dc49f97a",
+    "text": "Which one would you put in a drink to make it cold?"
+  },
+  {
     "id": "9ee582e9",
     "text": "Which one would you see at a birthday party?"
   },
   {
     "id": "d439b47e",
     "text": "Which one would you take outside on a rainy day?"
+  },
+  {
+    "id": "37d59617",
+    "text": "Which one would you take to the beach on a hot, sunny day?"
   },
   {
     "id": "5e21389a",
@@ -678,5 +1098,17 @@
   {
     "id": "fecae11d",
     "text": "Which one would you wear when it is raining?"
+  },
+  {
+    "id": "fd4a7d10",
+    "text": "Which word means the opposite of the word in the box?"
+  },
+  {
+    "id": "f6188dcb",
+    "text": "Zoe has seven crayons. Eli has two fewer crayons than Zoe. Which box shows how many crayons Eli has?"
+  },
+  {
+    "id": "a25aa867",
+    "text": "Zoe has three bags with four marbles in each bag, and two more marbles in a pocket. How many marbles does Zoe have?"
   }
 ]

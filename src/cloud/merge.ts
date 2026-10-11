@@ -1,4 +1,4 @@
-import type { Grade, SubType } from '../content/types'
+import type { Grade, SubType, TestFamily } from '../content/types'
 import type { ChildProfile } from '../state/profilesStore'
 import { EMPTY_PROGRESS, MAX_SHOWN_IDS_PER_SUBTYPE, type ProfileProgress, type SessionResult } from '../state/progressStore'
 
@@ -7,6 +7,8 @@ export interface ChildRow {
   id: string
   name: string
   grade: Grade
+  // Added in migration 0005; absent on rows from before it (= CogAT).
+  test_family?: TestFamily
   avatar: string
   test_date: string | null
   shown_question_ids: Record<string, string[]>
@@ -91,6 +93,7 @@ const toProfile = (r: ChildRow): ChildProfile => ({
   id: r.id,
   name: r.name,
   grade: r.grade,
+  testFamily: r.test_family ?? 'cogat',
   avatar: r.avatar,
   testDate: r.test_date,
   updatedAt: r.updated_at,
@@ -100,6 +103,7 @@ const toRow = (p: ChildProfile, progress: ProfileProgress, deletedAt: string | n
   id: p.id,
   name: p.name,
   grade: p.grade,
+  test_family: p.testFamily ?? 'cogat',
   avatar: p.avatar,
   test_date: p.testDate,
   shown_question_ids: progress.shownQuestionIds,

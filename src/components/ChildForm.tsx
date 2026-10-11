@@ -1,12 +1,14 @@
 import { useState } from 'react'
+import { FAMILIES, TEST_FAMILIES, levelName } from '../content/families'
 import { GRADES, LEVELS } from '../content/levels'
-import type { Grade } from '../content/types'
+import type { Grade, TestFamily } from '../content/types'
 import { AVATARS } from '../state/profilesStore'
 import { KidButton } from '../ui/KidButton'
 
 export interface ChildFormValues {
   name: string
   grade: Grade
+  testFamily: TestFamily
   avatar: string
 }
 
@@ -23,6 +25,7 @@ export function ChildForm({
 }) {
   const [name, setName] = useState(initial?.name ?? '')
   const [grade, setGrade] = useState<Grade | null>(initial?.grade ?? null)
+  const [testFamily, setTestFamily] = useState<TestFamily>(initial?.testFamily ?? 'cogat')
   const [avatar, setAvatar] = useState(initial?.avatar ?? AVATARS[0])
   const valid = name.trim().length > 0 && grade !== null
 
@@ -31,7 +34,7 @@ export function ChildForm({
       className="flex flex-col gap-5"
       onSubmit={(e) => {
         e.preventDefault()
-        if (valid) onSubmit({ name: name.trim(), grade: grade!, avatar })
+        if (valid) onSubmit({ name: name.trim(), grade: grade!, testFamily, avatar })
       }}
     >
       <label className="flex flex-col gap-1.5">
@@ -64,6 +67,31 @@ export function ChildForm({
           ))}
         </div>
         <span className="min-h-5 px-1 text-sm text-slate-500">{grade !== null ? LEVELS[grade].label : 'Pick the grade your child is in now.'}</span>
+      </div>
+
+      <div className="flex flex-col gap-1.5">
+        <span className="font-display text-lg font-medium">Which test?</span>
+        <div className="flex flex-col gap-2">
+          {TEST_FAMILIES.map((f) => (
+            <button
+              type="button"
+              key={f}
+              onClick={() => setTestFamily(f)}
+              aria-pressed={testFamily === f}
+              className={`rounded-2xl border-2 px-4 py-2.5 text-left transition ${
+                testFamily === f ? 'border-sprout-500 bg-sprout-100' : 'border-sprout-100 bg-white'
+              }`}
+            >
+              <span className="block font-display text-base font-semibold text-ink">
+                {FAMILIES[f].name} <span className="text-sm font-normal text-slate-500">· {FAMILIES[f].fullName}</span>
+              </span>
+              <span className="block text-sm text-slate-500">{FAMILIES[f].description}</span>
+            </button>
+          ))}
+        </div>
+        <span className="min-h-5 px-1 text-sm text-slate-500">
+          {grade !== null ? `Practices ${levelName(testFamily, grade)}.` : "Not sure? Ask your child's school. CogAT is the most common."}
+        </span>
       </div>
 
       <div className="flex flex-col gap-1.5">

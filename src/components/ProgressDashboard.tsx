@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
-import { BATTERIES, subtypeInfo, subtypesForGrade } from '../content/contentLoader'
-import type { Grade, SubType } from '../content/types'
+import { BATTERIES, subtypeInfo, testPlan } from '../content/contentLoader'
+import { FAMILIES, familyOf } from '../content/families'
+import type { Grade, SubType, TestFamily } from '../content/types'
 import { FOCUS_THRESHOLD, focusAreas, mockRuns, statsBySubtype, summary } from '../state/progressStats'
 import type { ChildProfile } from '../state/profilesStore'
 import { currentStreak, difficultyForSubType, useProfileProgress } from '../state/progressStore'
@@ -14,7 +15,7 @@ const MODE_LABEL: Record<string, string> = {
   quick: 'Quick mixed test',
 }
 
-const labelOf = (subType: SubType, grade: Grade) => subtypeInfo(subType, grade)?.label ?? subType
+const labelOf = (subType: SubType, grade: Grade, family: TestFamily) => subtypeInfo(subType, grade, family)?.label ?? subType
 const scoreColor = (p: number) => (p >= FOCUS_THRESHOLD ? 'text-green-600' : p >= 60 ? 'text-amber-600' : 'text-red-600')
 const barColor = (p: number) => (p >= FOCUS_THRESHOLD ? 'bg-green-500' : p >= 60 ? 'bg-amber-500' : 'bg-red-400')
 
@@ -45,7 +46,8 @@ export function ProgressDashboard({ profile }: { profile: ChildProfile }) {
   const days = daysUntil(profile.testDate)
 
   const stats = statsBySubtype(sessions)
-  const parts = subtypesForGrade(profile.grade)
+  const family = familyOf(profile)
+  const parts = testPlan(family, profile.grade).parts
   const focus = focusAreas(
     stats,
     parts.map((s) => s.subType),
@@ -73,7 +75,7 @@ export function ProgressDashboard({ profile }: { profile: ChildProfile }) {
             <h2 className="mb-2 text-sm font-semibold text-sprout-800">Focus next</h2>
             <div className="flex flex-col gap-2">
               {focus.map((f) => {
-                const info = subtypeInfo(f.subType, profile.grade)!
+                const info = subtypeInfo(f.subType, profile.grade, family)!
                 return (
                   <div key={f.subType} className="flex items-center justify-between rounded-xl bg-white px-3 py-2 shadow-sm">
                     <span className="text-sm font-medium text-slate-800">{info.label}</span>
@@ -85,7 +87,7 @@ export function ProgressDashboard({ profile }: { profile: ChildProfile }) {
           </section>
         )}
 
-        {BATTERIES.map(({ domain, label }) => (
+        {BATTERIES.filter(({ domain }) => parts.some((s) => s.domain === domain)).map(({ domain, label }) => (
           <section key={domain}>
             <h2 className="mb-2 px-1 text-xs font-semibold uppercase tracking-wide text-slate-500">{label}</h2>
             <div className="flex flex-col gap-2">
@@ -145,7 +147,7 @@ export function ProgressDashboard({ profile }: { profile: ChildProfile }) {
                   <div className="mt-3 border-t border-slate-100 pt-2">
                     {run.parts.map((p) => (
                       <div key={p.subType} className="flex justify-between py-1 text-sm">
-                        <span className="text-slate-600">{labelOf(p.subType, profile.grade)}</span>
+                        <span className="text-slate-600">{labelOf(p.subType, profile.grade, family)}</span>
                         <span className="text-slate-500">
                           {p.correct}/{p.total}
                         </span>
@@ -162,16 +164,14 @@ export function ProgressDashboard({ profile }: { profile: ChildProfile }) {
           Recent % = last 3 sessions. Green is {FOCUS_THRESHOLD}%+. Difficulty adjusts automatically as scores improve.
         </p>
         <p className="text-center text-xs font-medium text-slate-500">
-          This is a practice score, not a CogAT score — it only tracks how many practice questions {profile.name} got right.
+          This is a practice score, not {FAMILIES[family].article} {FAMILIES[family].name} score — it only tracks how many practice questions {profile.name} got
+          right.
         </p>
         <details className="rounded-2xl bg-white p-4 text-sm shadow-sm">
-          <summary className="cursor-pointer font-medium text-slate-700">What does a real CogAT score look like?</summary>
+          <summary className="cursor-pointer font-medium text-slate-700">What does a real {FAMILIES[family].name} score look like?</summary>
           <p className="mt-2 text-xs text-slate-500">
-            The real test doesn't report a percentage correct. Schools get back a Standard Age Score (100 is typical for a
-            child's age) and an Age Percentile Rank from 1 to 99 — a percentile rank of 70 means a child did as well as or
-            better than 70% of other kids the same age nationally. There's no public way to translate a ThinkSprout practice
-            percentage into those numbers, so please don't read a high or low practice score here as a preview of the real one
-            — it isn't.
+            {FAMILIES[family].scoreExplainer} There's no public way to translate a ThinkSprout practice percentage into those
+            numbers, so please don't read a high or low practice score here as a preview of the real one — it isn't.
           </p>
         </details>
       </div>

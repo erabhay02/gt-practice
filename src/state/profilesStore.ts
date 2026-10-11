@@ -1,11 +1,13 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { Grade } from '../content/types'
+import type { Grade, TestFamily } from '../content/types'
 
 export interface ChildProfile {
   id: string
   name: string
   grade: Grade
+  // Which school test they're practicing for; missing on older saves (= CogAT).
+  testFamily?: TestFamily
   avatar: string
   testDate: string | null // YYYY-MM-DD
   // Last local edit; cloud sync keeps the newer copy of each child.
@@ -46,7 +48,15 @@ export const useProfilesStore = create<ProfilesState>()(
         set((s) => ({
           profiles: [
             ...s.profiles,
-            { id, name: p.name, grade: p.grade, avatar: p.avatar, testDate: p.testDate ?? null, updatedAt: now() },
+            {
+              id,
+              name: p.name,
+              grade: p.grade,
+              testFamily: p.testFamily ?? 'cogat',
+              avatar: p.avatar,
+              testDate: p.testDate ?? null,
+              updatedAt: now(),
+            },
           ],
           activeId: id,
         }))

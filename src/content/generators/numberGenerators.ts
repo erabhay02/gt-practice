@@ -7,12 +7,12 @@ const text = (value: string | number): ContentSpec => ({ kind: 'text', value: St
 const blank: ContentSpec = { kind: 'blank' }
 const group = (emoji: string, count: number): ContentSpec => ({ kind: 'group', emoji, count })
 
-function between(rng: RngFn, lo: number, hi: number): number {
+export function between(rng: RngFn, lo: number, hi: number): number {
   return lo + Math.floor(rng() * (hi - lo + 1))
 }
 
 /** Correct value plus up to 3 distinct wrong values, all within [min, max]. */
-function pickWrongValues(rng: RngFn, correct: number, preferred: number[], min: number, max: number): number[] {
+export function pickWrongValues(rng: RngFn, correct: number, preferred: number[], min: number, max: number): number[] {
   const wrong: number[] = []
   const add = (v: number) => {
     if (Number.isInteger(v) && v >= min && v <= max && v !== correct && !wrong.includes(v)) wrong.push(v)
@@ -22,7 +22,7 @@ function pickWrongValues(rng: RngFn, correct: number, preferred: number[], min: 
   return wrong.slice(0, 3)
 }
 
-function toChoices<T>(rng: RngFn, correct: T, wrong: T[], render: (v: T) => ContentSpec) {
+export function toChoices<T>(rng: RngFn, correct: T, wrong: T[], render: (v: T) => ContentSpec) {
   return shuffle(rng, [
     { v: correct, isCorrect: true },
     ...wrong.map((v) => ({ v, isCorrect: false })),

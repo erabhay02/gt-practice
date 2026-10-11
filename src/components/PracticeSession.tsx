@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
-import { getQuestionPool, subtypesForGrade } from '../content/contentLoader'
+import { getQuestionPool, testPlan } from '../content/contentLoader'
+import { familyOf } from '../content/families'
 import type { Question, SubType } from '../content/types'
 import { useActiveProfile } from '../state/profilesStore'
 import { STREAK_MILESTONES, currentStreak, difficultyForSubType, recentlyShownIds, useProfileProgress, useProgressStore } from '../state/progressStore'
@@ -19,7 +20,7 @@ export function PracticeSession() {
   const streakBeforeRef = useRef(streak)
   const recordSession = useProgressStore((s) => s.recordSession)
   const recordShownQuestions = useProgressStore((s) => s.recordShownQuestions)
-  const info = profile ? subtypesForGrade(profile.grade).find((s) => s.subType === subtype) : undefined
+  const info = profile ? testPlan(familyOf(profile), profile.grade).parts.find((s) => s.subType === subtype) : undefined
 
   const questions = useMemo<Question[]>(() => {
     if (!info || !profile) return []

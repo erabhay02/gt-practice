@@ -2,7 +2,14 @@
 
 Live app: https://thinksprout.pages.dev and https://erabhay02.github.io/gt-practice/ (both auto-deploy on every push to `main`; tests must pass first). iPhone/iPad: TestFlight.
 
-## Content expansion (2026-10-10, DONE — committed locally, not pushed)
+## Release 1.1.0 — waiting for review (2026-10-11)
+Phases 3 and 6 are committed locally, **not pushed**. To release, in this order:
+1. Apply `supabase/migrations/0005_test_family.sql` to the live `thinksprout` project (adds `children.test_family`, default `cogat`). Until then sync still works: `src/cloud/sync.ts` retries without the column, so the test choice just stays on the device.
+2. Push `main` (deploys the web app).
+3. Upload the store builds: Android 1.1.0 (versionCode 5) `~/Desktop/ThinkSprout-1.1.0-build5.aab` to Play Console Internal testing; iOS 1.1.0 (4) `~/Desktop/ThinkSprout-1.1.0-build4.ipa` via Transporter, or ask Claude to upload it.
+4. Have a teacher/parent skim the new OLSAT listening items and the 5th/6th-grade words.
+
+## Content expansion (2026-10-10, DONE — pushed 2026-10-10)
 - [x] **Phase 1 of a broader improvement/expansion plan, fully complete** (full plan: ask
   to see it, or it covers — in order — content depth, privacy-safe usage insight, CogAT
   Levels 11/12, score context, an accessibility pass, OLSAT/NNAT3, growth/referral, then
@@ -27,9 +34,7 @@ Live app: https://thinksprout.pages.dev and https://erabhay02.github.io/gt-pract
   Updated the grade 1/2 locked-content fingerprint test
   (`locked-grades.regression.test.ts`) each round it touched grade 1/2 content. Full
   suite (151 tests) passing, including the audio-coverage check.
-- [ ] Waiting on a future push + the Android/iOS build-and-submit cycle that goes with it
-  (content changes alone don't need a native rebuild, but bundling with whatever else
-  ships was the plan).
+- [x] Shipped on the web 2026-10-10 and in iOS 1.0 (3) / Android build 3.
 - [x] **Phase 2, fully complete (2026-10-10): privacy-safe usage insight.** Migration
   `supabase/migrations/0003_usage_insights.sql` adds a security-definer function
   `public.usage_insights()` (same pattern as `has_access()` in `0001_init.sql`) that
@@ -49,7 +54,7 @@ Live app: https://thinksprout.pages.dev and https://erabhay02.github.io/gt-pract
     bumped to October 10, 2026.
   Exposure is the SQL editor only for now (per the plan: "start with the SQL-editor
   route; build UI only if that proves insufficient") — no admin UI built.
-- [ ] **Phase 3, in progress (2026-10-10): CogAT Levels 11/12 (5th/6th grade).**
+- [x] **Phase 3, complete (2026-10-11) except a human review: CogAT Levels 11/12 (5th/6th grade).**
   Plumbing is done and tested: `Grade` extended to 0–6, `LEVELS`/`GRADES` in
   `levels.ts` have 5/6 entries (mirroring grade 4's item counts — Riverside's specs
   give Levels 9–12 the same subtest structure), `contentLoader.ts`'s `BANKS` wired up,
@@ -68,12 +73,22 @@ Live app: https://thinksprout.pages.dev and https://erabhay02.github.io/gt-pract
     file's existing content for exact/near-duplicate word pairs, example sets, or
     sentences before adding — a few draft items were caught and replaced for
     exactly that reason.
-  - **Not done yet**: still short of full Level 11/12 depth (nowhere near grades
-    0–4's post-Phase-1 item counts) — continuing to build this out is its own
-    standing task, same as the three emoji-based banks were in Phase 1.
-    **Nobody has verified any of this against real released Level 11/12 practice
-    materials** — the plan's own stated bar before calling this "matching the real
-    format."
+  - [x] Third batch (2026-10-11), new relation types (group names, scientists,
+    materials, numbers, logic words): verbal-analogy 40→**81**, verbal-classification
+    33→**69**, sentence-reading 37→**75**. Untagged (3rd-grade baseline) items now go to
+    grades 3–4 only, so a 5th grader gets the [4,5,6] + [5,6] tiers (about 105–120 items
+    per part) instead of mostly "puppy : dog". Fixed 5 shaky items (Taj Mahal as an
+    "ancient wonder", atmosphere as a layer of Earth's structure, tectonic plates as an
+    "event", communism/federalism as forms of rule, quark category).
+  - [x] Checked against published sources (2026-10-11): Riverside's item-count table
+    (info.riversideinsights.com, "CogAT testing time, number of items per subtest") —
+    practice-test lengths now match it at every level (K–2 were approximate; Level 9
+    has 20 figure items; Levels 10–12 have 24 verbal analogies). Riverside's product
+    guide says Figure Matrices are 2x2 through Level 11 and "some questions at Level
+    12" use another format — 6th grade now mixes in 3x3 matrices (one in three).
+  - [ ] **Still open**: a person should compare the 5th/6th-grade content with real
+    Level 11/12 practice materials (the plan's bar). Answer-choice count per item
+    (the app always shows 4) is also unverified for Levels 9+.
   - [x] `supabase/migrations/0004_grades_5_to_6.sql` applied to the live `thinksprout`
     database and verified directly (`children_grade_check` now reads
     `grade >= 0 AND grade <= 6`). The app's grade picker now genuinely lets a parent
@@ -94,8 +109,8 @@ Live app: https://thinksprout.pages.dev and https://erabhay02.github.io/gt-pract
   with genuinely useful, publicly sourced context on the SAS/percentile scale, so
   parents have something real to calibrate against once they get an actual school
   report. `tsc -b` clean, full suite (151 tests) passing, dev server boots cleanly.
-  **Not verified in an actual browser session** (no browser automation tool
-  available) — worth a quick manual look in Parent Area → Progress before shipping.
+  Verified in the browser 2026-10-10 (Playwright). Phase 6 made the disclaimer and
+  explainer name the child's own test (CogAT / NNAT3 / OLSAT).
 
 - [x] **Phase 5, fully complete (2026-10-10): accessibility pass on figural items.**
   Ran the dataviz skill's `validate_palette.js` (OKLab ΔE under simulated
@@ -108,8 +123,11 @@ Live app: https://thinksprout.pages.dev and https://erabhay02.github.io/gt-pract
   Replaced the palette with one where all 10 pairs clear the CVD floor, the
   normal-vision floor, and contrast (blue #4C6FEB, purple #7E22CE, magenta
   #DC267F, red #991B1B, gold #D97706); the one pair still at the "legal only with
-  secondary encoding" floor (blue/purple) gets a dashed outline ring in
-  `primitives.tsx` regardless of fill type, so it's never color-alone. Also fixed
+  secondary encoding" floor (blue/purple) gets a secondary cue in `primitives.tsx`:
+  since 2026-10-10 white dashes cut into the shape's own edge (the first version, a
+  dark ring outside the shape, was hidden by thick outlines and showed as stray
+  specks). Single shapes only: on 2–3 scaled-down copies any edge pattern read as
+  speckle, and those items differ by count rather than color. Also fixed
   `ContentTile.tsx`'s separately-duplicated bead-color array (now imports
   `COLORS` instead of drifting) and `numberGenerators.ts`'s two hardcoded
   algebra-symbol colors. Updated 5 locked-content fingerprint hashes (matrix +
@@ -128,10 +146,40 @@ Live app: https://thinksprout.pages.dev and https://erabhay02.github.io/gt-pract
   - Closes out the old **"Ideas for later"** item *"Scores are practice
     percentages, not CogAT scores (no age norms/percentiles)"* — that's exactly
     what Phase 4 above fixed.
-  - None of these three were verified in an actual browser session (no browser
-    automation tool available this session) — worth a few minutes of manual
-    click-through (a brand-new profile's first practice session; a seeded
-    multi-day streak) before shipping.
+  - Verified in the browser 2026-10-10: walkthrough on a brand-new child's first
+    session (and not again after one is finished); 🔥 badge at seeded 3/7/14-day
+    streaks, none on a second same-day session or at 4 days.
+  - Bug fixes found during that check (2026-10-10): blank answer tile in some
+    1st-grade figure matrices, React setState-in-render error, "Great job!" only on a
+    pass (2+ stars, otherwise "Nice try!").
+
+- [x] **Phase 6, built (2026-10-11): NNAT3 and OLSAT.** Design: a `testFamily`
+  (`cogat` | `nnat3` | `olsat`) on each child, and `testPlan(family, grade)` in
+  `contentLoader.ts` (parts in test order, practice-test lengths, timing, level name)
+  that every screen uses instead of `subtypesForGrade(grade)`. Content stays keyed by
+  part + grade, so the same skill (e.g. figure analogies) is the same content in any
+  test. `families.ts` holds names, levels and score explainers.
+  - NNAT3 (Levels A–E; 48 items, 30 minutes per Pearson): Pattern Completion,
+    Reasoning by Analogy (2x2 at the easiest level, 3x3 above), Serial Reasoning
+    (Latin-square rows), Spatial Visualization (line figures added; "shared lines
+    disappear" at the hardest level) — `generators/nnatGenerators.ts`. Pattern holes
+    are always solvable (`holeIsSolvable`). Blue/yellow/white/navy colors like the real
+    test. Pearson doesn't publish the mix of item types: the per-level split is an
+    estimate.
+  - OLSAT (Levels A–F; totals 40/60/60/64/72/72 from public guides, split evenly
+    verbal/nonverbal; the split within each half is an estimate): K–2 Following
+    Directions, Aural Reasoning and Arithmetic Reasoning (listening, authored, with
+    recorded audio — `banks/olsatListening.ts`), plus picture/figure parts and
+    Figural Series; 3rd–6th Antonyms, Sentence Arrangement, Logical Selection
+    (`banks/olsatVerbal.ts`), written word problems, Number Matrix (checked for a
+    single fitting rule), and the CogAT verbal/figure/number parts under OLSAT names.
+  - 108 new audio clips (Piper). `supabase/migrations/0005_test_family.sql` (not yet
+    applied — see Release 1.1.0 above). Privacy policy, terms and Settings updated
+    (K–6, the test choice as stored data, Pearson trademarks).
+  - 21 new tests (`families.test.ts`); 173 passing. Browser-checked at phone width:
+    child form, NNAT3 and OLSAT (K and 4th grade) items, practice-test chooser,
+    progress page, CogAT 6th grade.
+  - **Not verified against real NNAT3/OLSAT practice materials** (same bar as Phase 3).
 
 ## Next up — needs a parent
 - [ ] Custom domain **thinksprout.astrala.us**: wait until the Astrala site / Nexus AI move is done (handled in a separate project), then Cloudflare → Workers & Pages → thinksprout → Custom domains → add it
@@ -139,10 +187,9 @@ Live app: https://thinksprout.pages.dev and https://erabhay02.github.io/gt-pract
 - [ ] Supabase: delete test user `thinksprout-pwcheck@example.com` (Authentication → Users); set minimum password length to 8 (Authentication → Sign In / Providers → Email)
 - [ ] Review the Privacy Policy + Terms (`public/privacy.html`, `public/terms.html`); set up privacy@astrala.us (Cloudflare Email Routing → Gmail) or change the address
 - [ ] If not done yet: rename "My child" and set the test date (🔒 Grown-ups → Children), then add the 1st grader
-- [ ] Confirm with each school: CogAT level (Level 7 = 1st grade, Level 8 = 2nd grade) and test dates
+- [ ] Confirm with each school: which test (CogAT, NNAT3 or OLSAT), the level, and test dates; set it per child in 🔒 Grown-ups → Children
 
 ## Next up — Claude (after the items above)
-- [ ] iPhone build 2 (iPad landscape fix is committed, not uploaded — upload only when asked)
 - [ ] Make the repo private once thinksprout.astrala.us is live (this ends the github.io site)
 - [ ] TestFlight external testers for invited families: needs the privacy URL on the new domain, a beta description, a contact email, then a ~1-day Beta App Review
 - [ ] Android closed testing: at least 12 testers opted in for 14 days in a row before Google allows production (personal accounts). Needs store listing basics + app content forms first
@@ -154,6 +201,7 @@ Live app: https://thinksprout.pages.dev and https://erabhay02.github.io/gt-pract
 - [x] 1st- and 2nd-grade content locked by fingerprint tests (unchanged); database accepts grades 0–4 (`supabase/migrations/0002_grades_k_to_4.sql`, applied)
 - [x] Privacy Policy rewritten (all grades, apps, SendGrid/Cloudflare/GitHub, COPPA rights, security, changes); removed-child records on the server keep no name/details
 - [x] iPhone build 1.0 (2) uploaded to TestFlight 2026-10-05 (grades K–4 + iPad landscape fix); Android versionCode 2 built and signed (`~/Desktop/ThinkSprout-1.0-build2.aab`) for the parent to upload to Internal testing
+- [x] Android 1.0.1 (versionCode 4, 2026-10-11): same app as build 3, rebuilt after a broken Play Console draft (`~/Desktop/ThinkSprout-1.0.1-build4.aab`)
 - [x] Build 3 (2026-10-10): Phases 3–5 + bug fixes (blank matrix tile, purple shape cue, results copy). iOS 1.0 (3) uploaded to TestFlight 2026-10-10; Android versionCode 3 signed (`~/Desktop/ThinkSprout-1.0-build3.aab`) for the parent to upload to Internal testing
 - [ ] ⚠️ Build 1 only knows grades 1–2: update every device to build 2 before adding a K/3rd/4th-grade child
 - [ ] Have a teacher/parent skim the new 3rd/4th-grade word items; K/1st practice-test lengths are approximate

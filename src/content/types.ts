@@ -13,6 +13,23 @@ export type SubType =
   | 'figure-matrix'
   | 'figure-classification'
   | 'paper-folding'
+  // NNAT3 (figural only). Serial reasoning doubles as OLSAT's Pattern Matrix.
+  | 'pattern-completion'
+  | 'reasoning-by-analogy'
+  | 'serial-reasoning'
+  | 'spatial-visualization'
+  // OLSAT. Its picture/figure/number parts reuse the CogAT types above.
+  | 'following-directions'
+  | 'aural-reasoning'
+  | 'arithmetic-reasoning'
+  | 'figural-series'
+  | 'antonyms'
+  | 'sentence-arrangement'
+  | 'logical-selection'
+  | 'number-matrix'
+
+/** Which school test a child is practicing for. */
+export type TestFamily = 'cogat' | 'nnat3' | 'olsat'
 
 export type Difficulty = 1 | 2 | 3
 
@@ -52,7 +69,10 @@ export interface PaperRegion {
   h: number
 }
 
-export type FoldLine = 'vertical' | 'horizontal' | 'diagonal' | 'anti-diagonal'
+/** Strokes a line figure can contain, within a unit square. */
+export type LineStroke = 'top' | 'bottom' | 'left' | 'right' | 'diag' | 'antidiag' | 'vmid' | 'hmid' | 'ring'
+
+export type FoldLine ='vertical' | 'horizontal' | 'diagonal' | 'anti-diagonal'
 
 // A punched or cut hole. Triangles point toward `angle` (0 = right), so a
 // mirror copy visibly flips direction.
@@ -72,6 +92,13 @@ export type ContentSpec =
   | { kind: 'blank' }
   | { kind: 'group'; emoji: string; count: number }
   | { kind: 'abacus'; counts: (number | null)[] }
+  // A grid of colored squares (NNAT Pattern Completion). `hole` blanks out a
+  // square block of cells, drawn as an empty dashed area.
+  | { kind: 'pattern'; cells: string[][]; hole?: { row: number; col: number; size: number } }
+  // A line figure in a square frame: the strokes present (see LINE_STROKES).
+  | { kind: 'lines'; strokes: LineStroke[] }
+  // Small emoji pictures laid out in rows (OLSAT Following Directions).
+  | { kind: 'scene'; rows: string[][] }
   | {
       kind: 'paper'
       region: PaperRegion

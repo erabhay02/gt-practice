@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { Navigate } from 'react-router-dom'
 import { subtypeInfo } from '../content/contentLoader'
+import { familyOf } from '../content/families'
 import { buildDailyQuestions } from '../state/dailyPlan'
 import { useActiveProfile } from '../state/profilesStore'
 import { EMPTY_PROGRESS, STREAK_MILESTONES, currentStreak, todayStr, useProfileProgress, useProgressStore } from '../state/progressStore'
@@ -22,7 +23,7 @@ export function DailyPractice() {
   const questions = useMemo(() => {
     if (!profile) return []
     const progress = useProgressStore.getState().byProfile[profile.id] ?? EMPTY_PROGRESS
-    return buildDailyQuestions(progress, profile.grade, todayStr())
+    return buildDailyQuestions(progress, profile.grade, todayStr(), familyOf(profile))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile?.id])
 
@@ -41,7 +42,7 @@ export function DailyPractice() {
     <QuizRunner
       title="Today's practice"
       questions={questions}
-      explanationFor={(q) => q.explanationAudioText ?? subtypeInfo(q.subType, profile.grade)?.tip}
+      explanationFor={(q) => q.explanationAudioText ?? subtypeInfo(q.subType, profile.grade, familyOf(profile))?.tip}
       finishedMessage="Today's practice is done!"
       showWelcome={neverPracticed}
       milestoneStreak={streak > streakBeforeRef.current && STREAK_MILESTONES.includes(streak) ? streak : null}

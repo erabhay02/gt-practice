@@ -1,5 +1,5 @@
-import { getQuestionPool, subtypesForGrade } from '../content/contentLoader'
-import type { Grade, Question, SubType } from '../content/types'
+import { getQuestionPool, testPlan } from '../content/contentLoader'
+import type { Grade, Question, SubType, TestFamily } from '../content/types'
 import { focusAreas, statsBySubtype } from './progressStats'
 import { difficultyForSubType, recentlyShownIds, type ProfileProgress } from './progressStore'
 
@@ -14,8 +14,8 @@ function dayNumber(date: string): number {
  * Today's three parts: the weakest recent part, the least-practiced part, and
  * one that rotates by date, so every part comes up regularly.
  */
-export function chooseDailyParts(progress: ProfileProgress, date: string, grade: Grade = 2): SubType[] {
-  const ALL = subtypesForGrade(grade).map((s) => s.subType)
+export function chooseDailyParts(progress: ProfileProgress, date: string, grade: Grade = 2, family: TestFamily = 'cogat'): SubType[] {
+  const ALL = testPlan(family, grade).parts.map((s) => s.subType)
   const stats = statsBySubtype(progress.sessions)
   const picked: SubType[] = []
   const add = (s: SubType | undefined) => {
@@ -29,8 +29,8 @@ export function chooseDailyParts(progress: ProfileProgress, date: string, grade:
   return picked
 }
 
-export function buildDailyQuestions(progress: ProfileProgress, grade: Grade, date: string): Question[] {
-  return chooseDailyParts(progress, date, grade).flatMap((subType) =>
+export function buildDailyQuestions(progress: ProfileProgress, grade: Grade, date: string, family: TestFamily = 'cogat'): Question[] {
+  return chooseDailyParts(progress, date, grade, family).flatMap((subType) =>
     getQuestionPool(
       subType,
       difficultyForSubType(progress, subType),

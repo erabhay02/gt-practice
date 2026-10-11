@@ -12,9 +12,23 @@ import { buildSentenceCompletionBank } from './banks/sentenceCompletion'
 import { buildSentenceReadingBank } from './banks/sentenceReading'
 import { buildVerbalAnalogyBank } from './banks/verbalAnalogy'
 import { buildVerbalClassificationBank } from './banks/verbalClassification'
-import { randomSeed, shuffle, mulberry32 } from './generators/rng'
-import { isReadingLevel } from './levels'
-import type { Difficulty, Domain, Grade, Question, SubType } from './types'
+import {
+  generatePatternCompletionQuestion,
+  generateReasoningByAnalogyQuestion,
+  generateSerialReasoningQuestion,
+  generateSpatialVisualizationQuestion,
+} from './generators/nnatGenerators'
+import {
+  generateArithmeticReasoningQuestion,
+  generateFiguralSeriesQuestion,
+  generateNumberMatrixQuestion,
+} from './generators/olsatGenerators'
+import { buildArithmeticPicturesBank, buildAuralReasoningBank, buildFollowingDirectionsBank } from './banks/olsatListening'
+import { buildAntonymBank, buildLogicalSelectionBank, buildSentenceArrangementBank } from './banks/olsatVerbal'
+import { generatedId, randomSeed, shuffle, mulberry32 } from './generators/rng'
+import { FAMILIES, levelName } from './families'
+import { LEVELS, isReadingLevel } from './levels'
+import type { Difficulty, Domain, Grade, Question, SubType, TestFamily } from './types'
 
 const bankSet = (grade: Grade): Partial<Record<SubType, Question[]>> =>
   isReadingLevel(grade)
@@ -22,11 +36,18 @@ const bankSet = (grade: Grade): Partial<Record<SubType, Question[]>> =>
         'verbal-analogy': buildVerbalAnalogyBank(grade),
         'sentence-completion': buildSentenceReadingBank(grade),
         'verbal-classification': buildVerbalClassificationBank(grade),
+        'antonyms': buildAntonymBank(grade),
+        'logical-selection': buildLogicalSelectionBank(grade),
+        'sentence-arrangement': buildSentenceArrangementBank(grade),
       }
     : {
         'picture-classification': buildPictureClassificationBank(grade),
         'picture-analogy': buildPictureAnalogyBank(grade),
         'sentence-completion': buildSentenceCompletionBank(grade),
+        'following-directions': buildFollowingDirectionsBank(grade),
+        'aural-reasoning': buildAuralReasoningBank(grade),
+        // Read aloud with picture answers; readers get generated word problems.
+        'arithmetic-reasoning': buildArithmeticPicturesBank(grade),
       }
 const BANKS: Record<Grade, Partial<Record<SubType, Question[]>>> = {
   0: bankSet(0),
@@ -38,8 +59,24 @@ const BANKS: Record<Grade, Partial<Record<SubType, Question[]>>> = {
   6: bankSet(6),
 }
 
+/**
+ * CogAT Level 12 (6th grade) mixes some 3x3 figure matrices in with the 2x2
+ * format ("some questions at Level 12" — Riverside product guide): one in three.
+ */
+function generateFigureMatrixForGrade(d: Difficulty, seed: number, grade: Grade): Question {
+  if (grade < 6 || seed % 3 !== 0) return generateMatrixQuestion(d, seed, grade)
+  return { ...generateReasoningByAnalogyQuestion(d, seed, grade), id: generatedId('figure-matrix', grade, d, seed), subType: 'figure-matrix' }
+}
+
 const GENERATORS: Partial<Record<SubType, (d: Difficulty, seed: number, grade: Grade) => Question>> = {
-  'figure-matrix': generateMatrixQuestion,
+  'figure-matrix': generateFigureMatrixForGrade,
+  'pattern-completion': generatePatternCompletionQuestion,
+  'reasoning-by-analogy': generateReasoningByAnalogyQuestion,
+  'serial-reasoning': generateSerialReasoningQuestion,
+  'spatial-visualization': generateSpatialVisualizationQuestion,
+  'figural-series': generateFiguralSeriesQuestion,
+  'number-matrix': generateNumberMatrixQuestion,
+  'arithmetic-reasoning': generateArithmeticReasoningQuestion,
   'figure-classification': generateFigureClassificationQuestion,
   'paper-folding': generatePaperFoldingQuestion,
   'number-analogy': generateNumberAnalogyQuestion,
@@ -201,15 +238,194 @@ export const READING_LEVEL_SUBTYPES: SubtestInfo[] = [
   ...AVAILABLE_SUBTYPES.filter((s) => s.domain === 'nonverbal'),
 ]
 
-/** The parts a child at this grade practices. */
-export function subtypesForGrade(grade: Grade): SubtestInfo[] {
-  return isReadingLevel(grade) ? READING_LEVEL_SUBTYPES : AVAILABLE_SUBTYPES
+/** The four NNAT3 item types (Levels A–E): all figural, no words or numbers. */
+export const NNAT_SUBTYPES: SubtestInfo[] = [
+  {
+    domain: 'nonverbal', subType: 'pattern-completion', icon: '🧩', label: 'Pattern Completion',
+    shortDescription: 'Find the missing piece',
+    tip: 'Look at the colors all around the empty space. The right piece keeps the pattern going in every direction, so check that all of its edges match.',
+  },
+  {
+    domain: 'nonverbal', subType: 'reasoning-by-analogy', icon: '🔀', label: 'Reasoning by Analogy',
+    shortDescription: 'How do the shapes change?',
+    tip: 'Find what changes as you go across a row and what changes as you go down a column. The missing picture follows both changes.',
+  },
+  {
+    domain: 'nonverbal', subType: 'serial-reasoning', icon: '🔁', label: 'Serial Reasoning',
+    shortDescription: 'Each row follows a pattern',
+    tip: 'Each row and column uses the same few pictures in a different order. Find the picture that is still missing from the last row and the last column.',
+  },
+  {
+    domain: 'nonverbal', subType: 'spatial-visualization', icon: '📐', label: 'Spatial Visualization',
+    shortDescription: 'Put the pictures together',
+    tip: 'Imagine sliding the first two pictures on top of each other and keep every line you would see. If the question says shared lines disappear, cross those lines out.',
+  },
+]
+
+const info = (subType: SubType, overrides: Partial<SubtestInfo> = {}): SubtestInfo => {
+  const base = [...AVAILABLE_SUBTYPES, ...READING_LEVEL_SUBTYPES, ...NNAT_SUBTYPES].find((s) => s.subType === subType)!
+  return { ...base, ...overrides }
 }
 
-/** Label/tip for a part, even one this grade doesn't use (e.g. in old history). */
-export function subtypeInfo(subType: SubType, grade: Grade): SubtestInfo | undefined {
-  return subtypesForGrade(grade).find((s) => s.subType === subType)
-    ?? [...AVAILABLE_SUBTYPES, ...READING_LEVEL_SUBTYPES].find((s) => s.subType === subType)
+const OLSAT_ONLY: Record<'followingDirections' | 'auralReasoning' | 'arithmeticListen' | 'arithmeticRead' | 'figuralSeries' | 'antonyms' | 'arrangement' | 'logic' | 'numberMatrix', SubtestInfo> = {
+  followingDirections: {
+    domain: 'verbal', subType: 'following-directions', icon: '👂', label: 'Following Directions',
+    shortDescription: 'Listen and find the right box',
+    tip: 'Listen to every word. Words like above, below, between, first and last tell you exactly where things go.',
+  },
+  auralReasoning: {
+    domain: 'verbal', subType: 'aural-reasoning', icon: '🤔', label: 'Aural Reasoning',
+    shortDescription: 'Listen and think',
+    tip: 'Listen to the whole question before you look. Think about each clue, then pick the picture that fits all of them.',
+  },
+  arithmeticListen: {
+    domain: 'verbal', subType: 'arithmetic-reasoning', icon: '🍎', label: 'Arithmetic Reasoning',
+    shortDescription: 'Listen to the story and solve it',
+    tip: 'Picture the story in your head. Start with how many there are, then add or take away what happens.',
+  },
+  arithmeticRead: {
+    domain: 'verbal', subType: 'arithmetic-reasoning', icon: '🧮', label: 'Arithmetic Reasoning',
+    shortDescription: 'Solve the word problem',
+    tip: 'Read the whole problem first. Find what it asks, then do each step in order and check that your answer makes sense.',
+  },
+  figuralSeries: {
+    domain: 'nonverbal', subType: 'figural-series', icon: '➡️', label: 'Figural Series',
+    shortDescription: 'Which shape comes next?',
+    tip: 'Look at how each shape changes from one box to the next: turning, color, pattern or shape. Keep the same change going.',
+  },
+  antonyms: {
+    domain: 'verbal', subType: 'antonyms', icon: '↔️', label: 'Antonyms',
+    shortDescription: 'Find the opposite',
+    tip: 'Watch out for words that mean the same thing. You want the word that means the opposite.',
+  },
+  arrangement: {
+    domain: 'verbal', subType: 'sentence-arrangement', icon: '🔤', label: 'Sentence Arrangement',
+    shortDescription: 'Put the words in order',
+    tip: 'Find who or what the sentence is about and what happened. Build the whole sentence in your head before you choose its last word.',
+  },
+  logic: {
+    domain: 'verbal', subType: 'logical-selection', icon: '✅', label: 'Logical Selection',
+    shortDescription: 'What is always true?',
+    tip: 'Many answers are often true. Pick the one that is true every single time, with no exceptions.',
+  },
+  numberMatrix: {
+    domain: 'quantitative', subType: 'number-matrix', icon: '🔢', label: 'Number Matrix',
+    shortDescription: 'Find the rule in each row',
+    tip: 'Find one rule that works for both full rows, like adding the first two numbers. Then use it on the last row.',
+  },
+}
+
+/** OLSAT Levels A–C (K–2): listening plus picture and figure reasoning. Level A has no picture analogies or pattern matrix. */
+function olsatPrimary(grade: Grade): SubtestInfo[] {
+  return [
+    OLSAT_ONLY.followingDirections,
+    OLSAT_ONLY.auralReasoning,
+    OLSAT_ONLY.arithmeticListen,
+    // OLSAT scores picture items as nonverbal (pictorial reasoning), unlike CogAT.
+    info('picture-classification', { domain: 'nonverbal' }),
+    ...(grade >= 1 ? [info('picture-analogy', { domain: 'nonverbal' })] : []),
+    info('figure-classification', { label: 'Figural Classification' }),
+    info('figure-matrix', { label: 'Figural Analogies' }),
+    OLSAT_ONLY.figuralSeries,
+    ...(grade >= 1 ? [info('serial-reasoning', { label: 'Pattern Matrix', icon: '🔳' })] : []),
+  ]
+}
+
+/** OLSAT Levels D–F (3rd–6th): reading, figural and quantitative reasoning. */
+const OLSAT_UPPER: SubtestInfo[] = [
+  OLSAT_ONLY.antonyms,
+  info('sentence-completion', { icon: '📖' }),
+  OLSAT_ONLY.arrangement,
+  OLSAT_ONLY.arithmeticRead,
+  info('verbal-analogy'),
+  info('verbal-classification'),
+  OLSAT_ONLY.logic,
+  info('figure-matrix', { label: 'Figural Analogies' }),
+  info('serial-reasoning', { label: 'Pattern Matrix', icon: '🔳' }),
+  OLSAT_ONLY.figuralSeries,
+  { ...READING_LEVEL_SUBTYPES.find((s) => s.subType === 'number-series')! },
+  info('number-analogy', { label: 'Numeric Inference', icon: '🔢', shortDescription: 'Find the rule' }),
+  OLSAT_ONLY.numberMatrix,
+]
+
+// NNAT3: 48 items per level. Pearson doesn't publish the mix of item types, so
+// this split is an estimate: younger levels lean on pattern completion, older
+// ones on analogy, serial reasoning and spatial visualization.
+const NNAT_MIX: Record<string, Partial<Record<SubType, number>>> = {
+  A: { 'pattern-completion': 26, 'reasoning-by-analogy': 12, 'serial-reasoning': 6, 'spatial-visualization': 4 },
+  B: { 'pattern-completion': 20, 'reasoning-by-analogy': 14, 'serial-reasoning': 8, 'spatial-visualization': 6 },
+  C: { 'pattern-completion': 14, 'reasoning-by-analogy': 16, 'serial-reasoning': 10, 'spatial-visualization': 8 },
+  D: { 'pattern-completion': 8, 'reasoning-by-analogy': 16, 'serial-reasoning': 12, 'spatial-visualization': 12 },
+  E: { 'pattern-completion': 4, 'reasoning-by-analogy': 16, 'serial-reasoning': 14, 'spatial-visualization': 14 },
+}
+
+// OLSAT totals per level from public guides (A 40, B–C 60, D 64, E–F 72),
+// split evenly between verbal and nonverbal (incl. quantitative) items. The
+// split within each half is an estimate.
+const OLSAT_MIX: Record<string, Partial<Record<SubType, number>>> = {
+  A: { 'following-directions': 6, 'aural-reasoning': 5, 'arithmetic-reasoning': 5, 'picture-classification': 6, 'figure-classification': 6, 'figure-matrix': 6, 'figural-series': 6 },
+  B: { 'following-directions': 10, 'aural-reasoning': 10, 'arithmetic-reasoning': 10, 'picture-classification': 5, 'picture-analogy': 5, 'figure-classification': 5, 'figure-matrix': 5, 'figural-series': 5, 'serial-reasoning': 5 },
+  D: { 'antonyms': 5, 'sentence-completion': 5, 'sentence-arrangement': 4, 'arithmetic-reasoning': 5, 'verbal-analogy': 5, 'verbal-classification': 4, 'logical-selection': 4, 'figure-matrix': 6, 'serial-reasoning': 5, 'figural-series': 5, 'number-series': 6, 'number-analogy': 5, 'number-matrix': 5 },
+  E: { 'antonyms': 6, 'sentence-completion': 5, 'sentence-arrangement': 5, 'arithmetic-reasoning': 5, 'verbal-analogy': 5, 'verbal-classification': 5, 'logical-selection': 5, 'figure-matrix': 6, 'serial-reasoning': 6, 'figural-series': 6, 'number-series': 6, 'number-analogy': 6, 'number-matrix': 6 },
+}
+OLSAT_MIX.C = OLSAT_MIX.B
+OLSAT_MIX.F = OLSAT_MIX.E
+
+export interface TestPlan {
+  family: TestFamily
+  // "CogAT Level 7", "NNAT3 Level B".
+  levelName: string
+  // In the order the real test gives them.
+  parts: SubtestInfo[]
+  mockLength: (subType: SubType) => number
+  // A time limit per part (CogAT Levels 9+), or for the whole test (NNAT3).
+  minutesPerPart: number | null
+  totalMinutes: number | null
+}
+
+/** What a child practices: the parts, lengths and timing of their real test. */
+export function testPlan(family: TestFamily, grade: Grade): TestPlan {
+  const level = FAMILIES[family].levels[grade]
+  const common = { family, levelName: levelName(family, grade), totalMinutes: FAMILIES[family].totalMinutes }
+  if (family === 'nnat3') {
+    return { ...common, parts: NNAT_SUBTYPES, mockLength: (s) => NNAT_MIX[level][s] ?? 0, minutesPerPart: null }
+  }
+  if (family === 'olsat') {
+    return {
+      ...common,
+      parts: isReadingLevel(grade) ? OLSAT_UPPER : olsatPrimary(grade),
+      mockLength: (s) => OLSAT_MIX[level][s] ?? 0,
+      minutesPerPart: null,
+    }
+  }
+  return {
+    ...common,
+    parts: isReadingLevel(grade) ? READING_LEVEL_SUBTYPES : AVAILABLE_SUBTYPES,
+    mockLength: (s) => LEVELS[grade].mockLength[s] ?? 12,
+    minutesPerPart: LEVELS[grade].minutesPerPart,
+  }
+}
+
+/** The CogAT parts a child at this grade practices. */
+export function subtypesForGrade(grade: Grade): SubtestInfo[] {
+  return testPlan('cogat', grade).parts
+}
+
+const ALL_INFOS: SubtestInfo[] = [
+  ...AVAILABLE_SUBTYPES,
+  ...READING_LEVEL_SUBTYPES,
+  ...NNAT_SUBTYPES,
+  ...Object.values(OLSAT_ONLY),
+]
+
+/** Every distinct part across all tests (for the worksheet's part filter). */
+export const ALL_SUBTYPES: SubType[] = [...new Set(ALL_INFOS.map((s) => s.subType))]
+
+/** Label/tip for a part, even one this child's plan doesn't use (e.g. in old history). */
+export function subtypeInfo(subType: SubType, grade: Grade, family: TestFamily = 'cogat'): SubtestInfo | undefined {
+  return testPlan(family, grade).parts.find((s) => s.subType === subType)
+    ?? subtypesForGrade(grade).find((s) => s.subType === subType)
+    ?? ALL_INFOS.find((s) => s.subType === subType)
 }
 
 export const BATTERIES: { domain: Domain; label: string; kidLabel: string; icon: string }[] = [

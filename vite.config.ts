@@ -21,7 +21,7 @@ export default defineConfig({
       manifest: {
         name: 'ThinkSprout',
         short_name: 'ThinkSprout',
-        description: 'Gifted & Talented test practice for Kindergarten through 4th grade',
+        description: 'Gifted & Talented test practice for Kindergarten through 6th grade',
         theme_color: '#2ea44f',
         background_color: '#fffbf0',
         display: 'standalone',

@@ -222,9 +222,56 @@ const RAW_ITEMS: RawItem[] = [
   { pair: ['vivid', 'brilliant'], start: 'bleak', correct: 'dreary', distractors: ['brilliant', 'bright', 'happy'], relation: 'same meaning', grades: [5, 6] },
   { pair: ['seismograph', 'earthquakes'], start: 'Geiger counter', correct: 'radiation', distractors: ['earthquakes', 'temperature', 'pressure'], relation: 'tool : what it measures', grades: [5, 6] },
   { pair: ['episode', 'series'], start: 'chapter', correct: 'book', distractors: ['series', 'movie', 'song'], relation: 'part : whole', grades: [5, 6] },
+  // Third grade-5/6 batch (2026-10-10) — Phase 3 depth: new relation types
+  // (group names, scientists, materials, numbers) so Levels 11/12 aren't just
+  // harder synonyms. Each trap is checked to fail the relation, not just look odd.
+  { pair: ['flock', 'sheep'], start: 'pod', correct: 'whales', distractors: ['sheep', 'ocean', 'fins'], relation: 'group : its members', grades: [5, 6] },
+  { pair: ['pack', 'wolves'], start: 'swarm', correct: 'bees', distractors: ['wolves', 'hive', 'honey'], relation: 'group : its members', grades: [5, 6] },
+  { pair: ['constellation', 'stars'], start: 'archipelago', correct: 'islands', distractors: ['stars', 'ocean', 'continents'], relation: 'group : its members', grades: [5, 6] },
+  { pair: ['herd', 'cattle'], start: 'school', correct: 'fish', distractors: ['cattle', 'teacher', 'ocean'], relation: 'group : its members', grades: [5, 6] },
+  { pair: ['senate', 'senators'], start: 'jury', correct: 'jurors', distractors: ['senators', 'judge', 'court'], relation: 'group : its members', grades: [5, 6] },
+  { pair: ['novice', 'expert'], start: 'apprentice', correct: 'master', distractors: ['expert', 'student', 'tool'], relation: 'beginner : highly skilled', grades: [5, 6] },
+  { pair: ['fawn', 'deer'], start: 'kid', correct: 'goat', distractors: ['deer', 'lamb', 'farm'], relation: 'young animal : grown animal', grades: [5, 6] },
+  { pair: ['glacier', 'ice'], start: 'dune', correct: 'sand', distractors: ['ice', 'desert', 'wind'], relation: 'landform : what it is made of', grades: [5, 6] },
+  { pair: ['summit', 'mountain'], start: 'crest', correct: 'wave', distractors: ['mountain', 'ocean', 'foam'], relation: 'top : of what', grades: [5, 6] },
+  { pair: ['cartographer', 'maps'], start: 'lexicographer', correct: 'dictionaries', distractors: ['maps', 'novels', 'newspapers'], relation: 'maker : what they make', grades: [5, 6] },
+  { pair: ['evaporate', 'vapor'], start: 'freeze', correct: 'ice', distractors: ['vapor', 'cold', 'water'], relation: 'process : what it produces', grades: [5, 6] },
+  { pair: ['prologue', 'epilogue'], start: 'introduction', correct: 'conclusion', distractors: ['epilogue', 'chapter', 'title'], relation: 'beginning : ending', grades: [5, 6] },
+  { pair: ['biologist', 'living things'], start: 'geologist', correct: 'rocks', distractors: ['living things', 'maps', 'stars'], relation: 'scientist : what they study', grades: [5, 6] },
+  { pair: ['meteorologist', 'weather'], start: 'astronomer', correct: 'stars', distractors: ['weather', 'rocks', 'telescopes'], relation: 'scientist : what they study', grades: [5, 6] },
+  { pair: ['sprint', 'jog'], start: 'shout', correct: 'speak', distractors: ['jog', 'whisper', 'song'], relation: 'intense : ordinary', grades: [5, 6] },
+  { pair: ['ravenous', 'hungry'], start: 'exhausted', correct: 'tired', distractors: ['hungry', 'energetic', 'sleep'], relation: 'extremely : somewhat', grades: [5, 6] },
+  { pair: ['stanza', 'poem'], start: 'paragraph', correct: 'essay', distractors: ['poem', 'sentence', 'word'], relation: 'part : whole', grades: [5, 6] },
+  { pair: ['benevolent', 'kind'], start: 'malicious', correct: 'cruel', distractors: ['kind', 'careless', 'curious'], relation: 'same meaning', grades: [5, 6] },
+  { pair: ['prudent', 'wise'], start: 'rash', correct: 'hasty', distractors: ['wise', 'rich', 'quiet'], relation: 'same meaning', grades: [5, 6] },
+  { pair: ['veto', 'reject'], start: 'ratify', correct: 'approve', distractors: ['reject', 'vote', 'argue'], relation: 'same meaning', grades: [5, 6] },
+  { pair: ['courageous', 'fearless'], start: 'cowardly', correct: 'fearful', distractors: ['fearless', 'brave', 'angry'], relation: 'same meaning', grades: [5, 6] },
+  { pair: ['lethargic', 'energetic'], start: 'sorrowful', correct: 'joyful', distractors: ['energetic', 'tearful', 'tired'], relation: 'opposites', grades: [5, 6] },
+  { pair: ['loyal', 'traitor'], start: 'honest', correct: 'liar', distractors: ['traitor', 'truth', 'judge'], relation: 'trait : a person without it', grades: [5, 6] },
+  { pair: ['cobbler', 'shoes'], start: 'tailor', correct: 'clothes', distractors: ['shoes', 'needle', 'store'], relation: 'worker : what they make and mend', grades: [5, 6] },
+  { pair: ['carpenter', 'wood'], start: 'mason', correct: 'stone', distractors: ['wood', 'metal', 'glass'], relation: 'worker : material', grades: [5, 6] },
+  { pair: ['quill', 'pen'], start: 'abacus', correct: 'calculator', distractors: ['pen', 'beads', 'numbers'], relation: 'old tool : modern tool', grades: [5, 6] },
+  { pair: ['candle', 'wax'], start: 'tire', correct: 'rubber', distractors: ['wax', 'wheel', 'car'], relation: 'object : material', grades: [5, 6] },
+  { pair: ['opaque', 'light'], start: 'soundproof', correct: 'sound', distractors: ['light', 'wall', 'quiet'], relation: 'blocks : what it blocks', grades: [5, 6] },
+  { pair: ['hinge', 'door'], start: 'axle', correct: 'wheel', distractors: ['door', 'car', 'spoke'], relation: 'part : what it lets turn', grades: [5, 6] },
+  { pair: ['7', '49'], start: '9', correct: '81', distractors: ['49', '18', '72'], relation: 'number : that number times itself', grades: [5, 6] },
+  { pair: ['1/2', '50%'], start: '1/4', correct: '25%', distractors: ['50%', '40%', '4%'], relation: 'fraction : percent', grades: [5, 6] },
+  { pair: ['hexagon', '6'], start: 'octagon', correct: '8', distractors: ['6', '10', '5'], relation: 'shape : number of sides', grades: [5, 6] },
+  { pair: ['quartet', '4'], start: 'trio', correct: '3', distractors: ['4', '2', '6'], relation: 'group : how many members', grades: [5, 6] },
+  { pair: ['elated', 'joy'], start: 'terrified', correct: 'fear', distractors: ['joy', 'brave', 'calm'], relation: 'feeling : what it is full of', grades: [5, 6] },
+  { pair: ['thesaurus', 'synonyms'], start: 'atlas', correct: 'maps', distractors: ['synonyms', 'words', 'travel'], relation: 'reference book : what it holds', grades: [5, 6] },
+  { pair: ['waning', 'moon'], start: 'ebbing', correct: 'tide', distractors: ['moon', 'ocean', 'wave'], relation: 'shrinking : what shrinks', grades: [5, 6] },
+  { pair: ['nocturnal', 'night'], start: 'diurnal', correct: 'day', distractors: ['night', 'morning', 'week'], relation: 'active : when', grades: [5, 6] },
+  { pair: ['oasis', 'desert'], start: 'island', correct: 'ocean', distractors: ['desert', 'beach', 'ship'], relation: 'small place : what surrounds it', grades: [5, 6] },
+  { pair: ['preface', 'book'], start: 'overture', correct: 'opera', distractors: ['book', 'singer', 'curtain'], relation: 'opening part : of what', grades: [5, 6] },
+  { pair: ['blueprint', 'building'], start: 'recipe', correct: 'dish', distractors: ['building', 'oven', 'flour'], relation: 'plan : what it makes', grades: [5, 6] },
+  { pair: ['gills', 'fish'], start: 'lungs', correct: 'mammals', distractors: ['fish', 'air', 'heart'], relation: 'breathing organ : animal', grades: [5, 6] },
 ]
 
-const gradesOf = (item: RawItem): Grade[] => item.grades ?? [3, 4, 5, 6]
+// Untagged items are the Level 9/10 baseline: 5th–6th grade (Levels 11/12)
+// get the harder [4, 5, 6] and [5, 6] tiers instead, so a 5th grader isn't
+// mostly served 3rd-grade words like "puppy : dog".
+const gradesOf = (item: RawItem): Grade[] => item.grades ?? [3, 4]
 
 export const VERBAL_ANALOGY_PROMPT =
   'The first two words go together in some way. Which word goes with the third word in the same way?'

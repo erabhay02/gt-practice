@@ -1,5 +1,5 @@
 import { COLORS as BEAD_COLORS } from '../generators/shapePalette'
-import type { ContentSpec, FoldLine, Hole, PaperRegion, Point } from '../types'
+import type { ContentSpec, FoldLine, Hole, LineStroke, PaperRegion, Point } from '../types'
 import { ShapeRenderer } from './primitives'
 
 type TileSize = 'small' | 'medium' | 'large'
@@ -119,6 +119,79 @@ function PaperTile({
   )
 }
 
+/** A grid of colored squares; `hole` is left blank with a dashed outline. */
+function PatternTile({ cells, hole, px }: { cells: string[][]; hole?: { row: number; col: number; size: number }; px: number }) {
+  const rows = cells.length
+  const cols = cells[0]?.length ?? 0
+  const unit = 10
+  const inHole = (r: number, c: number) =>
+    !!hole && r >= hole.row && r < hole.row + hole.size && c >= hole.col && c < hole.col + hole.size
+  return (
+    <svg viewBox={`-1 -1 ${cols * unit + 2} ${rows * unit + 2}`} width={px} height={(px * rows) / cols}>
+      {cells.flatMap((row, r) =>
+        row.map((color, c) =>
+          inHole(r, c) ? null : (
+            <rect key={`${r}-${c}`} x={c * unit} y={r * unit} width={unit} height={unit} fill={color} stroke="#1e293b" strokeWidth={0.4} />
+          ),
+        ),
+      )}
+      {hole && (
+        <rect
+          x={hole.col * unit}
+          y={hole.row * unit}
+          width={hole.size * unit}
+          height={hole.size * unit}
+          fill="#ffffff"
+          stroke="#64748b"
+          strokeWidth={0.8}
+          strokeDasharray="2 1.5"
+        />
+      )}
+      <rect x={0} y={0} width={cols * unit} height={rows * unit} fill="none" stroke="#1e293b" strokeWidth={0.8} />
+    </svg>
+  )
+}
+
+const STROKE_PATHS: Record<LineStroke, string> = {
+  top: 'M8 8 H56',
+  bottom: 'M8 56 H56',
+  left: 'M8 8 V56',
+  right: 'M56 8 V56',
+  diag: 'M8 8 L56 56',
+  antidiag: 'M56 8 L8 56',
+  vmid: 'M32 8 V56',
+  hmid: 'M8 32 H56',
+  ring: 'M32 20 a12 12 0 1 0 0.01 0',
+}
+
+/** A line figure: the chosen strokes inside a faint square guide. */
+function LinesTile({ strokes, px }: { strokes: LineStroke[]; px: number }) {
+  return (
+    <svg viewBox="0 0 64 64" width={px} height={px}>
+      <rect x={8} y={8} width={48} height={48} fill="none" stroke="#e2e8f0" strokeWidth={1} />
+      {strokes.map((s) => (
+        <path key={s} d={STROKE_PATHS[s]} fill="none" stroke="#1e3a8a" strokeWidth={3.5} strokeLinecap="round" />
+      ))}
+    </svg>
+  )
+}
+
+/** Emoji laid out in rows, so "above", "between" and "last" are easy to see. */
+function SceneTile({ rows, size }: { rows: string[][]; size: TileSize }) {
+  const text = size === 'small' ? 'text-lg' : size === 'large' ? 'text-3xl' : 'text-2xl'
+  return (
+    <div className={`flex flex-col items-center gap-0.5 leading-none ${text}`}>
+      {rows.map((row, r) => (
+        <div key={r} className="flex gap-1">
+          {row.map((e, c) => (
+            <span key={c}>{e}</span>
+          ))}
+        </div>
+      ))}
+    </div>
+  )
+}
+
 /** A sentence with its "___" drawn as a fill-in line. */
 function SentenceText({ text }: { text: string }) {
   const parts = text.split('___')
@@ -179,6 +252,15 @@ export function ContentTile({ content, size = 'medium' }: { content: ContentSpec
       return <GroupTile emoji={content.emoji} count={content.count} />
     case 'abacus':
       return <AbacusTile counts={content.counts} />
+    case 'pattern': {
+      // The full design is shown big; answer pieces (2x2/3x3 blocks) small.
+      const big = content.cells.length > 3
+      return <PatternTile cells={content.cells} hole={content.hole} px={big ? (size === 'small' ? 120 : 168) : size === 'small' ? 40 : 56} />
+    }
+    case 'lines':
+      return <LinesTile strokes={content.strokes} px={size === 'large' ? 60 : size === 'small' ? 40 : 52} />
+    case 'scene':
+      return <SceneTile rows={content.rows} size={size} />
     case 'paper':
       return (
         <PaperTile

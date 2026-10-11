@@ -12,6 +12,19 @@ import {
   generateNumberSeriesQuestion,
 } from '../content/generators/numberGenerators'
 import { generatePaperFoldingQuestion } from '../content/generators/paperFoldingGenerator'
+import {
+  generatePatternCompletionQuestion,
+  generateReasoningByAnalogyQuestion,
+  generateSerialReasoningQuestion,
+  generateSpatialVisualizationQuestion,
+} from '../content/generators/nnatGenerators'
+import {
+  generateArithmeticReasoningQuestion,
+  generateFiguralSeriesQuestion,
+  generateNumberMatrixQuestion,
+} from '../content/generators/olsatGenerators'
+import { buildArithmeticPicturesBank, buildAuralReasoningBank, buildFollowingDirectionsBank } from '../content/banks/olsatListening'
+import { buildAntonymBank, buildLogicalSelectionBank, buildSentenceArrangementBank } from '../content/banks/olsatVerbal'
 import { GRADES, isReadingLevel } from '../content/levels'
 import type { Difficulty, Grade, Question } from '../content/types'
 import { normalizeSpokenText } from './clipId'
@@ -25,6 +38,13 @@ const GENERATORS: ((d: Difficulty, seed: number, grade: Grade) => Question)[] = 
   generateNumberAnalogyQuestion,
   generateNumberPuzzleQuestion,
   generateNumberSeriesQuestion,
+  generatePatternCompletionQuestion,
+  generateReasoningByAnalogyQuestion,
+  generateSerialReasoningQuestion,
+  generateSpatialVisualizationQuestion,
+  generateFiguralSeriesQuestion,
+  generateNumberMatrixQuestion,
+  generateArithmeticReasoningQuestion,
 ]
 
 // Generated prompts come from a handful of templates; sampling many seeds
@@ -36,8 +56,22 @@ export function allSpokenTexts(): string[] {
   const texts = new Set<string>([SOUND_CHECK_TEXT])
   for (const grade of GRADES) {
     const banks = isReadingLevel(grade)
-      ? [buildVerbalAnalogyBank(grade), buildVerbalClassificationBank(grade), buildSentenceReadingBank(grade)]
-      : [buildPictureAnalogyBank(grade), buildPictureClassificationBank(grade), buildSentenceCompletionBank(grade)]
+      ? [
+          buildVerbalAnalogyBank(grade),
+          buildVerbalClassificationBank(grade),
+          buildSentenceReadingBank(grade),
+          buildAntonymBank(grade),
+          buildLogicalSelectionBank(grade),
+          buildSentenceArrangementBank(grade),
+        ]
+      : [
+          buildPictureAnalogyBank(grade),
+          buildPictureClassificationBank(grade),
+          buildSentenceCompletionBank(grade),
+          buildFollowingDirectionsBank(grade),
+          buildAuralReasoningBank(grade),
+          buildArithmeticPicturesBank(grade),
+        ]
     for (const bank of banks) {
       for (const q of bank) texts.add(q.promptAudioText)
     }

@@ -150,8 +150,8 @@ export function Settings() {
         <Section title="About">
           <p className="text-xs text-slate-500">
             ThinkSprout gives original practice questions in the style of cognitive abilities tests for young children. It is not
-            affiliated with, endorsed by, or sponsored by Riverside Insights. CogAT® is a registered trademark of Riverside
-            Assessments, LLC.
+            affiliated with, endorsed by, or sponsored by Riverside Insights or Pearson. CogAT® is a registered trademark of
+            Riverside Assessments, LLC. NNAT® and OLSAT® are trademarks of Pearson Education, Inc. or its affiliates.
           </p>
           <p className="mt-2 text-xs text-slate-400">App version: {__BUILD_ID__}</p>
         </Section>

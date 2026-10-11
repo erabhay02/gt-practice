@@ -6,7 +6,8 @@ export interface LevelInfo {
   // Short form for tight spots ("K", "3rd").
   shortLabel: string
   cogatLevel: string
-  // Approximate number of items on each real subtest at this level.
+  // Items on each real CogAT subtest at this level (Riverside's published
+  // Form 7 table: "CogAT testing time, number of items per subtest").
   mockLength: Partial<Record<SubType, number>>
   // Levels 9 and up give each subtest a time limit; K–2 are untimed.
   minutesPerPart: number | null
@@ -19,15 +20,15 @@ export const LEVELS: Record<Grade, LevelInfo> = {
     shortLabel: 'K',
     cogatLevel: '5/6',
     mockLength: {
-      'picture-analogy': 12,
-      'sentence-completion': 12,
-      'picture-classification': 12,
-      'number-analogy': 12,
+      'picture-analogy': 14,
+      'sentence-completion': 14,
+      'picture-classification': 14,
+      'number-analogy': 14,
       'number-puzzle': 10,
-      'number-series': 12,
-      'figure-matrix': 10,
+      'number-series': 14,
+      'figure-matrix': 14,
       'paper-folding': 10,
-      'figure-classification': 10,
+      'figure-classification': 14,
     },
     minutesPerPart: null,
   },
@@ -37,15 +38,15 @@ export const LEVELS: Record<Grade, LevelInfo> = {
     shortLabel: '1st',
     cogatLevel: '7',
     mockLength: {
-      'picture-analogy': 13,
-      'sentence-completion': 13,
-      'picture-classification': 12,
-      'number-analogy': 13,
-      'number-puzzle': 11,
-      'number-series': 13,
-      'figure-matrix': 11,
-      'paper-folding': 10,
-      'figure-classification': 11,
+      'picture-analogy': 16,
+      'sentence-completion': 16,
+      'picture-classification': 16,
+      'number-analogy': 16,
+      'number-puzzle': 12,
+      'number-series': 16,
+      'figure-matrix': 16,
+      'paper-folding': 12,
+      'figure-classification': 16,
     },
     minutesPerPart: null,
   },
@@ -55,21 +56,21 @@ export const LEVELS: Record<Grade, LevelInfo> = {
     shortLabel: '2nd',
     cogatLevel: '8',
     mockLength: {
-      'picture-analogy': 16,
-      'sentence-completion': 16,
-      'picture-classification': 16,
-      'number-analogy': 16,
+      'picture-analogy': 18,
+      'sentence-completion': 18,
+      'picture-classification': 18,
+      'number-analogy': 18,
       'number-puzzle': 14,
-      'number-series': 16,
-      'figure-matrix': 16,
-      'paper-folding': 14,
-      'figure-classification': 16,
+      'number-series': 18,
+      'figure-matrix': 18,
+      'paper-folding': 16,
+      'figure-classification': 18,
     },
     minutesPerPart: null,
   },
-  // Levels 9 through 12 share the same subtests and item counts (Riverside's
-  // published specs give the whole upper battery, Levels 9–17/18, the same
-  // per-subtest item counts and 10-minute timed parts).
+  // Levels 9 through 12 share the same subtests and 10-minute timed parts;
+  // Level 9 has 22 verbal analogies and 20 figure items, Levels 10–17/18 have
+  // 24 and 22 (Riverside's published item table).
   3: {
     grade: 3,
     label: '3rd grade',
@@ -82,9 +83,9 @@ export const LEVELS: Record<Grade, LevelInfo> = {
       'number-analogy': 18,
       'number-puzzle': 16,
       'number-series': 18,
-      'figure-matrix': 22,
+      'figure-matrix': 20,
       'paper-folding': 16,
-      'figure-classification': 22,
+      'figure-classification': 20,
     },
     minutesPerPart: 10,
   },
@@ -94,7 +95,7 @@ export const LEVELS: Record<Grade, LevelInfo> = {
     shortLabel: '4th',
     cogatLevel: '10',
     mockLength: {
-      'verbal-analogy': 22,
+      'verbal-analogy': 24,
       'sentence-completion': 20,
       'verbal-classification': 20,
       'number-analogy': 18,
@@ -112,7 +113,7 @@ export const LEVELS: Record<Grade, LevelInfo> = {
     shortLabel: '5th',
     cogatLevel: '11',
     mockLength: {
-      'verbal-analogy': 22,
+      'verbal-analogy': 24,
       'sentence-completion': 20,
       'verbal-classification': 20,
       'number-analogy': 18,
@@ -130,7 +131,7 @@ export const LEVELS: Record<Grade, LevelInfo> = {
     shortLabel: '6th',
     cogatLevel: '12',
     mockLength: {
-      'verbal-analogy': 22,
+      'verbal-analogy': 24,
       'sentence-completion': 20,
       'verbal-classification': 20,
       'number-analogy': 18,

@@ -189,9 +189,52 @@ const RAW_ITEMS: RawItem[] = [
   { sentence: 'The ___ silence that followed the announcement made everyone uneasy.', correct: 'stunned', distractors: ['comfortable', 'joyful', 'brief'], grades: [5, 6] },
   { sentence: 'Because the old warehouse had become so ___ over the years, the city finally condemned it.', correct: 'unstable', distractors: ['colorful', 'spacious', 'modern'], grades: [5, 6] },
   { sentence: 'The ___ scientist spent thirty years perfecting a single theory before publishing it.', correct: 'tenacious', distractors: ['careless', 'impatient', 'forgetful'], grades: [5, 6] },
+  // Third grade-5/6 batch (2026-10-10) — Phase 3 depth: logic words
+  // (unless, rather than, although) where only one choice keeps the sentence consistent.
+  { sentence: 'Unless the bakery receives more flour, it will have to ___ some of its bread orders.', correct: 'cancel', distractors: ['bake', 'double', 'deliver'], grades: [5, 6] },
+  { sentence: 'The town was ___ by the storm; nearly every street was blocked by fallen trees.', correct: 'devastated', distractors: ['improved', 'delighted', 'ignored'], grades: [5, 6] },
+  { sentence: 'Because the evidence was only ___, the judge asked for more proof before deciding.', correct: 'partial', distractors: ['complete', 'obvious', 'final'], grades: [5, 6] },
+  { sentence: 'The chef ___ the soup several times, adding a pinch of salt until the flavor was just right.', correct: 'tasted', distractors: ['froze', 'spilled', 'hid'], grades: [5, 6] },
+  { sentence: 'Rather than ___ the argument, the two friends calmly talked through their disagreement.', correct: 'escalate', distractors: ['settle', 'resolve', 'end'], grades: [5, 6] },
+  { sentence: 'The once-thriving village became ___ after the factory closed and families moved away.', correct: 'deserted', distractors: ['crowded', 'prosperous', 'noisy'], grades: [5, 6] },
+  { sentence: 'Since the instructions were ___, nobody could figure out how to assemble the bookshelf.', correct: 'ambiguous', distractors: ['clear', 'detailed', 'helpful'], grades: [5, 6] },
+  { sentence: "The athlete's ___ training schedule left little time for anything else.", correct: 'rigorous', distractors: ['relaxed', 'occasional', 'optional'], grades: [5, 6] },
+  { sentence: 'To ___ the spread of the illness, everyone was asked to wash their hands often.', correct: 'prevent', distractors: ['encourage', 'celebrate', 'measure'], grades: [5, 6] },
+  { sentence: 'The documentary was ___; it presented facts from many viewpoints without taking sides.', correct: 'impartial', distractors: ['biased', 'fictional', 'unfinished'], grades: [5, 6] },
+  { sentence: 'Although the puppy looked ___, it was actually full of energy once it woke up.', correct: 'sleepy', distractors: ['playful', 'lively', 'excited'], grades: [5, 6] },
+  { sentence: 'The ___ of the rare bird drew birdwatchers from hundreds of miles away.', correct: 'sighting', distractors: ['absence', 'silence', 'departure'], grades: [5, 6] },
+  { sentence: 'The ___ student asked so many questions that the teacher stayed after class to answer them.', correct: 'inquisitive', distractors: ['indifferent', 'sleepy', 'silent'], grades: [5, 6] },
+  { sentence: 'The two countries signed a ___ promising to protect the river they share.', correct: 'treaty', distractors: ['recipe', 'novel', 'receipt'], grades: [5, 6] },
+  { sentence: 'Because the ice on the pond was ___, the ranger warned skaters to stay off it.', correct: 'thin', distractors: ['thick', 'solid', 'frozen'], grades: [5, 6] },
+  { sentence: 'Too much sunlight can ___ the colors of a painting over time.', correct: 'fade', distractors: ['brighten', 'paint', 'frame'], grades: [5, 6] },
+  { sentence: 'A ___ is a word that means the same as another word.', correct: 'synonym', distractors: ['antonym', 'homophone', 'verb'], grades: [5, 6] },
+  { sentence: 'Scientists ___ fossils to learn how animals lived millions of years ago.', correct: 'study', distractors: ['forget', 'prevent', 'imitate'], grades: [5, 6] },
+  { sentence: 'The hikers ___ their water carefully because the next stream was miles away.', correct: 'rationed', distractors: ['wasted', 'spilled', 'splashed'], grades: [5, 6] },
+  { sentence: "The movie's ending was so ___ that most viewers guessed it long before it happened.", correct: 'predictable', distractors: ['shocking', 'mysterious', 'confusing'], grades: [5, 6] },
+  { sentence: 'Because the speaker mumbled, the audience could barely ___ what was said.', correct: 'understand', distractors: ['enjoy', 'write', 'forget'], grades: [5, 6] },
+  { sentence: 'The ___ plant needed only a little water, which made it perfect for the dry climate.', correct: 'hardy', distractors: ['delicate', 'thirsty', 'tropical'], grades: [5, 6] },
+  { sentence: 'The museum ___ a new wing to display its growing collection of dinosaur fossils.', correct: 'constructed', distractors: ['demolished', 'ignored', 'borrowed'], grades: [5, 6] },
+  { sentence: 'With each ___ step, the mountaineers moved closer to the snowy summit.', correct: 'careful', distractors: ['backward', 'sleepy', 'absent'], grades: [5, 6] },
+  { sentence: "The mayor's speech was ___; it lasted only two minutes but covered every important point.", correct: 'concise', distractors: ['rambling', 'endless', 'confusing'], grades: [5, 6] },
+  { sentence: 'Because the team ___ the old record, their names were added to the trophy.', correct: 'broke', distractors: ['missed', 'forgot', 'lost'], grades: [5, 6] },
+  { sentence: 'The ___ melody was so catchy that everyone was humming it for days.', correct: 'memorable', distractors: ['forgettable', 'silent', 'unpleasant'], grades: [5, 6] },
+  { sentence: 'The farmers were ___ that the long drought would finally end, but the clouds brought no rain.', correct: 'hopeful', distractors: ['relieved', 'unaware', 'furious'], grades: [5, 6] },
+  { sentence: 'Since the forecast predicted a ___, the coastal towns filled sandbags and boarded up windows.', correct: 'hurricane', distractors: ['sunny day', 'light breeze', 'rainbow'], grades: [5, 6] },
+  { sentence: "The young violinist's ___ was clear as soon as the first note filled the hall.", correct: 'talent', distractors: ['boredom', 'absence', 'laziness'], grades: [5, 6] },
+  { sentence: 'Where the two rivers ___, they form one wide, slow-moving channel.', correct: 'meet', distractors: ['dry', 'freeze', 'begin'], grades: [5, 6] },
+  { sentence: 'Although the old map was ___, the explorers could still make out the trail to the waterfall.', correct: 'faded', distractors: ['new', 'accurate', 'colorful'], grades: [5, 6] },
+  { sentence: 'The scientist repeated the experiment to make sure the results were ___.', correct: 'reliable', distractors: ['accidental', 'forgotten', 'imaginary'], grades: [5, 6] },
+  { sentence: 'The cat moved ___ across the room, careful not to wake the sleeping dog.', correct: 'stealthily', distractors: ['noisily', 'clumsily', 'proudly'], grades: [5, 6] },
+  { sentence: 'The students ___ their ideas on the whiteboard before choosing a topic for the project.', correct: 'brainstormed', distractors: ['forgot', 'hid', 'ignored'], grades: [5, 6] },
+  { sentence: 'Because the bridge could hold only a ___ amount of weight, large trucks were not allowed to cross.', correct: 'limited', distractors: ['unlimited', 'enormous', 'growing'], grades: [5, 6] },
+  { sentence: 'The ___ volunteers worked through the night to rescue animals from the flood.', correct: 'dedicated', distractors: ['reluctant', 'lazy', 'absent'], grades: [5, 6] },
+  { sentence: "The editor's close ___ to detail meant that no mistake went unnoticed.", correct: 'attention', distractors: ['objection', 'resistance', 'distance'], grades: [5, 6] },
 ]
 
-const gradesOf = (item: RawItem): Grade[] => item.grades ?? [3, 4, 5, 6]
+// Untagged items are the Level 9/10 baseline: 5th–6th grade (Levels 11/12)
+// get the harder [4, 5, 6] and [5, 6] tiers instead, so a 5th grader isn't
+// mostly served 3rd-grade words like "puppy : dog".
+const gradesOf = (item: RawItem): Grade[] => item.grades ?? [3, 4]
 
 export const SENTENCE_READING_PROMPT = 'Read the sentence. Which word fits best in the blank?'
 

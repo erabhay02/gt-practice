@@ -97,9 +97,19 @@ async function syncOnce() {
   const merged = mergeAll(before, { children, sessions }, new Date().toISOString())
 
   if (merged.push.children.length) {
-    const { error } = await supabase()
-      .from('children')
-      .upsert(merged.push.children.map((c) => ({ ...c, parent_id: uid })), { onConflict: 'parent_id,id' })
+    const rows = merged.push.children.map((c) => ({ ...c, parent_id: uid }))
+    let { error } = await supabase().from('children').upsert(rows, { onConflict: 'parent_id,id' })
+    // Before migration 0005 the server has no test_family column (PostgREST:
+    // "Could not find the 'test_family' column"). Sync everything else rather
+    // than failing, so the app can ship before the database is updated.
+    if (error && /test_family/.test(error.message)) {
+      const withoutFamily = rows.map((r) => {
+        const copy: Partial<typeof r> = { ...r }
+        delete copy.test_family
+        return copy
+      })
+      ;({ error } = await supabase().from('children').upsert(withoutFamily, { onConflict: 'parent_id,id' }))
+    }
     if (error) throw error
   }
   for (let i = 0; i < merged.push.sessions.length; i += 500) {

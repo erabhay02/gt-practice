@@ -1,8 +1,9 @@
 import { useMemo, useState } from 'react'
+import { FAMILIES, TEST_FAMILIES, familyOf, levelName } from '../content/families'
 import { GRADES, LEVELS } from '../content/levels'
 import { useActiveProfile } from '../state/profilesStore'
-import { AVAILABLE_SUBTYPES, BATTERIES, READING_LEVEL_SUBTYPES, getRampedQuestions, subtypesForGrade } from '../content/contentLoader'
-import type { ContentSpec, Grade, Question, SubType } from '../content/types'
+import { ALL_SUBTYPES, BATTERIES, getRampedQuestions, testPlan } from '../content/contentLoader'
+import type { ContentSpec, Grade, Question, SubType, TestFamily } from '../content/types'
 import { ContentTile } from '../content/shapes/ContentTile'
 
 const LETTERS = ['A', 'B', 'C', 'D']
@@ -49,7 +50,8 @@ function PrintQuestion({ q, number }: { q: Question; number: number }) {
       <div className="mb-2 flex gap-2">
         <span className="font-bold text-slate-800">{number}.</span>
         <span className="text-sm text-slate-600">
-          {q.subType === 'sentence-completion' && q.promptVisual === undefined ? <strong>Read aloud: “{q.promptAudioText}”</strong> : q.promptAudioText}
+          {/* Listening items have no picture prompt: the grown-up reads the question. */}
+          {q.promptVisual === undefined ? <strong>Read aloud: “{q.promptAudioText}”</strong> : q.promptAudioText}
         </span>
       </div>
       <div className="flex flex-wrap items-center gap-6 pl-6">
@@ -74,21 +76,21 @@ function PrintQuestion({ q, number }: { q: Question; number: number }) {
 export function Worksheet() {
   const profile = useActiveProfile()
   const [grade, setGrade] = useState<Grade>(profile?.grade ?? 2)
-  const [selected, setSelected] = useState<Set<SubType>>(
-    () => new Set([...AVAILABLE_SUBTYPES, ...READING_LEVEL_SUBTYPES].map((s) => s.subType)),
-  )
+  const [family, setFamily] = useState<TestFamily>(profile ? familyOf(profile) : 'cogat')
+  const [selected, setSelected] = useState<Set<SubType>>(() => new Set(ALL_SUBTYPES))
+  const plan = testPlan(family, grade)
   const [perPart, setPerPart] = useState(3)
   const [version, setVersion] = useState(0)
 
   const parts = useMemo(
     () =>
-      subtypesForGrade(grade).filter((s) => selected.has(s.subType)).map((info) => ({
+      plan.parts.filter((s) => selected.has(s.subType)).map((info) => ({
         info,
         questions: getRampedQuestions(info.subType, perPart, [], grade),
       })),
     // `version` forces a fresh set of questions.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [selected, perPart, version, grade],
+    [selected, perPart, version, grade, family],
   )
 
   let n = 0
@@ -120,11 +122,25 @@ export function Worksheet() {
               </button>
             ))}
           </div>
-          {BATTERIES.map(({ domain, label }) => (
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-sm text-slate-600">Test:</span>
+            {TEST_FAMILIES.map((f) => (
+              <button
+                key={f}
+                onClick={() => setFamily(f)}
+                className={`rounded-full border-2 px-3 py-1 text-sm ${
+                  family === f ? 'border-sprout-500 bg-sprout-50 text-sprout-800' : 'border-slate-200 text-slate-500'
+                }`}
+              >
+                {FAMILIES[f].name}
+              </button>
+            ))}
+          </div>
+          {BATTERIES.filter(({ domain }) => plan.parts.some((s) => s.domain === domain)).map(({ domain, label }) => (
             <div key={domain}>
               <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-500">{label}</p>
               <div className="flex flex-wrap gap-2">
-                {subtypesForGrade(grade).filter((s) => s.domain === domain).map((s) => (
+                {plan.parts.filter((s) => s.domain === domain).map((s) => (
                   <button
                     key={s.subType}
                     onClick={() => toggle(s.subType)}
@@ -172,7 +188,9 @@ export function Worksheet() {
 
       <article className="mx-auto max-w-2xl rounded-2xl bg-white p-6 shadow-sm print:max-w-none print:rounded-none print:shadow-none">
         <div className="mb-2 flex justify-between border-b-2 border-slate-800 pb-2">
-          <h2 className="text-lg font-bold text-slate-800">ThinkSprout Worksheet · {LEVELS[grade].label}</h2>
+          <h2 className="text-lg font-bold text-slate-800">
+            ThinkSprout Worksheet · {LEVELS[grade].label} · {levelName(family, grade)}
+          </h2>
           <span className="text-sm text-slate-500">Name: ____________ Date: ________</span>
         </div>
         {numbered.map(({ info, items }) => (

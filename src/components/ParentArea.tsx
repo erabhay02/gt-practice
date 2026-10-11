@@ -7,6 +7,7 @@ import { daysUntil } from '../state/settingsStore'
 import { cloudEnabled } from '../cloud/supabase'
 import { friendlyError, useAuthStore } from '../cloud/authStore'
 import { resetChildEverywhere } from '../cloud/sync'
+import { familyOf, levelName } from '../content/families'
 import { ChildForm } from './ChildForm'
 import { ProgressDashboard } from './ProgressDashboard'
 
@@ -85,7 +86,10 @@ export function ParentProgress() {
     <>
       <ChildChips value={profile.id} onChange={setChosen} />
       <h1 className="mb-4 text-xl font-bold text-slate-800">
-        {profile.name}'s progress <span className="text-sm font-normal text-slate-500">· {LEVELS[profile.grade].label}</span>
+        {profile.name}'s progress{' '}
+        <span className="text-sm font-normal text-slate-500">
+          · {LEVELS[profile.grade].label} · {levelName(familyOf(profile), profile.grade)}
+        </span>
       </h1>
       <ProgressDashboard profile={profile} />
     </>
@@ -126,7 +130,7 @@ function ChildCard({ child }: { child: ChildProfile }) {
           <div>
             <p className="font-semibold text-slate-800">{child.name}</p>
             <p className="text-xs text-slate-500">
-              {LEVELS[child.grade].label} (CogAT Level {LEVELS[child.grade].cogatLevel}) · {sessions} sessions
+              {LEVELS[child.grade].label} · {levelName(familyOf(child), child.grade)} · {sessions} sessions
             </p>
           </div>
         </div>
