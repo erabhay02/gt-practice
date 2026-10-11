@@ -291,7 +291,7 @@ function numberEquation(rng: RngFn, difficulty: Difficulty, seed: number): Quest
     }
     case 'symbol': {
       // ▲ = a ; ? = ▲ + b
-      const symbol: ContentSpec = { kind: 'shape', spec: { type: 'triangle', color: '#3b82f6', size: 'small', rotation: 0, fill: 'solid' } }
+      const symbol: ContentSpec = { kind: 'shape', spec: { type: 'triangle', color: '#4C6FEB', size: 'small', rotation: 0, fill: 'solid' } }
       answer = a + b
       preferred = [a, b, a * 2]
       visual = [
@@ -595,8 +595,8 @@ function numericSeries(difficulty: Difficulty, seed: number, grade: Grade): Ques
 
 function numericPuzzle(difficulty: Difficulty, seed: number, grade: Grade): Question {
   const rng = mulberry32(seed)
-  const triangle: ContentSpec = { kind: 'shape', spec: { type: 'triangle', color: '#3b82f6', size: 'small', rotation: 0, fill: 'solid' } }
-  const square: ContentSpec = { kind: 'shape', spec: { type: 'square', color: '#ef4444', size: 'small', rotation: 0, fill: 'solid' } }
+  const triangle: ContentSpec = { kind: 'shape', spec: { type: 'triangle', color: '#4C6FEB', size: 'small', rotation: 0, fill: 'solid' } }
+  const square: ContentSpec = { kind: 'shape', spec: { type: 'square', color: '#991B1B', size: 'small', rotation: 0, fill: 'solid' } }
   let visual: ContentSpec[][] = []
   let answer = 0
   let preferred: number[] = []

@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { COLORS } from '../generators/shapePalette'
 import type { ShapeSpec, ShapeType } from '../types'
 
 const SIZE_PX: Record<ShapeSpec['size'], number> = {
@@ -32,7 +33,15 @@ interface Paint {
   fill: string
   stroke: string
   strokeWidth: number
+  strokeDasharray?: string
 }
+
+// Accessibility: COLORS[0] (blue) and COLORS[1] (purple) are the one pair in
+// the palette that's only barely distinguishable under simulated red-green
+// colorblindness (OKLab ΔE ~7.7, the "legal only with secondary encoding"
+// floor — see shapePalette.ts). A dashed stroke on purple means an item
+// whose only changing attribute is color is never color-alone to solve.
+const DASHED_STROKE_COLOR = COLORS[1]
 
 function shapeElement(type: ShapeType, c: number, r: number, paint: Paint): ReactNode {
   const common = { ...paint, strokeLinejoin: 'round' as const }
@@ -149,6 +158,8 @@ export function ShapeRenderer({ spec, className, scale = 1 }: { spec: ShapeSpec;
           <stop offset="0.5" stopColor="white" />
         </linearGradient>
       </defs>
+      {spec.color === DASHED_STROKE_COLOR &&
+        shapeElement(spec.type, c, r * 1.12, { fill: 'none', stroke: MARK_COLOR, strokeWidth: 2, strokeDasharray: '3 3' })}
       {shapeElement(spec.type, c, r, paint)}
       {spec.nested && shapeElement(spec.nested, c, r * 0.38, { fill: 'white', stroke: MARK_COLOR, strokeWidth: 2 })}
       {!spec.nested && <InnerMark mark={spec.inner} c={c} r={r} />}

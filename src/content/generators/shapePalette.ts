@@ -7,7 +7,14 @@ import { pickOne, type RngFn } from './rng'
 export const SHAPE_TYPES: ShapeType[] = ['triangle', 'star', 'pentagon', 'hexagon', 'arrow']
 // Easy items: unrotated, instantly recognizable silhouettes (no pentagon/hexagon mix-ups).
 export const EASY_SHAPE_TYPES: ShapeType[] = ['circle', 'square', 'triangle', 'star', 'arrow']
-export const COLORS = ['#ef4444', '#3b82f6', '#22c55e', '#f59e0b', '#a855f7']
+// Colorblind-safe: every pair clears OKLab ΔE under simulated protan/deutan/
+// tritan vision (checked with the dataviz skill's validate_palette.js), not
+// just picked to look nice. The one pair left at the "legal only with
+// secondary encoding" floor (COLORS[0] blue vs COLORS[1] purple, ΔE 7.7 under
+// deutan) gets a dashed stroke on purple in ShapeRenderer so it's never
+// color-alone. Replaces an earlier palette where blue/purple were a near-total
+// collision (ΔE 0.9) and green/amber another hard fail (ΔE 5.7) under CVD.
+export const COLORS = ['#4C6FEB', '#7E22CE', '#DC267F', '#991B1B', '#D97706']
 export const SIZES: ShapeSize[] = ['small', 'medium', 'large']
 export const ROTATIONS: ShapeRotation[] = [0, 45, 90, 135, 180, 225, 270, 315]
 export const BASIC_FILLS: ShapeFill[] = ['solid', 'striped', 'dotted', 'outline']

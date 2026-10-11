@@ -20,8 +20,12 @@ import type { Difficulty, Grade, Question } from './types'
 const EXPECTED: Partial<Record<Grade, Record<string, string>>> = {
   // Recorded before Kindergarten and grades 3–4 were added.
   1: {
-    generateMatrixQuestion: '9da2835630e197c6',
-    generateFigureClassificationQuestion: '69dd40c6ade7b64e',
+    // generateMatrixQuestion and generateFigureClassificationQuestion updated
+    // 2026-10-10 (Phase 5, accessibility): shapePalette.ts's COLORS swapped
+    // to a colorblind-safe palette (the old one had a near-total blue/purple
+    // collision and a hard green/amber collision under simulated CVD).
+    generateMatrixQuestion: '33fa4bce2893bfe5',
+    generateFigureClassificationQuestion: '534c162ee9f5ac7d',
     generatePaperFoldingQuestion: '8381f251f272c499',
     generateNumberAnalogyQuestion: '70ae83bf0890f84e',
     generateNumberPuzzleQuestion: '5c598799ffa873ae',
@@ -39,11 +43,15 @@ const EXPECTED: Partial<Record<Grade, Record<string, string>>> = {
   },
   // Recorded before 1st grade was added.
   2: {
-    generateMatrixQuestion: '60e54b912812d0dd',
-    generateFigureClassificationQuestion: '0d0fcc6c5a8f2069',
+    // See the grade-1 comment above — same 2026-10-10 accessibility update.
+    // generateNumberPuzzleQuestion also changed here (not at grade 1): its
+    // algebra-symbol triangle/square colors were hardcoded to the two old
+    // palette hexes directly, now updated to the new blue/red.
+    generateMatrixQuestion: '7db79eec4b74c5ad',
+    generateFigureClassificationQuestion: '217c461266fd92fa',
     generatePaperFoldingQuestion: 'b3119ad77717d142',
     generateNumberAnalogyQuestion: 'e4e81929466332a6',
-    generateNumberPuzzleQuestion: 'dcafafff381f5ec8',
+    generateNumberPuzzleQuestion: '9caeaec1c800e9d5',
     generateNumberSeriesQuestion: 'bc9b85538b9e829e',
     // See the grade-1 comment above — same 2026-10-10 updates.
     buildPictureAnalogyBank: 'd71b1932fd6625da',

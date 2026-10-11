@@ -1,3 +1,4 @@
+import { COLORS as BEAD_COLORS } from '../generators/shapePalette'
 import type { ContentSpec, FoldLine, Hole, PaperRegion, Point } from '../types'
 import { ShapeRenderer } from './primitives'
 
@@ -28,8 +29,6 @@ function GroupTile({ emoji, count }: { emoji: string; count: number }) {
     </div>
   )
 }
-
-const BEAD_COLORS = ['#ef4444', '#3b82f6', '#22c55e', '#f59e0b', '#a855f7']
 
 function AbacusTile({ counts }: { counts: (number | null)[] }) {
   const rodGap = 22
