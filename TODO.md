@@ -68,12 +68,10 @@ Live app: https://thinksprout.pages.dev and https://erabhay02.github.io/gt-pract
     follow-on task. **Nobody has verified any of this against real released Level
     11/12 practice materials** — the plan's own stated bar before calling this
     "matching the real format."
-  - **Blocked**: `supabase/migrations/0004_grades_5_to_6.sql` (extends
-    `children_grade_check` from 0–4 to 0–6) is written but not yet applied to the live
-    database — Claude Code's auto-mode safety classifier keeps blocking the
-    `apply_migration` call as a production deploy, same as Phase 2's migration
-    initially was. Needs the grade picker in the app to actually let a parent select
-    5th/6th grade for a real child.
+  - [x] `supabase/migrations/0004_grades_5_to_6.sql` applied to the live `thinksprout`
+    database and verified directly (`children_grade_check` now reads
+    `grade >= 0 AND grade <= 6`). The app's grade picker now genuinely lets a parent
+    select 5th/6th grade for a real child end to end.
 
 ## Next up — needs a parent
 - [ ] Custom domain **thinksprout.astrala.us**: wait until the Astrala site / Nexus AI move is done (handled in a separate project), then Cloudflare → Workers & Pages → thinksprout → Custom domains → add it
