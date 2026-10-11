@@ -50,29 +50,29 @@ const RAW_ITEMS: RawItem[] = [
   { sentence: 'Owls can see well in the dark, so they hunt at ___.', correct: 'night', distractors: ['noon', 'sunrise', 'lunch'] },
   { sentence: 'The drive was very ___, so we packed lots of snacks.', correct: 'long', distractors: ['short', 'quick', 'quiet'] },
   // 4th grade (Level 10): harder words and sentences that turn on "although", "since", "because".
-  { sentence: 'The hikers were ___ after climbing the steep mountain all day.', correct: 'exhausted', distractors: ['energetic', 'bored', 'curious'], grades: [4] },
-  { sentence: 'Although the test was difficult, Maya felt ___ because she had studied.', correct: 'confident', distractors: ['nervous', 'confused', 'lazy'], grades: [4] },
-  { sentence: 'The scientist used a ___ to look at the tiny cells.', correct: 'microscope', distractors: ['telescope', 'thermometer', 'magnet'], grades: [4] },
-  { sentence: 'The river was so ___ that we could see the fish at the bottom.', correct: 'clear', distractors: ['deep', 'muddy', 'wide'], grades: [4] },
-  { sentence: 'Carlos is very ___; he always shares his snacks with friends.', correct: 'generous', distractors: ['selfish', 'shy', 'forgetful'], grades: [4] },
-  { sentence: 'The ancient castle was built hundreds of years ___.', correct: 'ago', distractors: ['later', 'soon', 'ahead'], grades: [4] },
-  { sentence: 'Since the bridge was ___, the cars had to take a different road.', correct: 'damaged', distractors: ['new', 'long', 'painted'], grades: [4] },
-  { sentence: 'A ___ is a person who writes poems.', correct: 'poet', distractors: ['painter', 'baker', 'pilot'], grades: [4] },
-  { sentence: 'The desert gets very little ___, so few plants grow there.', correct: 'rain', distractors: ['sand', 'heat', 'sunlight'], grades: [4] },
-  { sentence: 'Our team practiced every day, so we were well ___ for the big game.', correct: 'prepared', distractors: ['unlikely', 'afraid', 'late'], grades: [4] },
-  { sentence: 'The audience ___ loudly at the end of the wonderful play.', correct: 'clapped', distractors: ['slept', 'whispered', 'frowned'], grades: [4] },
-  { sentence: 'A compass helps you find which ___ you are going.', correct: 'direction', distractors: ['speed', 'time', 'distance'], grades: [4] },
-  { sentence: 'The museum guard asked us not to ___ the paintings.', correct: 'touch', distractors: ['see', 'enjoy', 'visit'], grades: [4] },
-  { sentence: 'Elephants are ___ animals; they are the largest animals on land.', correct: 'enormous', distractors: ['tiny', 'fast', 'noisy'], grades: [4] },
-  { sentence: 'Because Leo was ___, he did not want to speak in front of the class.', correct: 'shy', distractors: ['brave', 'proud', 'tall'], grades: [4] },
-  { sentence: 'Water turns into ice when it ___.', correct: 'freezes', distractors: ['boils', 'melts', 'flows'], grades: [4] },
-  { sentence: 'The opposite of ancient is ___.', correct: 'modern', distractors: ['old', 'broken', 'famous'], grades: [4] },
-  { sentence: 'The detective looked for ___ to solve the mystery.', correct: 'clues', distractors: ['toys', 'snacks', 'friends'], grades: [4] },
-  { sentence: 'Bats sleep during the day and are ___ at night.', correct: 'active', distractors: ['asleep', 'hidden', 'still'], grades: [4] },
-  { sentence: 'The recipe says to ___ the eggs and sugar together in a bowl.', correct: 'mix', distractors: ['freeze', 'slice', 'bake'], grades: [4] },
-  { sentence: 'Mount Everest is the ___ mountain in the world.', correct: 'highest', distractors: ['smallest', 'newest', 'wettest'], grades: [4] },
-  { sentence: 'The children were ___ to see a rainbow after the storm.', correct: 'delighted', distractors: ['annoyed', 'bored', 'frightened'], grades: [4] },
-  { sentence: 'Even though it was raining, the soccer game was not ___.', correct: 'canceled', distractors: ['played', 'wet', 'long'], grades: [4] },
+  { sentence: 'The hikers were ___ after climbing the steep mountain all day.', correct: 'exhausted', distractors: ['energetic', 'bored', 'curious'], grades: [4, 5, 6] },
+  { sentence: 'Although the test was difficult, Maya felt ___ because she had studied.', correct: 'confident', distractors: ['nervous', 'confused', 'lazy'], grades: [4, 5, 6] },
+  { sentence: 'The scientist used a ___ to look at the tiny cells.', correct: 'microscope', distractors: ['telescope', 'thermometer', 'magnet'], grades: [4, 5, 6] },
+  { sentence: 'The river was so ___ that we could see the fish at the bottom.', correct: 'clear', distractors: ['deep', 'muddy', 'wide'], grades: [4, 5, 6] },
+  { sentence: 'Carlos is very ___; he always shares his snacks with friends.', correct: 'generous', distractors: ['selfish', 'shy', 'forgetful'], grades: [4, 5, 6] },
+  { sentence: 'The ancient castle was built hundreds of years ___.', correct: 'ago', distractors: ['later', 'soon', 'ahead'], grades: [4, 5, 6] },
+  { sentence: 'Since the bridge was ___, the cars had to take a different road.', correct: 'damaged', distractors: ['new', 'long', 'painted'], grades: [4, 5, 6] },
+  { sentence: 'A ___ is a person who writes poems.', correct: 'poet', distractors: ['painter', 'baker', 'pilot'], grades: [4, 5, 6] },
+  { sentence: 'The desert gets very little ___, so few plants grow there.', correct: 'rain', distractors: ['sand', 'heat', 'sunlight'], grades: [4, 5, 6] },
+  { sentence: 'Our team practiced every day, so we were well ___ for the big game.', correct: 'prepared', distractors: ['unlikely', 'afraid', 'late'], grades: [4, 5, 6] },
+  { sentence: 'The audience ___ loudly at the end of the wonderful play.', correct: 'clapped', distractors: ['slept', 'whispered', 'frowned'], grades: [4, 5, 6] },
+  { sentence: 'A compass helps you find which ___ you are going.', correct: 'direction', distractors: ['speed', 'time', 'distance'], grades: [4, 5, 6] },
+  { sentence: 'The museum guard asked us not to ___ the paintings.', correct: 'touch', distractors: ['see', 'enjoy', 'visit'], grades: [4, 5, 6] },
+  { sentence: 'Elephants are ___ animals; they are the largest animals on land.', correct: 'enormous', distractors: ['tiny', 'fast', 'noisy'], grades: [4, 5, 6] },
+  { sentence: 'Because Leo was ___, he did not want to speak in front of the class.', correct: 'shy', distractors: ['brave', 'proud', 'tall'], grades: [4, 5, 6] },
+  { sentence: 'Water turns into ice when it ___.', correct: 'freezes', distractors: ['boils', 'melts', 'flows'], grades: [4, 5, 6] },
+  { sentence: 'The opposite of ancient is ___.', correct: 'modern', distractors: ['old', 'broken', 'famous'], grades: [4, 5, 6] },
+  { sentence: 'The detective looked for ___ to solve the mystery.', correct: 'clues', distractors: ['toys', 'snacks', 'friends'], grades: [4, 5, 6] },
+  { sentence: 'Bats sleep during the day and are ___ at night.', correct: 'active', distractors: ['asleep', 'hidden', 'still'], grades: [4, 5, 6] },
+  { sentence: 'The recipe says to ___ the eggs and sugar together in a bowl.', correct: 'mix', distractors: ['freeze', 'slice', 'bake'], grades: [4, 5, 6] },
+  { sentence: 'Mount Everest is the ___ mountain in the world.', correct: 'highest', distractors: ['smallest', 'newest', 'wettest'], grades: [4, 5, 6] },
+  { sentence: 'The children were ___ to see a rainbow after the storm.', correct: 'delighted', distractors: ['annoyed', 'bored', 'frightened'], grades: [4, 5, 6] },
+  { sentence: 'Even though it was raining, the soccer game was not ___.', correct: 'canceled', distractors: ['played', 'wet', 'long'], grades: [4, 5, 6] },
   // New batch (2026-10-10) — appended at the true end so existing items keep their
   // index-based ids. promptAudioText is the constant SENTENCE_READING_PROMPT here
   // (not per-item) — the sentence itself is read by the child, not the app — so
@@ -82,40 +82,40 @@ const RAW_ITEMS: RawItem[] = [
   { sentence: 'The ___ barked loudly when a stranger walked by the house.', correct: 'dog', distractors: ['cat', 'bird', 'fish'] },
   { sentence: 'Before crossing the street, always look both ___.', correct: 'ways', distractors: ['hands', 'feet', 'eyes'] },
   // 4th grade only: "although/since/because" sentences, matching this file's existing bar.
-  { sentence: 'Although she was nervous, Priya ___ her hand to answer the question.', correct: 'raised', distractors: ['hid', 'lowered', 'shook'], grades: [4] },
-  { sentence: 'Since the library was ___, the students studied in complete silence.', correct: 'quiet', distractors: ['crowded', 'sunny', 'new'], grades: [4] },
+  { sentence: 'Although she was nervous, Priya ___ her hand to answer the question.', correct: 'raised', distractors: ['hid', 'lowered', 'shook'], grades: [4, 5, 6] },
+  { sentence: 'Since the library was ___, the students studied in complete silence.', correct: 'quiet', distractors: ['crowded', 'sunny', 'new'], grades: [4, 5, 6] },
   // Second new batch (2026-10-10, Phase 1 continued) — same append-only rule as above.
   { sentence: 'The chef added a pinch of ___ to make the soup taste better.', correct: 'salt', distractors: ['sugar', 'flour', 'ice'] },
   { sentence: 'The kitten was too ___ to jump onto the tall shelf.', correct: 'small', distractors: ['brave', 'hungry', 'loud'] },
   { sentence: 'Grandma knitted a warm ___ for the baby to wear in winter.', correct: 'sweater', distractors: ['swimsuit', 'sandals', 'sunglasses'] },
   { sentence: 'The teacher asked the class to ___ their hands before speaking.', correct: 'raise', distractors: ['clap', 'wash', 'shake'] },
   // 4th grade only: "although/since/because" sentences, matching this file's existing bar.
-  { sentence: 'Because the experiment required precision, the scientist measured each ___ carefully.', correct: 'ingredient', distractors: ['friend', 'color', 'song'], grades: [4] },
-  { sentence: 'The marathon runner felt ___ after finishing the twenty-six mile race.', correct: 'triumphant', distractors: ['nervous', 'confused', 'sleepy'], grades: [4] },
+  { sentence: 'Because the experiment required precision, the scientist measured each ___ carefully.', correct: 'ingredient', distractors: ['friend', 'color', 'song'], grades: [4, 5, 6] },
+  { sentence: 'The marathon runner felt ___ after finishing the twenty-six mile race.', correct: 'triumphant', distractors: ['nervous', 'confused', 'sleepy'], grades: [4, 5, 6] },
   // Third new batch (2026-10-10, Phase 1 continued) — same append-only rule as above.
   { sentence: 'The baby elephant stayed close to its ___ for protection.', correct: 'mother', distractors: ['friend', 'teacher', 'neighbor'] },
   { sentence: 'Jake forgot his umbrella, so he got completely ___ in the storm.', correct: 'soaked', distractors: ['warm', 'tired', 'happy'] },
   { sentence: 'The chef sharpened the ___ before slicing the vegetables.', correct: 'knife', distractors: ['spoon', 'napkin', 'plate'] },
   { sentence: 'Our class visited the ___ to see lions, tigers, and bears.', correct: 'zoo', distractors: ['library', 'hospital', 'bakery'] },
   // 4th grade only: "although/since/because" sentences, matching this file's existing bar.
-  { sentence: 'Because the bridge was closed for repairs, drivers had to find an ___ route.', correct: 'alternate', distractors: ['ancient', 'empty', 'narrow'], grades: [4] },
-  { sentence: "The scientist's ___ was proven correct after months of careful research.", correct: 'hypothesis', distractors: ['lunch', 'vacation', 'car'], grades: [4] },
+  { sentence: 'Because the bridge was closed for repairs, drivers had to find an ___ route.', correct: 'alternate', distractors: ['ancient', 'empty', 'narrow'], grades: [4, 5, 6] },
+  { sentence: "The scientist's ___ was proven correct after months of careful research.", correct: 'hypothesis', distractors: ['lunch', 'vacation', 'car'], grades: [4, 5, 6] },
   // Fourth new batch (2026-10-10, Phase 1 continued) — same append-only rule as above.
   { sentence: 'The little girl was ___ to open her birthday presents.', correct: 'eager', distractors: ['tired', 'worried', 'angry'] },
   { sentence: 'The old bridge looked ___, so the workers decided to repair it.', correct: 'broken', distractors: ['new', 'painted', 'tall'] },
   { sentence: 'During the ___, everyone had to stay inside because of the storm.', correct: 'hurricane', distractors: ['party', 'picnic', 'parade'] },
   { sentence: 'The puppy wagged its ___ happily when its owner came home.', correct: 'tail', distractors: ['ears', 'paws', 'nose'] },
   // 4th grade only: "although/since/because" sentences, matching this file's existing bar.
-  { sentence: 'Since the museum exhibit was so ___, visitors wanted to learn more.', correct: 'fascinating', distractors: ['boring', 'empty', 'loud'], grades: [4] },
-  { sentence: 'Although the math problem seemed ___, Sam solved it after a few tries.', correct: 'difficult', distractors: ['easy', 'short', 'colorful'], grades: [4] },
+  { sentence: 'Since the museum exhibit was so ___, visitors wanted to learn more.', correct: 'fascinating', distractors: ['boring', 'empty', 'loud'], grades: [4, 5, 6] },
+  { sentence: 'Although the math problem seemed ___, Sam solved it after a few tries.', correct: 'difficult', distractors: ['easy', 'short', 'colorful'], grades: [4, 5, 6] },
   // Fifth new batch (2026-10-10, Phase 1 continued) — same append-only rule as above.
   { sentence: 'The spider spun a ___ to catch its dinner.', correct: 'web', distractors: ['nest', 'shell', 'den'] },
   { sentence: 'Before the race began, all the runners lined up at the ___.', correct: 'start', distractors: ['finish', 'middle', 'top'] },
   { sentence: 'The clown made the children ___ with his funny tricks.', correct: 'laugh', distractors: ['cry', 'shiver', 'yawn'] },
   { sentence: 'The farmer woke up at ___ to milk the cows.', correct: 'dawn', distractors: ['midnight', 'noon', 'dusk'] },
   // 4th grade only: "although/since/because" sentences, matching this file's existing bar.
-  { sentence: 'Since the volcano had been ___ for years, scientists were surprised when it erupted.', correct: 'dormant', distractors: ['active', 'famous', 'small'], grades: [4] },
-  { sentence: 'Although the novel was ___, Leo finished all five hundred pages in a week.', correct: 'lengthy', distractors: ['short', 'boring', 'cheap'], grades: [4] },
+  { sentence: 'Since the volcano had been ___ for years, scientists were surprised when it erupted.', correct: 'dormant', distractors: ['active', 'famous', 'small'], grades: [4, 5, 6] },
+  { sentence: 'Although the novel was ___, Leo finished all five hundred pages in a week.', correct: 'lengthy', distractors: ['short', 'boring', 'cheap'], grades: [4, 5, 6] },
   // Sixth new batch (2026-10-10, Phase 1 continued) — same append-only rule as above.
   // This batch brings sentence-reading to the plan's "roughly double" target.
   { sentence: 'The firefighter climbed the ___ to reach the top floor.', correct: 'ladder', distractors: ['chair', 'table', 'bed'] },
@@ -139,17 +139,33 @@ const RAW_ITEMS: RawItem[] = [
   { sentence: 'The teacher wrote the homework assignment on the ___.', correct: 'board', distractors: ['ceiling', 'window', 'floor'] },
   { sentence: 'The chef wore a tall white ___ while cooking.', correct: 'hat', distractors: ['scarf', 'belt', 'glove'] },
   // 4th grade only: "although/since/because" sentences, matching this file's existing bar.
-  { sentence: 'Since the river had ___ after the heavy rain, the town had to evacuate.', correct: 'flooded', distractors: ['dried', 'frozen', 'sparkled'], grades: [4] },
-  { sentence: 'Although Mia practiced the piano every day, she remained ___ before the recital.', correct: 'nervous', distractors: ['bored', 'confident', 'careless'], grades: [4] },
-  { sentence: 'Because the ancient manuscript was so ___, historians handled it very carefully.', correct: 'fragile', distractors: ['heavy', 'colorful', 'cheap'], grades: [4] },
-  { sentence: 'The explorer felt a sense of ___ upon discovering the hidden cave.', correct: 'wonder', distractors: ['boredom', 'anger', 'hunger'], grades: [4] },
-  { sentence: 'Since the negotiations had ___, both sides finally reached an agreement.', correct: 'succeeded', distractors: ['failed', 'started', 'ended'], grades: [4] },
-  { sentence: 'The committee will ___ the proposal before making a final decision.', correct: 'review', distractors: ['forget', 'ignore', 'destroy'], grades: [4] },
-  { sentence: 'Although the climb was ___, the hikers reached the summit by sunset.', correct: 'strenuous', distractors: ['easy', 'short', 'flat'], grades: [4] },
-  { sentence: 'The archaeologist carefully brushed away the dirt to reveal an ancient ___.', correct: 'artifact', distractors: ['pizza', 'bicycle', 'television'], grades: [4] },
+  { sentence: 'Since the river had ___ after the heavy rain, the town had to evacuate.', correct: 'flooded', distractors: ['dried', 'frozen', 'sparkled'], grades: [4, 5, 6] },
+  { sentence: 'Although Mia practiced the piano every day, she remained ___ before the recital.', correct: 'nervous', distractors: ['bored', 'confident', 'careless'], grades: [4, 5, 6] },
+  { sentence: 'Because the ancient manuscript was so ___, historians handled it very carefully.', correct: 'fragile', distractors: ['heavy', 'colorful', 'cheap'], grades: [4, 5, 6] },
+  { sentence: 'The explorer felt a sense of ___ upon discovering the hidden cave.', correct: 'wonder', distractors: ['boredom', 'anger', 'hunger'], grades: [4, 5, 6] },
+  { sentence: 'Since the negotiations had ___, both sides finally reached an agreement.', correct: 'succeeded', distractors: ['failed', 'started', 'ended'], grades: [4, 5, 6] },
+  { sentence: 'The committee will ___ the proposal before making a final decision.', correct: 'review', distractors: ['forget', 'ignore', 'destroy'], grades: [4, 5, 6] },
+  { sentence: 'Although the climb was ___, the hikers reached the summit by sunset.', correct: 'strenuous', distractors: ['easy', 'short', 'flat'], grades: [4, 5, 6] },
+  { sentence: 'The archaeologist carefully brushed away the dirt to reveal an ancient ___.', correct: 'artifact', distractors: ['pizza', 'bicycle', 'television'], grades: [4, 5, 6] },
+  // Phase 3 (2026-10-10): CogAT Levels 11/12 (5th/6th grade) start here — a
+  // notch past the 4th-grade tier above (more subordinate-clause sentence
+  // structures and more advanced vocabulary), same cumulative, append-only
+  // pattern as verbalAnalogy.ts and verbalClassification.ts.
+  { sentence: "Despite the committee's ___ efforts, the outdated policy remained unchanged for another decade.", correct: 'persistent', distractors: ['brief', 'careless', 'silent'], grades: [5, 6] },
+  { sentence: "The scientist's hypothesis was ultimately ___ by the overwhelming data from the experiment.", correct: 'validated', distractors: ['invented', 'ignored', 'disguised'], grades: [5, 6] },
+  { sentence: 'The ___ silence in the abandoned house sent a chill down her spine.', correct: 'eerie', distractors: ['cheerful', 'noisy', 'warm'], grades: [5, 6] },
+  { sentence: 'Because the evidence was entirely ___, the jury had no trouble reaching a verdict.', correct: 'conclusive', distractors: ['confusing', 'missing', 'biased'], grades: [5, 6] },
+  { sentence: 'The ___ diplomat managed to resolve the dispute without a single harsh word.', correct: 'tactful', distractors: ['rude', 'loud', 'careless'], grades: [5, 6] },
+  { sentence: 'After months of drought, the ___ fields finally received the rain they desperately needed.', correct: 'parched', distractors: ['flooded', 'frozen', 'fertile'], grades: [5, 6] },
+  { sentence: "The professor's lecture was so ___ that several students struggled to follow the argument.", correct: 'convoluted', distractors: ['simple', 'short', 'cheerful'], grades: [5, 6] },
+  { sentence: "The ___ critic praised every detail of the young artist's debut exhibition.", correct: 'effusive', distractors: ['harsh', 'silent', 'confused'], grades: [5, 6] },
+  { sentence: 'Although the ancient bridge looked ___, engineers confirmed it could still bear heavy traffic.', correct: 'dilapidated', distractors: ['brand-new', 'colorful', 'narrow'], grades: [5, 6] },
+  { sentence: "The CEO's ___ decision to cut costs ultimately saved the struggling company.", correct: 'shrewd', distractors: ['reckless', 'random', 'forgetful'], grades: [5, 6] },
+  { sentence: 'The twins were so ___ that even their own mother sometimes confused them.', correct: 'identical', distractors: ['different', 'tall', 'loud'], grades: [5, 6] },
+  { sentence: 'Her ___ explanation left no room for doubt about what had actually happened.', correct: 'lucid', distractors: ['vague', 'angry', 'brief'], grades: [5, 6] },
 ]
 
-const gradesOf = (item: RawItem): Grade[] => item.grades ?? [3, 4]
+const gradesOf = (item: RawItem): Grade[] => item.grades ?? [3, 4, 5, 6]
 
 export const SENTENCE_READING_PROMPT = 'Read the sentence. Which word fits best in the blank?'
 

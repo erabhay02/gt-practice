@@ -34,6 +34,8 @@ const BANKS: Record<Grade, Partial<Record<SubType, Question[]>>> = {
   2: bankSet(2),
   3: bankSet(3),
   4: bankSet(4),
+  5: bankSet(5),
+  6: bankSet(6),
 }
 
 const GENERATORS: Partial<Record<SubType, (d: Difficulty, seed: number, grade: Grade) => Question>> = {

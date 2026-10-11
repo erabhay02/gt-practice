@@ -67,7 +67,9 @@ export const LEVELS: Record<Grade, LevelInfo> = {
     },
     minutesPerPart: null,
   },
-  // Levels 9 and 10 share the same subtests and item counts.
+  // Levels 9 through 12 share the same subtests and item counts (Riverside's
+  // published specs give the whole upper battery, Levels 9–17/18, the same
+  // per-subtest item counts and 10-minute timed parts).
   3: {
     grade: 3,
     label: '3rd grade',
@@ -104,9 +106,45 @@ export const LEVELS: Record<Grade, LevelInfo> = {
     },
     minutesPerPart: 10,
   },
+  5: {
+    grade: 5,
+    label: '5th grade',
+    shortLabel: '5th',
+    cogatLevel: '11',
+    mockLength: {
+      'verbal-analogy': 22,
+      'sentence-completion': 20,
+      'verbal-classification': 20,
+      'number-analogy': 18,
+      'number-puzzle': 16,
+      'number-series': 18,
+      'figure-matrix': 22,
+      'paper-folding': 16,
+      'figure-classification': 22,
+    },
+    minutesPerPart: 10,
+  },
+  6: {
+    grade: 6,
+    label: '6th grade',
+    shortLabel: '6th',
+    cogatLevel: '12',
+    mockLength: {
+      'verbal-analogy': 22,
+      'sentence-completion': 20,
+      'verbal-classification': 20,
+      'number-analogy': 18,
+      'number-puzzle': 16,
+      'number-series': 18,
+      'figure-matrix': 22,
+      'paper-folding': 16,
+      'figure-classification': 22,
+    },
+    minutesPerPart: 10,
+  },
 }
 
-export const GRADES: Grade[] = [0, 1, 2, 3, 4]
+export const GRADES: Grade[] = [0, 1, 2, 3, 4, 5, 6]
 
 /** Grades 3 and up read their own verbal questions and work with written numbers. */
 export const isReadingLevel = (grade: Grade) => grade >= 3

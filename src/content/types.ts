@@ -4,7 +4,7 @@ export type SubType =
   | 'picture-analogy'
   | 'picture-classification'
   | 'sentence-completion'
-  // Grades 3–4 (CogAT Levels 9–10): the verbal battery is read, not pictured.
+  // Grades 3–6 (CogAT Levels 9–12): the verbal battery is read, not pictured.
   | 'verbal-analogy'
   | 'verbal-classification'
   | 'number-analogy'
@@ -16,8 +16,9 @@ export type SubType =
 
 export type Difficulty = 1 | 2 | 3
 
-// 0 = Kindergarten (CogAT Level 5/6), 1 = Level 7, 2 = Level 8, 3 = Level 9, 4 = Level 10.
-export type Grade = 0 | 1 | 2 | 3 | 4
+// 0 = Kindergarten (CogAT Level 5/6), 1 = Level 7, 2 = Level 8, 3 = Level 9, 4 = Level 10,
+// 5 = Level 11, 6 = Level 12.
+export type Grade = 0 | 1 | 2 | 3 | 4 | 5 | 6
 
 export type ShapeType = 'circle' | 'square' | 'triangle' | 'star' | 'pentagon' | 'hexagon' | 'arrow' | 'cross'
 export type ShapeFill = 'solid' | 'striped' | 'dotted' | 'outline' | 'half'

@@ -49,8 +49,13 @@ export function generatedId(subType: string, grade: number, difficulty: number, 
   return `${subType}${tag}-${difficulty}-${seed}`
 }
 
-/** Grades 3–4 reuse the 2nd-grade figure rules, starting one step harder. */
+/**
+ * Grades 3–6 reuse the 2nd-grade figure rules, starting one step harder each
+ * level up: 3rd grade eases in, 4th settles at the harder floor, 5th–6th
+ * (Levels 11–12) stay there and never serve the easiest figure rule at all.
+ */
 export function upperGradeDifficulty(difficulty: 1 | 2 | 3, grade: number): 1 | 2 | 3 {
   if (grade === 3) return difficulty === 1 ? 2 : difficulty === 2 ? 2 : 3
+  if (grade >= 5) return 3
   return difficulty === 1 ? 2 : 3
 }

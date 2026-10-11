@@ -70,26 +70,26 @@ const RAW_ITEMS: RawItem[] = [
   { pair: ['wet', 'dry'], start: 'loud', correct: 'quiet', distractors: ['noisy', 'ears', 'dry'], relation: 'opposites' },
   { pair: ['bark', 'dog'], start: 'meow', correct: 'cat', distractors: ['mouse', 'purr', 'pet'], relation: 'sound : animal' },
   // 4th grade (Level 10): less familiar words and more abstract connections.
-  { pair: ['clock', 'time'], start: 'thermometer', correct: 'temperature', distractors: ['weather', 'hot', 'glass'], relation: 'tool : what it measures', grades: [4] },
-  { pair: ['ruler', 'length'], start: 'scale', correct: 'weight', distractors: ['heavy', 'fish', 'measure'], relation: 'tool : what it measures', grades: [4] },
-  { pair: ['square', 'cube'], start: 'circle', correct: 'sphere', distractors: ['round', 'triangle', 'ring'], relation: 'flat shape : solid shape', grades: [4] },
-  { pair: ['hour', 'minute'], start: 'minute', correct: 'second', distractors: ['clock', 'hour', 'time'], relation: 'unit : next smaller unit', grades: [4] },
-  { pair: ['begin', 'start'], start: 'finish', correct: 'end', distractors: ['stop', 'first', 'start'], relation: 'same meaning', grades: [4] },
-  { pair: ['inch', 'foot'], start: 'centimeter', correct: 'meter', distractors: ['ruler', 'mile', 'millimeter'], relation: 'small unit : bigger unit', grades: [4] },
-  { pair: ['author', 'novel'], start: 'composer', correct: 'symphony', distractors: ['piano', 'orchestra', 'singer'], relation: 'creator : work', grades: [4] },
-  { pair: ['year', 'month'], start: 'week', correct: 'day', distractors: ['hour', 'calendar', 'month'], relation: 'whole : part', grades: [4] },
-  { pair: ['ice', 'water'], start: 'water', correct: 'steam', distractors: ['ocean', 'rain', 'cold'], relation: 'what it becomes when heated', grades: [4] },
-  { pair: ['polite', 'rude'], start: 'honest', correct: 'dishonest', distractors: ['truthful', 'kind', 'rude'], relation: 'opposites', grades: [4] },
-  { pair: ['telescope', 'stars'], start: 'microscope', correct: 'germs', distractors: ['glass', 'lens', 'planets'], relation: 'tool : what you look at', grades: [4] },
-  { pair: ['architect', 'building'], start: 'chef', correct: 'meal', distractors: ['kitchen', 'apron', 'restaurant'], relation: 'maker : what they make', grades: [4] },
-  { pair: ['drought', 'water'], start: 'famine', correct: 'food', distractors: ['hunger', 'rain', 'farm'], relation: 'shortage : of what', grades: [4] },
-  { pair: ['cub', 'bear'], start: 'foal', correct: 'horse', distractors: ['saddle', 'barn', 'cow'], relation: 'baby animal : grown animal', grades: [4] },
-  { pair: ['grape', 'raisin'], start: 'plum', correct: 'prune', distractors: ['peach', 'juice', 'purple'], relation: 'fruit : dried fruit', grades: [4] },
-  { pair: ['add', 'subtract'], start: 'multiply', correct: 'divide', distractors: ['plus', 'times', 'sum'], relation: 'opposite operations', grades: [4] },
-  { pair: ['old', 'new'], start: 'ancient', correct: 'modern', distractors: ['history', 'past', 'antique'], relation: 'opposites', grades: [4] },
-  { pair: ['good', 'excellent'], start: 'bad', correct: 'terrible', distractors: ['okay', 'sad', 'excellent'], relation: 'a word : a stronger word', grades: [4] },
-  { pair: ['sculptor', 'statue'], start: 'poet', correct: 'poem', distractors: ['rhyme', 'reader', 'book'], relation: 'creator : work', grades: [4] },
-  { pair: ['rare', 'common'], start: 'scarce', correct: 'plentiful', distractors: ['few', 'empty', 'rare'], relation: 'opposites', grades: [4] },
+  { pair: ['clock', 'time'], start: 'thermometer', correct: 'temperature', distractors: ['weather', 'hot', 'glass'], relation: 'tool : what it measures', grades: [4, 5, 6] },
+  { pair: ['ruler', 'length'], start: 'scale', correct: 'weight', distractors: ['heavy', 'fish', 'measure'], relation: 'tool : what it measures', grades: [4, 5, 6] },
+  { pair: ['square', 'cube'], start: 'circle', correct: 'sphere', distractors: ['round', 'triangle', 'ring'], relation: 'flat shape : solid shape', grades: [4, 5, 6] },
+  { pair: ['hour', 'minute'], start: 'minute', correct: 'second', distractors: ['clock', 'hour', 'time'], relation: 'unit : next smaller unit', grades: [4, 5, 6] },
+  { pair: ['begin', 'start'], start: 'finish', correct: 'end', distractors: ['stop', 'first', 'start'], relation: 'same meaning', grades: [4, 5, 6] },
+  { pair: ['inch', 'foot'], start: 'centimeter', correct: 'meter', distractors: ['ruler', 'mile', 'millimeter'], relation: 'small unit : bigger unit', grades: [4, 5, 6] },
+  { pair: ['author', 'novel'], start: 'composer', correct: 'symphony', distractors: ['piano', 'orchestra', 'singer'], relation: 'creator : work', grades: [4, 5, 6] },
+  { pair: ['year', 'month'], start: 'week', correct: 'day', distractors: ['hour', 'calendar', 'month'], relation: 'whole : part', grades: [4, 5, 6] },
+  { pair: ['ice', 'water'], start: 'water', correct: 'steam', distractors: ['ocean', 'rain', 'cold'], relation: 'what it becomes when heated', grades: [4, 5, 6] },
+  { pair: ['polite', 'rude'], start: 'honest', correct: 'dishonest', distractors: ['truthful', 'kind', 'rude'], relation: 'opposites', grades: [4, 5, 6] },
+  { pair: ['telescope', 'stars'], start: 'microscope', correct: 'germs', distractors: ['glass', 'lens', 'planets'], relation: 'tool : what you look at', grades: [4, 5, 6] },
+  { pair: ['architect', 'building'], start: 'chef', correct: 'meal', distractors: ['kitchen', 'apron', 'restaurant'], relation: 'maker : what they make', grades: [4, 5, 6] },
+  { pair: ['drought', 'water'], start: 'famine', correct: 'food', distractors: ['hunger', 'rain', 'farm'], relation: 'shortage : of what', grades: [4, 5, 6] },
+  { pair: ['cub', 'bear'], start: 'foal', correct: 'horse', distractors: ['saddle', 'barn', 'cow'], relation: 'baby animal : grown animal', grades: [4, 5, 6] },
+  { pair: ['grape', 'raisin'], start: 'plum', correct: 'prune', distractors: ['peach', 'juice', 'purple'], relation: 'fruit : dried fruit', grades: [4, 5, 6] },
+  { pair: ['add', 'subtract'], start: 'multiply', correct: 'divide', distractors: ['plus', 'times', 'sum'], relation: 'opposite operations', grades: [4, 5, 6] },
+  { pair: ['old', 'new'], start: 'ancient', correct: 'modern', distractors: ['history', 'past', 'antique'], relation: 'opposites', grades: [4, 5, 6] },
+  { pair: ['good', 'excellent'], start: 'bad', correct: 'terrible', distractors: ['okay', 'sad', 'excellent'], relation: 'a word : a stronger word', grades: [4, 5, 6] },
+  { pair: ['sculptor', 'statue'], start: 'poet', correct: 'poem', distractors: ['rhyme', 'reader', 'book'], relation: 'creator : work', grades: [4, 5, 6] },
+  { pair: ['rare', 'common'], start: 'scarce', correct: 'plentiful', distractors: ['few', 'empty', 'rare'], relation: 'opposites', grades: [4, 5, 6] },
   // New batch (2026-10-10) — appended at the true end so existing items keep their
   // index-based ids. promptAudioText is the constant VERBAL_ANALOGY_PROMPT here (not
   // per-item), so unlike sentenceCompletion.ts, this bank needs no new audio clips.
@@ -100,8 +100,8 @@ const RAW_ITEMS: RawItem[] = [
   { pair: ['petal', 'flower'], start: 'branch', correct: 'tree', distractors: ['leaf', 'root', 'petal'], relation: 'part : whole' },
   { pair: ['painter', 'brush'], start: 'writer', correct: 'pen', distractors: ['paper', 'book', 'brush'], relation: 'worker : tool they use' },
   // 4th grade only: less familiar words, matching this file's existing grades:[4] bar.
-  { pair: ['joey', 'kangaroo'], start: 'cygnet', correct: 'swan', distractors: ['duck', 'goose', 'joey'], relation: 'baby animal : grown animal', grades: [4] },
-  { pair: ['carnivore', 'meat'], start: 'herbivore', correct: 'plants', distractors: ['animals', 'grass', 'meat'], relation: 'diet type : what it eats', grades: [4] },
+  { pair: ['joey', 'kangaroo'], start: 'cygnet', correct: 'swan', distractors: ['duck', 'goose', 'joey'], relation: 'baby animal : grown animal', grades: [4, 5, 6] },
+  { pair: ['carnivore', 'meat'], start: 'herbivore', correct: 'plants', distractors: ['animals', 'grass', 'meat'], relation: 'diet type : what it eats', grades: [4, 5, 6] },
   // Second new batch (2026-10-10, Phase 1 continued) — same append-only rule as above.
   { pair: ['teacher', 'classroom'], start: 'actor', correct: 'stage', distractors: ['audience', 'script', 'movie'], relation: 'worker : workplace' },
   { pair: ['knife', 'slice'], start: 'needle', correct: 'sew', distractors: ['thread', 'prick', 'fabric'], relation: 'tool : what it does' },
@@ -111,9 +111,9 @@ const RAW_ITEMS: RawItem[] = [
   { pair: ['sour', 'lemon'], start: 'sweet', correct: 'candy', distractors: ['sugar', 'cake', 'lemon'], relation: 'taste : example' },
   { pair: ['rooster', 'crow'], start: 'owl', correct: 'hoot', distractors: ['screech', 'howl', 'crow'], relation: 'animal : its sound' },
   // 4th grade only: less familiar words, matching this file's existing grades:[4] bar.
-  { pair: ['fragile', 'break'], start: 'durable', correct: 'last', distractors: ['break', 'bend', 'shatter'], relation: 'trait : what happens', grades: [4] },
-  { pair: ['predator', 'hunts'], start: 'prey', correct: 'flees', distractors: ['hunts', 'hides', 'sleeps'], relation: 'role : what it does', grades: [4] },
-  { pair: ['vast', 'huge'], start: 'minuscule', correct: 'tiny', distractors: ['huge', 'large', 'tall'], relation: 'same meaning', grades: [4] },
+  { pair: ['fragile', 'break'], start: 'durable', correct: 'last', distractors: ['break', 'bend', 'shatter'], relation: 'trait : what happens', grades: [4, 5, 6] },
+  { pair: ['predator', 'hunts'], start: 'prey', correct: 'flees', distractors: ['hunts', 'hides', 'sleeps'], relation: 'role : what it does', grades: [4, 5, 6] },
+  { pair: ['vast', 'huge'], start: 'minuscule', correct: 'tiny', distractors: ['huge', 'large', 'tall'], relation: 'same meaning', grades: [4, 5, 6] },
   // Third new batch (2026-10-10, Phase 1 continued) — same append-only rule as above.
   { pair: ['scissors', 'cut'], start: 'spoon', correct: 'stir', distractors: ['bowl', 'soup', 'cut'], relation: 'tool : what it does' },
   { pair: ['apple', 'red'], start: 'banana', correct: 'yellow', distractors: ['green', 'peel', 'red'], relation: 'fruit : color' },
@@ -122,8 +122,8 @@ const RAW_ITEMS: RawItem[] = [
   { pair: ['teacher', 'students'], start: 'shepherd', correct: 'sheep', distractors: ['wolf', 'farm', 'students'], relation: 'leader : group they lead' },
   { pair: ['curious', 'ask'], start: 'scared', correct: 'hide', distractors: ['laugh', 'sleep', 'ask'], relation: 'feeling : what you do' },
   // 4th grade only: less familiar words, matching this file's existing grades:[4] bar.
-  { pair: ['bland', 'spicy'], start: 'dim', correct: 'bright', distractors: ['dark', 'light', 'spicy'], relation: 'opposites', grades: [4] },
-  { pair: ['migrate', 'travel'], start: 'hibernate', correct: 'sleep', distractors: ['travel', 'eat', 'build'], relation: 'animal behavior : simple meaning', grades: [4] },
+  { pair: ['bland', 'spicy'], start: 'dim', correct: 'bright', distractors: ['dark', 'light', 'spicy'], relation: 'opposites', grades: [4, 5, 6] },
+  { pair: ['migrate', 'travel'], start: 'hibernate', correct: 'sleep', distractors: ['travel', 'eat', 'build'], relation: 'animal behavior : simple meaning', grades: [4, 5, 6] },
   // Fourth new batch (2026-10-10, Phase 1 continued) — same append-only rule as above.
   { pair: ['sandpaper', 'rough'], start: 'silk', correct: 'smooth', distractors: ['soft', 'shiny', 'rough'], relation: 'texture' },
   { pair: ['library', 'quiet'], start: 'playground', correct: 'loud', distractors: ['fun', 'outside', 'quiet'], relation: 'place : how it sounds' },
@@ -132,8 +132,8 @@ const RAW_ITEMS: RawItem[] = [
   { pair: ['artist', 'paint'], start: 'musician', correct: 'play', distractors: ['sing', 'note', 'paint'], relation: 'person : what they do with their art' },
   { pair: ['whale', 'mammal'], start: 'shark', correct: 'fish', distractors: ['ocean', 'mammal', 'swim'], relation: 'animal : type of animal' },
   // 4th grade only: less familiar words, matching this file's existing grades:[4] bar.
-  { pair: ['abundant', 'scarce'], start: 'generous', correct: 'stingy', distractors: ['kind', 'scarce', 'rich'], relation: 'opposites', grades: [4] },
-  { pair: ['author', 'write'], start: 'sculptor', correct: 'carve', distractors: ['write', 'paint', 'build'], relation: 'person : what they do', grades: [4] },
+  { pair: ['abundant', 'scarce'], start: 'generous', correct: 'stingy', distractors: ['kind', 'scarce', 'rich'], relation: 'opposites', grades: [4, 5, 6] },
+  { pair: ['author', 'write'], start: 'sculptor', correct: 'carve', distractors: ['write', 'paint', 'build'], relation: 'person : what they do', grades: [4, 5, 6] },
   // Fifth new batch (2026-10-10, Phase 1 continued) — same append-only rule as above.
   { pair: ['clean', 'spotless'], start: 'dirty', correct: 'filthy', distractors: ['messy', 'spotless', 'muddy'], relation: 'a word : a stronger word' },
   { pair: ['north', 'south'], start: 'east', correct: 'west', distractors: ['up', 'down', 'south'], relation: 'opposites' },
@@ -143,9 +143,9 @@ const RAW_ITEMS: RawItem[] = [
   { pair: ['kind', 'mean'], start: 'brave', correct: 'cowardly', distractors: ['scared', 'mean', 'strong'], relation: 'opposites' },
   { pair: ['waiter', 'restaurant'], start: 'cashier', correct: 'store', distractors: ['money', 'customer', 'restaurant'], relation: 'worker : workplace' },
   // 4th grade only: less familiar words, matching this file's existing grades:[4] bar.
-  { pair: ['gain', 'lose'], start: 'increase', correct: 'decrease', distractors: ['lose', 'grow', 'rise'], relation: 'opposites', grades: [4] },
-  { pair: ['famine', 'hunger'], start: 'drought', correct: 'thirst', distractors: ['hunger', 'flood', 'rain'], relation: 'shortage : what it causes', grades: [4] },
-  { pair: ['verdict', 'judge'], start: 'diagnosis', correct: 'doctor', distractors: ['judge', 'patient', 'medicine'], relation: 'decision : who makes it', grades: [4] },
+  { pair: ['gain', 'lose'], start: 'increase', correct: 'decrease', distractors: ['lose', 'grow', 'rise'], relation: 'opposites', grades: [4, 5, 6] },
+  { pair: ['famine', 'hunger'], start: 'drought', correct: 'thirst', distractors: ['hunger', 'flood', 'rain'], relation: 'shortage : what it causes', grades: [4, 5, 6] },
+  { pair: ['verdict', 'judge'], start: 'diagnosis', correct: 'doctor', distractors: ['judge', 'patient', 'medicine'], relation: 'decision : who makes it', grades: [4, 5, 6] },
   // Sixth new batch (2026-10-10, Phase 1 continued) — same append-only rule as above.
   // This batch brings verbal-analogy to the plan's "roughly double" target.
   { pair: ['bee', 'sting'], start: 'dog', correct: 'bite', distractors: ['bark', 'wag', 'run'], relation: 'animal : how it defends itself' },
@@ -169,16 +169,36 @@ const RAW_ITEMS: RawItem[] = [
   { pair: ['book', 'read'], start: 'movie', correct: 'watch', distractors: ['see', 'screen', 'read'], relation: 'thing : how you enjoy it' },
   { pair: ['fish', 'gills'], start: 'human', correct: 'lungs', distractors: ['skin', 'fins', 'gills'], relation: 'animal : how it breathes' },
   // 4th grade only: less familiar words, matching this file's existing grades:[4] bar.
-  { pair: ['triumph', 'victory'], start: 'defeat', correct: 'loss', distractors: ['victory', 'win', 'draw'], relation: 'same meaning', grades: [4] },
-  { pair: ['ocean', 'vast'], start: 'puddle', correct: 'tiny', distractors: ['wet', 'vast', 'blue'], relation: 'thing : its size', grades: [4] },
-  { pair: ['composer', 'symphony'], start: 'architect', correct: 'building', distractors: ['symphony', 'music', 'blueprint'], relation: 'creator : work', grades: [4] },
-  { pair: ['generous', 'selfish'], start: 'honest', correct: 'deceitful', distractors: ['selfish', 'kind', 'truthful'], relation: 'opposites', grades: [4] },
-  { pair: ['century', '100'], start: 'decade', correct: '10', distractors: ['100', '1', '1000'], relation: 'unit : number of years', grades: [4] },
-  { pair: ['extinct', 'gone'], start: 'endangered', correct: 'threatened', distractors: ['gone', 'safe', 'common'], relation: 'same meaning', grades: [4] },
-  { pair: ['telescope', 'far'], start: 'microscope', correct: 'small', distractors: ['far', 'close', 'large'], relation: 'tool : what it helps you see', grades: [4] },
+  { pair: ['triumph', 'victory'], start: 'defeat', correct: 'loss', distractors: ['victory', 'win', 'draw'], relation: 'same meaning', grades: [4, 5, 6] },
+  { pair: ['ocean', 'vast'], start: 'puddle', correct: 'tiny', distractors: ['wet', 'vast', 'blue'], relation: 'thing : its size', grades: [4, 5, 6] },
+  { pair: ['composer', 'symphony'], start: 'architect', correct: 'building', distractors: ['symphony', 'music', 'blueprint'], relation: 'creator : work', grades: [4, 5, 6] },
+  { pair: ['generous', 'selfish'], start: 'honest', correct: 'deceitful', distractors: ['selfish', 'kind', 'truthful'], relation: 'opposites', grades: [4, 5, 6] },
+  { pair: ['century', '100'], start: 'decade', correct: '10', distractors: ['100', '1', '1000'], relation: 'unit : number of years', grades: [4, 5, 6] },
+  { pair: ['extinct', 'gone'], start: 'endangered', correct: 'threatened', distractors: ['gone', 'safe', 'common'], relation: 'same meaning', grades: [4, 5, 6] },
+  { pair: ['telescope', 'far'], start: 'microscope', correct: 'small', distractors: ['far', 'close', 'large'], relation: 'tool : what it helps you see', grades: [4, 5, 6] },
+  // Phase 3 (2026-10-10): CogAT Levels 11/12 (5th/6th grade) start here. These
+  // items are genuinely harder than the 4th-grade tier above (more abstract
+  // vocabulary and relations), not just a relabeled copy of it — grade 5/6
+  // see this set ON TOP OF everything above, same cumulative pattern as how
+  // grade 4 already layers on top of grade 3.
+  { pair: ['meticulous', 'careful'], start: 'audacious', correct: 'bold', distractors: ['careful', 'cautious', 'humble'], relation: 'same meaning', grades: [5, 6] },
+  { pair: ['altruistic', 'selfless'], start: 'miserly', correct: 'stingy', distractors: ['selfless', 'generous', 'wealthy'], relation: 'same meaning', grades: [5, 6] },
+  { pair: ['ephemeral', 'temporary'], start: 'perpetual', correct: 'endless', distractors: ['temporary', 'brief', 'rare'], relation: 'same meaning', grades: [5, 6] },
+  { pair: ['credible', 'believable'], start: 'dubious', correct: 'doubtful', distractors: ['believable', 'certain', 'honest'], relation: 'same meaning', grades: [5, 6] },
+  { pair: ['candid', 'deceptive'], start: 'humble', correct: 'arrogant', distractors: ['deceptive', 'shy', 'proud'], relation: 'opposites', grades: [5, 6] },
+  { pair: ['diligent', 'lazy'], start: 'punctual', correct: 'tardy', distractors: ['lazy', 'quick', 'early'], relation: 'opposites', grades: [5, 6] },
+  { pair: ['scalpel', 'surgeon'], start: 'gavel', correct: 'judge', distractors: ['surgeon', 'lawyer', 'jury'], relation: 'tool : who uses it', grades: [5, 6] },
+  { pair: ['chapter', 'novel'], start: 'movement', correct: 'symphony', distractors: ['novel', 'song', 'note'], relation: 'part : whole', grades: [5, 6] },
+  { pair: ['negligence', 'accident'], start: 'vaccination', correct: 'immunity', distractors: ['accident', 'sickness', 'medicine'], relation: 'cause : effect', grades: [5, 6] },
+  { pair: ['annoyed', 'furious'], start: 'content', correct: 'ecstatic', distractors: ['furious', 'sad', 'calm'], relation: 'mild : intense', grades: [5, 6] },
+  { pair: ['transparent', 'clear'], start: 'translucent', correct: 'hazy', distractors: ['clear', 'thin', 'colorful'], relation: 'same meaning', grades: [5, 6] },
+  { pair: ['verbose', 'wordy'], start: 'terse', correct: 'concise', distractors: ['wordy', 'rude', 'loud'], relation: 'same meaning', grades: [5, 6] },
+  { pair: ['choreographer', 'dance'], start: 'screenwriter', correct: 'movie', distractors: ['dance', 'actor', 'camera'], relation: 'creator : work', grades: [5, 6] },
+  { pair: ['dozen', '12'], start: 'score', correct: '20', distractors: ['12', '50', '100'], relation: 'unit : number', grades: [5, 6] },
+  { pair: ['odometer', 'distance'], start: 'speedometer', correct: 'speed', distractors: ['distance', 'time', 'direction'], relation: 'tool : what it measures', grades: [5, 6] },
 ]
 
-const gradesOf = (item: RawItem): Grade[] => item.grades ?? [3, 4]
+const gradesOf = (item: RawItem): Grade[] => item.grades ?? [3, 4, 5, 6]
 
 export const VERBAL_ANALOGY_PROMPT =
   'The first two words go together in some way. Which word goes with the third word in the same way?'

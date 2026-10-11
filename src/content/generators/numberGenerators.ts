@@ -441,6 +441,19 @@ function numericRule(rng: RngFn, difficulty: Difficulty, grade: Grade): NumRule 
     if (difficulty === 2) return pickOne(rng, [mul(2), mul(3), mul(5), mul(10), add(between(rng, 10, 20)), sub(between(rng, 10, 20))])
     return pickOne(rng, [div(2), div(3), div(5), mul(4), sub(between(rng, 11, 25))])
   }
+  if (grade >= 5) {
+    // Levels 11–12: two-step rules start at difficulty 2, and difficulty 3
+    // uses a bigger multiplier than 4th grade's.
+    if (difficulty === 1) return pickOne(rng, [add(between(rng, 10, 25)), sub(between(rng, 10, 25)), mul(between(rng, 3, 6))])
+    if (difficulty === 2) {
+      const first = pickOne(rng, [2, 3, 4])
+      const then = pickOne(rng, [-3, -2, -1, 1, 2, 3])
+      return { apply: (n) => n * first + then, name: `x${first}${then > 0 ? '+' : ''}${then}` }
+    }
+    const first = pickOne(rng, [3, 4, 5])
+    const then = pickOne(rng, [-5, -4, -3, 3, 4, 5])
+    return { apply: (n) => n * first + then, name: `x${first}${then > 0 ? '+' : ''}${then}` }
+  }
   if (difficulty === 1) return pickOne(rng, [add(between(rng, 5, 15)), sub(between(rng, 5, 15)), mul(between(rng, 2, 5))])
   if (difficulty === 2) return pickOne(rng, [mul(between(rng, 3, 9)), div(between(rng, 2, 9))])
   // Two steps, e.g. double it then add one.
@@ -451,7 +464,7 @@ function numericRule(rng: RngFn, difficulty: Difficulty, grade: Grade): NumRule 
 
 function numericAnalogy(difficulty: Difficulty, seed: number, grade: Grade): Question {
   const rng = mulberry32(seed)
-  const max = grade === 3 ? 100 : 150
+  const max = grade === 3 ? 100 : grade >= 5 ? 250 : 150
   let rule = numericRule(rng, difficulty, grade)
   let inputs: number[] = []
   for (let i = 0; i < 500; i++) {
@@ -487,7 +500,11 @@ function numericSeriesPattern(rng: RngFn, difficulty: Difficulty, grade: Grade):
   const kinds =
     grade === 3
       ? difficulty === 1 ? ['step'] : difficulty === 2 ? ['alternate', 'growing', 'twoSeries'] : ['growing', 'staircase', 'double']
-      : difficulty === 1 ? ['step', 'alternate'] : difficulty === 2 ? ['growing', 'twoSeries', 'double'] : ['staircase', 'triple', 'doublingSteps', 'sumOfTwo']
+      : grade >= 5
+        // Levels 11–12: skip the plain step/alternate patterns entirely and
+        // start from what 4th grade only reaches at difficulty 3.
+        ? difficulty === 1 ? ['growing', 'twoSeries', 'double'] : difficulty === 2 ? ['staircase', 'triple', 'doublingSteps'] : ['triple', 'doublingSteps', 'sumOfTwo']
+        : difficulty === 1 ? ['step', 'alternate'] : difficulty === 2 ? ['growing', 'twoSeries', 'double'] : ['staircase', 'triple', 'doublingSteps', 'sumOfTwo']
   const kind = pickOne(rng, kinds)
   switch (kind) {
     case 'step': {
@@ -551,7 +568,7 @@ function numericSeriesPattern(rng: RngFn, difficulty: Difficulty, grade: Grade):
 
 function numericSeries(difficulty: Difficulty, seed: number, grade: Grade): Question {
   const rng = mulberry32(seed)
-  const limit = grade === 3 ? 200 : 400
+  const limit = grade === 3 ? 200 : grade >= 5 ? 600 : 400
   let series: number[] = []
   for (let i = 0; i < 500; i++) {
     series = numericSeriesPattern(rng, difficulty, grade)
@@ -588,9 +605,12 @@ function numericPuzzle(difficulty: Difficulty, seed: number, grade: Grade): Ques
   const forms =
     grade === 3
       ? difficulty === 1 ? ['missingAddend', 'missingStart'] : difficulty === 2 ? ['twoSided', 'twoSidedMinus'] : ['symbol', 'twoSided']
-      : difficulty === 1 ? ['missingFactor', 'missingDividend'] : difficulty === 2 ? ['productEqualsSum', 'twoSidedMinus'] : ['twoSymbols', 'doubleSymbol']
+      : grade >= 5
+        // Levels 11–12: start where 4th grade's hardest difficulty ends.
+        ? difficulty === 1 ? ['productEqualsSum', 'twoSidedMinus'] : ['twoSymbols', 'doubleSymbol']
+        : difficulty === 1 ? ['missingFactor', 'missingDividend'] : difficulty === 2 ? ['productEqualsSum', 'twoSidedMinus'] : ['twoSymbols', 'doubleSymbol']
   const form = pickOne(rng, forms)
-  const big = grade === 3 ? 20 : 50
+  const big = grade === 3 ? 20 : grade >= 5 ? 80 : 50
 
   switch (form) {
     case 'missingAddend': { // a + ? = c

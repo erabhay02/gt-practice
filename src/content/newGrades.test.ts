@@ -105,11 +105,11 @@ describe('Kindergarten (CogAT Level 5/6)', () => {
   })
 })
 
-describe('Grades 3–4 (CogAT Levels 9–10)', () => {
+describe('Grades 3–6 (CogAT Levels 9–12)', () => {
   const asNumber = (c: ContentSpec) => (c.kind === 'text' ? Number(c.value) : NaN)
 
   it('Number parts use written whole numbers', () => {
-    for (const grade of [3, 4] as const) for (const s of seeds) for (const d of DIFFS) {
+    for (const grade of [3, 4, 5, 6] as const) for (const s of seeds) for (const d of DIFFS) {
       for (const q of [generateNumberAnalogyQuestion(d, s, grade), generateNumberPuzzleQuestion(d, s, grade), generateNumberSeriesQuestion(d, s, grade)]) {
         expectWellFormed(q)
         for (const c of q.choices) {
@@ -121,7 +121,7 @@ describe('Grades 3–4 (CogAT Levels 9–10)', () => {
   })
 
   it('Number Analogies: one rule fits both example pairs and the answer', () => {
-    for (const grade of [3, 4] as const) for (const s of seeds) for (const d of DIFFS) {
+    for (const grade of [3, 4, 5, 6] as const) for (const s of seeds) for (const d of DIFFS) {
       const q = generateNumberAnalogyQuestion(d, s, grade)
       const [p1, p2, p3] = q.promptVisual!.map((row) => [asNumber(row[0]), asNumber(row[2])])
       const answer = asNumber(q.choices.find((c) => c.isCorrect)!.content)
@@ -137,7 +137,7 @@ describe('Grades 3–4 (CogAT Levels 9–10)', () => {
   })
 
   it('Number Series: shows seven numbers then a blank', () => {
-    for (const grade of [3, 4] as const) for (const s of seeds) for (const d of DIFFS) {
+    for (const grade of [3, 4, 5, 6] as const) for (const s of seeds) for (const d of DIFFS) {
       const row = generateNumberSeriesQuestion(d, s, grade).promptVisual![0]
       expect(row).toHaveLength(8)
       expect(row[7].kind).toBe('blank')
@@ -145,7 +145,7 @@ describe('Grades 3–4 (CogAT Levels 9–10)', () => {
   })
 
   it('shape parts give distinct choices and get harder than 2nd grade on easy items', () => {
-    for (const grade of [3, 4] as const) for (const s of seeds) for (const d of DIFFS) {
+    for (const grade of [3, 4, 5, 6] as const) for (const s of seeds) for (const d of DIFFS) {
       const m = generateMatrixQuestion(d, s, grade)
       expectWellFormed(m)
       const choices = m.choices.map((c) => (c.content as { spec: ShapeSpec }).spec)
