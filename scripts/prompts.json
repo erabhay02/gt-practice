@@ -124,6 +124,10 @@
     "text": "Which animal says quack?"
   },
   {
+    "id": "1452c53f",
+    "text": "Which animal says roar?"
+  },
+  {
     "id": "05b81b02",
     "text": "Which animal says woof?"
   },
@@ -192,6 +196,10 @@
     "text": "Which one does NOT live in water?"
   },
   {
+    "id": "06319331",
+    "text": "Which one found on a farm is NOT an animal?"
+  },
+  {
     "id": "518fa648",
     "text": "Which one gives us milk?"
   },
@@ -208,6 +216,14 @@
     "text": "Which one grows tall and gives us wood?"
   },
   {
+    "id": "4a9bc00f",
+    "text": "Which one has a beak?"
+  },
+  {
+    "id": "254c1c8c",
+    "text": "Which one has a bushy tail and buries nuts?"
+  },
+  {
     "id": "4ca318fc",
     "text": "Which one has a hump on its back?"
   },
@@ -216,8 +232,20 @@
     "text": "Which one has a long neck?"
   },
   {
+    "id": "4a0ad5c8",
+    "text": "Which one has a long tail and climbs trees?"
+  },
+  {
+    "id": "bf0d9150",
+    "text": "Which one has a long, sticky tongue to catch bugs?"
+  },
+  {
     "id": "97440d7a",
     "text": "Which one has a shell on its back?"
+  },
+  {
+    "id": "a035aa45",
+    "text": "Which one has a shell you can hold up to your ear?"
   },
   {
     "id": "3a23f446",
@@ -292,6 +320,10 @@
     "text": "Which one is bigger than a cat but smaller than a horse?"
   },
   {
+    "id": "a797d0f7",
+    "text": "Which one is covered in fur and hibernates in winter?"
+  },
+  {
     "id": "974cfce6",
     "text": "Which one is hot?"
   },
@@ -328,6 +360,10 @@
     "text": "Which one is used to cut wood?"
   },
   {
+    "id": "00814a93",
+    "text": "Which one keeps time during a race?"
+  },
+  {
     "id": "cebeefde",
     "text": "Which one keeps your drink cold?"
   },
@@ -338,6 +374,10 @@
   {
     "id": "4c532cc2",
     "text": "Which one lays eggs?"
+  },
+  {
+    "id": "1d31b9d0",
+    "text": "Which one lives in a hive?"
   },
   {
     "id": "c1bdd830",
@@ -450,6 +490,14 @@
   {
     "id": "59174d57",
     "text": "Which one would you use to dry your hands?"
+  },
+  {
+    "id": "084b6173",
+    "text": "Which one would you use to keep the sun out of your eyes?"
+  },
+  {
+    "id": "7cfa10b8",
+    "text": "Which one would you use to listen to music?"
   },
   {
     "id": "a98c6179",

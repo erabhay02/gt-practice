@@ -164,6 +164,21 @@ const RAW_ITEMS: RawItem[] = [
   { pairA: ['🫒', '🟢'], pairCStart: '🍒', correct: '🔴', distractors: ['🟢', '🟡', '🟣'], relation: 'color' },
   { pairA: ['🐦', '2️⃣'], pairCStart: '🐝', correct: '6️⃣', distractors: ['2️⃣', '8️⃣', '4️⃣'], relation: 'number of legs' },
   { pairA: ['🔼', '🔽'], pairCStart: '⏫', correct: '⏬', distractors: ['🔽', '⏺️', '⏭️'], relation: 'opposite' },
+  // Sixth new batch (2026-10-10, Phase 1 continued) — same append-only rule as above.
+  { pairA: ['🐖', '4️⃣'], pairCStart: '🦋', correct: '6️⃣', distractors: ['4️⃣', '8️⃣', '2️⃣'], relation: 'number of legs' },
+  { pairA: ['💨', '🧣'], pairCStart: '☀️', correct: '🧢', distractors: ['🧣', '🕶️', '☂️'], relation: 'protects from' },
+  { pairA: ['💍', '✋'], pairCStart: '👑', correct: '🧑', distractors: ['✋', '🦶', '👂'], relation: 'worn on' },
+  { pairA: ['🦔', '🐛'], pairCStart: '🦫', correct: '🪵', distractors: ['🐛', '🌳', '🐟'], relation: 'eats' },
+  { pairA: ['🦭', '🐟'], pairCStart: '🦦', correct: '🐠', distractors: ['🐟', '🪨', '🌊'], relation: 'eats' },
+  { pairA: ['🐍', '0️⃣'], pairCStart: '🐓', correct: '2️⃣', distractors: ['0️⃣', '4️⃣', '6️⃣'], relation: 'number of legs' },
+  { pairA: ['🍯', '🐝'], pairCStart: '🥛', correct: '🐄', distractors: ['🐝', '🧀', '🐖'], relation: 'comes from' },
+  { pairA: ['🎷', '👄'], pairCStart: '🪘', correct: '✋', distractors: ['👄', '🦶', '👂'], relation: 'played with' },
+  { pairA: ['🐋', '🦐'], pairCStart: '🐘', correct: '🐜', distractors: ['🦐', '🐭', '🦛'], relation: 'big : small' },
+  { pairA: ['👅', '🍭'], pairCStart: '👂', correct: '🎵', distractors: ['🍭', '👀', '✋'], relation: 'senses' },
+  { pairA: ['🍕', '🔺'], pairCStart: '🎲', correct: '🟥', distractors: ['🔺', '🔵', '⭐'], relation: 'shape' },
+  { pairA: ['🏺', '💧'], pairCStart: '🎁', correct: '🧸', distractors: ['💧', '🍬', '🎈'], relation: 'holds' },
+  { pairA: ['🔊', '🔈'], pairCStart: '☀️', correct: '🌙', distractors: ['🔈', '⭐', '☁️'], relation: 'opposite' },
+  { pairA: ['🚤', '🌊'], pairCStart: '🚁', correct: '☁️', distractors: ['🌊', '⭐', '🏔️'], relation: 'travels in' },
 ]
 
 const gradesOf = (item: RawItem): Grade[] => item.grades ?? (GRADE1_RELATIONS.has(item.relation) ? [1, 2] : [2])

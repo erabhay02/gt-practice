@@ -120,6 +120,19 @@ const RAW_ITEMS: RawItem[] = [
   { question: 'Which one has a trunk and big ears?', correct: '🐘', distractors: ['🦏', '🦛', '🐪'] },
   { question: 'Which one would you plant in the garden to grow a flower?', correct: '🌱', distractors: ['🪨', '🧱', '🔑'] },
   { question: 'Which one spins webs to catch bugs?', correct: '🕷️', distractors: ['🐝', '🐞', '🦋'] },
+  // Sixth new batch (2026-10-10, Phase 1 continued) — same append-only rule as above.
+  { question: 'Which animal says roar?', correct: '🦁', distractors: ['🐯', '🐻', '🐺'] },
+  { question: 'Which one has a beak?', correct: '🦆', distractors: ['🐕', '🐈', '🐟'] },
+  { question: 'Which one found on a farm is NOT an animal?', correct: '🚜', distractors: ['🐄', '🐖', '🐑'] },
+  { question: 'Which one keeps time during a race?', correct: '⏱️', distractors: ['📅', '🌡️', '🧭'] },
+  { question: 'Which one would you use to listen to music?', correct: '🎧', distractors: ['📻', '📺', '📱'] },
+  { question: 'Which one has a long tail and climbs trees?', correct: '🐒', distractors: ['🐕', '🐘', '🐢'] },
+  { question: 'Which one has a long, sticky tongue to catch bugs?', correct: '🐸', distractors: ['🐢', '🐍', '🦗'] },
+  { question: 'Which one lives in a hive?', correct: '🐝', distractors: ['🐜', '🦋', '🐞'] },
+  { question: 'Which one has a bushy tail and buries nuts?', correct: '🐿️', distractors: ['🐇', '🦔', '🐁'] },
+  { question: 'Which one has a shell you can hold up to your ear?', correct: '🐚', distractors: ['🐢', '🦀', '🪨'] },
+  { question: 'Which one would you use to keep the sun out of your eyes?', correct: '🕶️', distractors: ['🧢', '☂️', '👓'] },
+  { question: 'Which one is covered in fur and hibernates in winter?', correct: '🐻', distractors: ['🦔', '🦇', '🐿️'] },
 ]
 
 // Two-condition questions ("but", "more than", "and also") and harder

@@ -102,6 +102,15 @@ const RAW_ITEMS: RawItem[] = [
   // Fourth new batch (2026-10-10, Phase 1 continued) — same append-only rule as above.
   { example: ['🐚', '🦀', '🐢'], correct: '🦞', distractors: ['🐙', '🐬', '🐟'], category: 'sea creatures with shells' },
   { example: ['🎪', '🤹', '🎭'], correct: '🦁', distractors: ['🏠', '📚', '🚗'], category: 'things you find at a circus' },
+  // Fifth new batch (2026-10-10, Phase 1 continued) — same append-only rule as above.
+  { example: ['🚀', '🛰️', '👽'], correct: '🪐', distractors: ['✈️', '🐦', '🎈'], category: 'things in outer space' },
+  { example: ['🥖', '🥐', '🍰'], correct: '🧁', distractors: ['🍗', '🥩', '🥦'], category: 'things you find at a bakery' },
+  { example: ['🐧', '🐻‍❄️', '🦭'], correct: '🐳', distractors: ['🐒', '🦁', '🐫'], category: 'arctic animals' },
+  { example: ['🧹', '🧽', '🧼'], correct: '🪣', distractors: ['🔨', '🍽️', '🧸'], category: 'things you use to clean' },
+  { example: ['🐸', '🦆', '🐢'], correct: '🦫', distractors: ['🦁', '🦂', '🐧'], category: 'pond animals' },
+  { example: ['🎠', '🎡', '🎢'], correct: '🛝', distractors: ['🎪', '🚗', '🌳'], category: 'rides at a fairground' },
+  { example: ['🧳', '👕', '🪥'], correct: '👟', distractors: ['🚗', '🌳', '🐟'], category: 'things you pack in a suitcase' },
+  { example: ['🚒', '🚑', '🚓'], correct: '🚁', distractors: ['🚗', '🚲', '🛳️'], category: 'emergency vehicles' },
 ]
 
 // Categories too abstract (or with tricky traps) for a 1st grader.
