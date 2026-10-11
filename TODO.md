@@ -97,6 +97,42 @@ Live app: https://thinksprout.pages.dev and https://erabhay02.github.io/gt-pract
   **Not verified in an actual browser session** (no browser automation tool
   available) — worth a quick manual look in Parent Area → Progress before shipping.
 
+- [x] **Phase 5, fully complete (2026-10-10): accessibility pass on figural items.**
+  Ran the dataviz skill's `validate_palette.js` (OKLab ΔE under simulated
+  protan/deutan/tritan vision) on `shapePalette.ts`'s 5-color `COLORS` array —
+  measured, not eyeballed. Found two real failures (blue/purple: ΔE 0.9, a
+  near-total collision under deuteranopia; green/amber: ΔE 5.7, a hard fail under
+  protanopia) and one borderline pair (red/green: ΔE 7.4). This mattered because
+  `matrixGenerator.ts`'s easiest items can pick color as the *one* changing
+  attribute, making an item solvable only by telling two specific colors apart.
+  Replaced the palette with one where all 10 pairs clear the CVD floor, the
+  normal-vision floor, and contrast (blue #4C6FEB, purple #7E22CE, magenta
+  #DC267F, red #991B1B, gold #D97706); the one pair still at the "legal only with
+  secondary encoding" floor (blue/purple) gets a dashed outline ring in
+  `primitives.tsx` regardless of fill type, so it's never color-alone. Also fixed
+  `ContentTile.tsx`'s separately-duplicated bead-color array (now imports
+  `COLORS` instead of drifting) and `numberGenerators.ts`'s two hardcoded
+  algebra-symbol colors. Updated 5 locked-content fingerprint hashes (matrix +
+  classification for grades 1/2, number-puzzle for grade 2 only). Scoped to the
+  color system specifically, per the plan — did not do a separate font/contrast
+  pass on the rest of the UI this round.
+
+- [x] **Bundled small polish items (2026-10-10), not part of the phase plan:**
+  - A one-time "how to practice" walkthrough before a child's very first-ever
+    session (regular practice, not just mock tests, which already had per-part
+    examples) — `QuizRunner`'s new `showWelcome` prop, driven by
+    `sessions.length === 0`, no new persisted state.
+  - A small celebration (🔥 badge + confetti) when a session's completion reaches
+    a streak milestone (3/7/14/30/50/100 days) — `STREAK_MILESTONES` in
+    `progressStore.ts`, `QuizRunner`'s new `milestoneStreak` prop.
+  - Closes out the old **"Ideas for later"** item *"Scores are practice
+    percentages, not CogAT scores (no age norms/percentiles)"* — that's exactly
+    what Phase 4 above fixed.
+  - None of these three were verified in an actual browser session (no browser
+    automation tool available this session) — worth a few minutes of manual
+    click-through (a brand-new profile's first practice session; a seeded
+    multi-day streak) before shipping.
+
 ## Next up — needs a parent
 - [ ] Custom domain **thinksprout.astrala.us**: wait until the Astrala site / Nexus AI move is done (handled in a separate project), then Cloudflare → Workers & Pages → thinksprout → Custom domains → add it
 - [ ] Sign in on every device the kids already use **at the github.io link** (uploads their local progress) before switching addresses
@@ -161,5 +197,3 @@ Live app: https://thinksprout.pages.dev and https://erabhay02.github.io/gt-pract
 ## Ideas for later
 - [ ] When questions change, re-record: `npx tsx scripts/collect-prompts.ts`, then `scripts/generate_audio.py` (setup steps are in that file). CI fails until this is done.
 - [ ] If a school uses Level 9 (3rd grade): add text-based verbal items.
-- [ ] Scores are practice percentages, not CogAT scores (no age norms/percentiles).
-- [ ] Optional: a short "how to take the test" walkthrough; small rewards for streaks.
