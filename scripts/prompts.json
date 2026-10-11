@@ -132,8 +132,28 @@
     "text": "Which animal says woof?"
   },
   {
+    "id": "86969930",
+    "text": "Which one can change the color of its skin to hide?"
+  },
+  {
     "id": "6ad75062",
     "text": "Which one can fly, but is not a bird?"
+  },
+  {
+    "id": "cb8d7aa8",
+    "text": "Which one can hold its breath and dive deep underwater?"
+  },
+  {
+    "id": "2b8e6842",
+    "text": "Which one can regrow its tail if it loses it?"
+  },
+  {
+    "id": "c65f9220",
+    "text": "Which one can roll itself into a tight ball to stay safe?"
+  },
+  {
+    "id": "24f1f155",
+    "text": "Which one can swim and has flippers?"
   },
   {
     "id": "f5d7ac85",
@@ -152,6 +172,10 @@
     "text": "Which one can you write with and also erase?"
   },
   {
+    "id": "046ed7ba",
+    "text": "Which one carries its home on its back and moves very slowly?"
+  },
+  {
     "id": "68c5a03b",
     "text": "Which one comes before a butterfly?"
   },
@@ -162,6 +186,10 @@
   {
     "id": "be6ecb13",
     "text": "Which one do bees make?"
+  },
+  {
+    "id": "a9c0a89f",
+    "text": "Which one do farmers use to plow their fields?"
   },
   {
     "id": "cecb680c",
@@ -182,6 +210,14 @@
   {
     "id": "f7c7a57c",
     "text": "Which one do you use to draw a picture?"
+  },
+  {
+    "id": "392c7009",
+    "text": "Which one do you use to find your way when you are lost?"
+  },
+  {
+    "id": "51ab0126",
+    "text": "Which one do you use to measure the temperature?"
   },
   {
     "id": "03b6bd42",
@@ -216,6 +252,14 @@
     "text": "Which one grows tall and gives us wood?"
   },
   {
+    "id": "6311f822",
+    "text": "Which one grows underground and is used to make French fries?"
+  },
+  {
+    "id": "69d9cb2a",
+    "text": "Which one hangs upside down to sleep?"
+  },
+  {
     "id": "4a9bc00f",
     "text": "Which one has a beak?"
   },
@@ -224,8 +268,24 @@
     "text": "Which one has a bushy tail and buries nuts?"
   },
   {
+    "id": "6e76fde1",
+    "text": "Which one has a flat tail and is a great swimmer that builds dams?"
+  },
+  {
+    "id": "02f917bf",
+    "text": "Which one has a hard outer shell and can fly even though it looks like a rock?"
+  },
+  {
+    "id": "33c6f825",
+    "text": "Which one has a hard shell and pinchers called claws?"
+  },
+  {
     "id": "4ca318fc",
     "text": "Which one has a hump on its back?"
+  },
+  {
+    "id": "f5e67c0e",
+    "text": "Which one has a long mane and gallops fast?"
   },
   {
     "id": "028622b1",
@@ -240,6 +300,18 @@
     "text": "Which one has a long, sticky tongue to catch bugs?"
   },
   {
+    "id": "e2455898",
+    "text": "Which one has a long, thin body and no legs at all?"
+  },
+  {
+    "id": "0b5e3460",
+    "text": "Which one has a mane around its head?"
+  },
+  {
+    "id": "02f274b3",
+    "text": "Which one has a pouch to carry its baby?"
+  },
+  {
     "id": "97440d7a",
     "text": "Which one has a shell on its back?"
   },
@@ -252,12 +324,24 @@
     "text": "Which one has a trunk and big ears?"
   },
   {
+    "id": "37a280f9",
+    "text": "Which one has antlers on its head?"
+  },
+  {
+    "id": "a09dc309",
+    "text": "Which one has black and white fur and eats bamboo?"
+  },
+  {
     "id": "dce7995b",
     "text": "Which one has feathers?"
   },
   {
     "id": "cbd60bdb",
     "text": "Which one has four wheels?"
+  },
+  {
+    "id": "65e878f2",
+    "text": "Which one has long ears that flop down?"
   },
   {
     "id": "ce86824b",
@@ -304,8 +388,36 @@
     "text": "Which one is a baby animal?"
   },
   {
+    "id": "b52ab529",
+    "text": "Which one is a fruit with seeds on the outside instead of the inside?"
+  },
+  {
     "id": "54f2ec2c",
     "text": "Which one is a fruit?"
+  },
+  {
+    "id": "c81b2715",
+    "text": "Which one is a shape with four equal sides?"
+  },
+  {
+    "id": "3d86767e",
+    "text": "Which one is a shape with no corners at all?"
+  },
+  {
+    "id": "aab8ee41",
+    "text": "Which one is a shape with three sides?"
+  },
+  {
+    "id": "0256aac8",
+    "text": "Which one is a tall plant with a yellow flower that turns to face the sun?"
+  },
+  {
+    "id": "32689952",
+    "text": "Which one is a tiny insect that can jump many times its own body length?"
+  },
+  {
+    "id": "9aafb218",
+    "text": "Which one is a vegetable that makes you cry when you cut it?"
   },
   {
     "id": "d4253933",
@@ -332,12 +444,28 @@
     "text": "Which one is in the sky during the day?"
   },
   {
+    "id": "b9ec65d7",
+    "text": "Which one is known for saying 'cock-a-doodle-doo' in the morning?"
+  },
+  {
+    "id": "f764386d",
+    "text": "Which one is pink and loves mud?"
+  },
+  {
+    "id": "501fafd6",
+    "text": "Which one is pink and often stands on just one leg?"
+  },
+  {
     "id": "b6a5466f",
     "text": "Which one is round and bounces?"
   },
   {
     "id": "33e07cd0",
     "text": "Which one is the coldest?"
+  },
+  {
+    "id": "5cdb2ddc",
+    "text": "Which one is the fastest bird and can dive faster than any other animal?"
   },
   {
     "id": "e5b9d1a9",
@@ -348,8 +476,16 @@
     "text": "Which one is the heaviest?"
   },
   {
+    "id": "f7242af4",
+    "text": "Which one is the largest animal that has ever lived on Earth?"
+  },
+  {
     "id": "837f4ae8",
     "text": "Which one is the lightest?"
+  },
+  {
+    "id": "b679a04a",
+    "text": "Which one is the national bird of the United States?"
   },
   {
     "id": "5bda658f",
@@ -416,12 +552,24 @@
     "text": "Which one shines in the sky at night?"
   },
   {
+    "id": "ebd0f0c0",
+    "text": "Which one spins around and around with music playing?"
+  },
+  {
     "id": "a6f2eb3c",
     "text": "Which one spins webs to catch bugs?"
   },
   {
+    "id": "8d3d83c9",
+    "text": "Which one squirts ink to escape from danger?"
+  },
+  {
     "id": "0b00322a",
     "text": "Which one tells you what time it is?"
+  },
+  {
+    "id": "38334273",
+    "text": "Which one tells you winter has come?"
   },
   {
     "id": "bb106e04",

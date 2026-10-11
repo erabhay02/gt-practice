@@ -26,14 +26,16 @@ const EXPECTED: Partial<Record<Grade, Record<string, string>>> = {
     generateNumberAnalogyQuestion: '70ae83bf0890f84e',
     generateNumberPuzzleQuestion: '5c598799ffa873ae',
     generateNumberSeriesQuestion: '7230180a1c65041c',
-    // buildPictureAnalogyBank updated 2026-10-10 (six batches): see pictureAnalogy.ts's
-    // "New batch" through "Sixth new batch" comments for what changed each time.
-    buildPictureAnalogyBank: '434505aecea9a4db',
-    // buildPictureClassificationBank updated 2026-10-10 (five batches; no change in
-    // the third round — no new picture-classification items that round).
-    buildPictureClassificationBank: '9573aa1d5b24db72',
-    // buildSentenceCompletionBank updated 2026-10-10 (six batches), same pattern.
-    buildSentenceCompletionBank: 'd5b2a1bc9cd50290',
+    // buildPictureAnalogyBank updated 2026-10-10 (eight batches, completing Phase 1's
+    // doubling target at 182 items): see pictureAnalogy.ts's "New batch" through
+    // "Eighth new batch" comments for what changed each time.
+    buildPictureAnalogyBank: '1c440644c107c60b',
+    // buildPictureClassificationBank updated 2026-10-10 (six batches, exceeding Phase
+    // 1's doubling target at 141 items; no change in the third round).
+    buildPictureClassificationBank: 'eb9922d09a92464b',
+    // buildSentenceCompletionBank updated 2026-10-10 (seven batches, completing Phase
+    // 1's doubling target at 148 items), same pattern.
+    buildSentenceCompletionBank: 'c4a0c378e2d3b7ff',
   },
   // Recorded before 1st grade was added.
   2: {
@@ -44,9 +46,9 @@ const EXPECTED: Partial<Record<Grade, Record<string, string>>> = {
     generateNumberPuzzleQuestion: 'dcafafff381f5ec8',
     generateNumberSeriesQuestion: 'bc9b85538b9e829e',
     // See the grade-1 comment above — same 2026-10-10 updates.
-    buildPictureAnalogyBank: '8a657f845e93c0ff',
-    buildPictureClassificationBank: 'cba3659bc3f95ef8',
-    buildSentenceCompletionBank: '2e226dd9efd58c24',
+    buildPictureAnalogyBank: 'd71b1932fd6625da',
+    buildPictureClassificationBank: '63ef5115f2254d9d',
+    buildSentenceCompletionBank: 'ad90f0ee474363c6',
   },
 }
 
