@@ -6,7 +6,7 @@ Live app: https://thinksprout.pages.dev and https://erabhay02.github.io/gt-pract
 Migration 0005 applied to the live database and `main` pushed 2026-10-11. Remaining:
 1. ~~Apply `supabase/migrations/0005_test_family.sql` to the live `thinksprout` project (adds `children.test_family`, default `cogat`). Until then sync still works: `src/cloud/sync.ts` retries without the column, so the test choice just stays on the device.~~ Done: existing children default to `cogat`.
 2. ~~Push `main` (deploys the web app).~~ Done.
-3. Upload the store builds: Android 1.1.0 (versionCode 5) `~/Desktop/ThinkSprout-1.1.0-build5.aab` to Play Console Internal testing; iOS 1.1.0 (4) `~/Desktop/ThinkSprout-1.1.0-build4.ipa` via Transporter, or ask Claude to upload it.
+3. Upload the store builds: Android 1.1.0 (versionCode 5) `~/Desktop/ThinkSprout-1.1.0-build5.aab` to Play Console Internal testing (parent); ~~iOS 1.1.0 (4)~~ uploaded to TestFlight 2026-10-11.
 4. Have a teacher/parent skim the new OLSAT listening items and the 5th/6th-grade words.
 
 ## Content expansion (2026-10-10, DONE — pushed 2026-10-10)
