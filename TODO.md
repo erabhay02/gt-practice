@@ -154,7 +154,7 @@ Live app: https://thinksprout.pages.dev and https://erabhay02.github.io/gt-pract
 - [x] 1st- and 2nd-grade content locked by fingerprint tests (unchanged); database accepts grades 0–4 (`supabase/migrations/0002_grades_k_to_4.sql`, applied)
 - [x] Privacy Policy rewritten (all grades, apps, SendGrid/Cloudflare/GitHub, COPPA rights, security, changes); removed-child records on the server keep no name/details
 - [x] iPhone build 1.0 (2) uploaded to TestFlight 2026-10-05 (grades K–4 + iPad landscape fix); Android versionCode 2 built and signed (`~/Desktop/ThinkSprout-1.0-build2.aab`) for the parent to upload to Internal testing
-- [x] Build 3 (2026-10-10): Phases 3–5 + bug fixes (blank matrix tile, purple shape cue, results copy). iOS 1.0 (3) exported and signed (`~/Desktop/ThinkSprout-1.0-build3.ipa`), Android versionCode 3 signed (`~/Desktop/ThinkSprout-1.0-build3.aab`); both waiting for the parent to upload
+- [x] Build 3 (2026-10-10): Phases 3–5 + bug fixes (blank matrix tile, purple shape cue, results copy). iOS 1.0 (3) uploaded to TestFlight 2026-10-10; Android versionCode 3 signed (`~/Desktop/ThinkSprout-1.0-build3.aab`) for the parent to upload to Internal testing
 - [ ] ⚠️ Build 1 only knows grades 1–2: update every device to build 2 before adding a K/3rd/4th-grade child
 - [ ] Have a teacher/parent skim the new 3rd/4th-grade word items; K/1st practice-test lengths are approximate
 
