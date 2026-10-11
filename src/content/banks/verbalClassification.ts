@@ -156,6 +156,28 @@ const RAW_ITEMS: RawItem[] = [
   { example: ['allegory', 'satire', 'parody'], correct: 'fable', distractors: ['essay', 'biography', 'textbook'], category: 'literary forms', grades: [5, 6] },
   { example: ['Congress', 'Senate', 'House of Representatives'], correct: 'Parliament', distractors: ['President', 'Court', 'Governor'], category: 'legislative bodies', grades: [5, 6] },
   { example: ['insectivore', 'herbivore', 'carnivore'], correct: 'omnivore', distractors: ['predator', 'prey', 'scavenger'], category: 'types of animal diets', grades: [5, 6] },
+  // Second grade-5/6 batch (2026-10-10) — deepening the Level 11/12 tier.
+  { example: ['acute', 'obtuse', 'right'], correct: 'reflex', distractors: ['circle', 'square', 'line'], category: 'types of angles', grades: [5, 6] },
+  { example: ['tundra', 'savanna', 'rainforest'], correct: 'desert', distractors: ['ocean', 'river', 'lake'], category: 'biomes', grades: [5, 6] },
+  { example: ['Jupiter', 'Saturn', 'Neptune'], correct: 'Mercury', distractors: ['Sun', 'Moon', 'comet'], category: 'planets in our solar system', grades: [5, 6] },
+  { example: ['proton', 'neutron', 'electron'], correct: 'quark', distractors: ['atom', 'molecule', 'ion'], category: 'parts of an atom', grades: [5, 6] },
+  { example: ['femur', 'tibia', 'humerus'], correct: 'cranium', distractors: ['heart', 'lung', 'brain'], category: 'bones in the human body', grades: [5, 6] },
+  { example: ['Great Wall of China', 'Pyramids of Giza', 'Colosseum'], correct: 'Taj Mahal', distractors: ['Eiffel Tower', 'Statue of Liberty', 'Golden Gate Bridge'], category: 'ancient wonders of the world', grades: [5, 6] },
+  { example: ['Picasso', 'Monet', 'Van Gogh'], correct: 'Rembrandt', distractors: ['Beethoven', 'Mozart', 'Shakespeare'], category: 'famous painters', grades: [5, 6] },
+  { example: ['Beethoven', 'Mozart', 'Bach'], correct: 'Chopin', distractors: ['Picasso', 'Shakespeare', 'Einstein'], category: 'classical composers', grades: [5, 6] },
+  { example: ['tectonic plates', 'earthquakes', 'volcanoes'], correct: 'tsunamis', distractors: ['hurricanes', 'tornadoes', 'blizzards'], category: 'events caused by tectonic plate movement', grades: [5, 6] },
+  { example: ['exoskeleton', 'antennae', 'compound eyes'], correct: 'thorax', distractors: ['fur', 'feathers', 'scales'], category: 'insect body features', grades: [5, 6] },
+  { example: ['Jurassic', 'Cretaceous', 'Triassic'], correct: 'Paleogene', distractors: ['Renaissance', 'Medieval', 'Victorian'], category: 'geological time periods', grades: [5, 6] },
+  { example: ['prime number', 'composite number', 'even number'], correct: 'odd number', distractors: ['fraction', 'decimal', 'percentage'], category: 'ways to classify whole numbers', grades: [5, 6] },
+  { example: ['bacteria', 'virus', 'fungus'], correct: 'parasite', distractors: ['vaccine', 'antibody', 'medicine'], category: 'types of pathogens that can cause disease', grades: [5, 6] },
+  { example: ['estuary', 'delta', 'tributary'], correct: 'floodplain', distractors: ['desert', 'glacier', 'volcano'], category: 'river-related landforms', grades: [5, 6] },
+  { example: ['haiku', 'sonnet', 'limerick'], correct: 'ballad', distractors: ['essay', 'biography', 'dictionary'], category: 'forms of poetry', grades: [5, 6] },
+  { example: ['condensation', 'evaporation', 'precipitation'], correct: 'infiltration', distractors: ['combustion', 'digestion', 'photosynthesis'], category: 'stages of the water cycle', grades: [5, 6] },
+  { example: ['Mount Everest', 'K2', 'Kilimanjaro'], correct: 'Denali', distractors: ['Amazon River', 'Sahara Desert', 'Pacific Ocean'], category: 'famous mountains', grades: [5, 6] },
+  { example: ['monologue', 'dialogue', 'soliloquy'], correct: 'aside', distractors: ['footnote', 'caption', 'headline'], category: 'ways characters speak in a play', grades: [5, 6] },
+  { example: ['x-axis', 'y-axis', 'origin'], correct: 'quadrant', distractors: ['radius', 'diameter', 'circumference'], category: 'parts of a coordinate plane', grades: [5, 6] },
+  { example: ['hibernation', 'migration', 'camouflage'], correct: 'mimicry', distractors: ['domestication', 'extinction', 'pollination'], category: 'animal survival strategies', grades: [5, 6] },
+  { example: ['stanza', 'rhyme scheme', 'meter'], correct: 'refrain', distractors: ['footnote', 'bibliography', 'index'], category: "a poem's structural parts", grades: [5, 6] },
 ]
 
 const gradesOf = (item: RawItem): Grade[] => item.grades ?? [3, 4, 5, 6]
