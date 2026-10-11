@@ -1,9 +1,9 @@
-import { useMemo } from 'react'
+import { useMemo, useRef } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
 import { getQuestionPool, subtypesForGrade } from '../content/contentLoader'
 import type { Question, SubType } from '../content/types'
 import { useActiveProfile } from '../state/profilesStore'
-import { difficultyForSubType, recentlyShownIds, useProfileProgress, useProgressStore } from '../state/progressStore'
+import { STREAK_MILESTONES, currentStreak, difficultyForSubType, recentlyShownIds, useProfileProgress, useProgressStore } from '../state/progressStore'
 import { QuizRunner } from './QuizRunner'
 
 const SESSION_LENGTH = 8
@@ -11,7 +11,12 @@ const SESSION_LENGTH = 8
 export function PracticeSession() {
   const { subtype } = useParams<{ domain: string; subtype: SubType }>()
   const profile = useActiveProfile()
-  const neverPracticed = useProfileProgress(profile?.id).sessions.length === 0
+  const progress = useProfileProgress(profile?.id)
+  const neverPracticed = progress.sessions.length === 0
+  const streak = currentStreak(progress)
+  // Captured once per session, before it can finish, so the milestone below
+  // only fires when THIS session's completion is what reached it.
+  const streakBeforeRef = useRef(streak)
   const recordSession = useProgressStore((s) => s.recordSession)
   const recordShownQuestions = useProgressStore((s) => s.recordShownQuestions)
   const info = profile ? subtypesForGrade(profile.grade).find((s) => s.subType === subtype) : undefined
@@ -40,6 +45,7 @@ export function PracticeSession() {
       questions={questions}
       explanationFor={(q) => q.explanationAudioText ?? info.tip}
       showWelcome={neverPracticed}
+      milestoneStreak={streak > streakBeforeRef.current && STREAK_MILESTONES.includes(streak) ? streak : null}
       onFinish={(answers) =>
         recordSession(profile.id, {
           subType: info.subType,

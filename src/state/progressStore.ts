@@ -85,6 +85,9 @@ export function currentStreak(progress: ProfileProgress, today: string = todaySt
   return streak
 }
 
+/** Streak lengths worth a small on-screen celebration. */
+export const STREAK_MILESTONES = [3, 7, 14, 30, 50, 100]
+
 export function difficultyForSubType(progress: ProfileProgress, subType: SubType): Difficulty {
   const recent = progress.sessions.filter((s) => s.subType === subType).slice(-RECENT_SESSIONS_FOR_DIFFICULTY)
   if (recent.length === 0) return 1

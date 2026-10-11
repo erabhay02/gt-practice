@@ -20,6 +20,10 @@ interface Props {
   // yet): shows a one-time "how this works" screen before question 1. Every
   // later session — this subtype or any other — skips straight to the quiz.
   showWelcome?: boolean
+  // Set to a streak length (from STREAK_MILESTONES) when finishing THIS
+  // session is what reached it, so the celebration shows exactly once —
+  // not on every session during a milestone day.
+  milestoneStreak?: number | null
 }
 
 export function QuizHeader({ title, index, total, onExit }: { title: string; index: number; total: number; onExit: () => void }) {
@@ -40,7 +44,7 @@ export function QuizHeader({ title, index, total, onExit }: { title: string; ind
   )
 }
 
-export function QuizRunner({ title, questions, explanationFor, onFinish, finishedMessage, showWelcome }: Props) {
+export function QuizRunner({ title, questions, explanationFor, onFinish, finishedMessage, showWelcome, milestoneStreak }: Props) {
   const navigate = useNavigate()
   const { speak, stop, speaking, problem, isSupported } = useSpeech()
   const [index, setIndex] = useState(0)
@@ -76,8 +80,13 @@ export function QuizRunner({ title, questions, explanationFor, onFinish, finishe
     const skipped = questions.length - Object.keys(answers).length
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-5 bg-cream p-6 text-center">
-        {stars >= 2 && <Confetti />}
-        <Mascot mood={stars >= 2 ? 'cheer' : 'happy'} size={140} float />
+        {(stars >= 2 || milestoneStreak) && <Confetti />}
+        <Mascot mood={stars >= 2 || milestoneStreak ? 'cheer' : 'happy'} size={140} float />
+        {milestoneStreak && (
+          <p className="animate-pop rounded-full bg-sun-300 px-4 py-1.5 font-display text-lg font-semibold text-ink shadow-sm">
+            🔥 {milestoneStreak}-day streak!
+          </p>
+        )}
         <div className="flex gap-1 text-5xl" aria-label={`${stars} stars`}>
           {[1, 2, 3].map((n) => (
             <span key={n} className={n <= stars ? 'animate-pop' : 'opacity-20 grayscale'}>
